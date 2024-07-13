@@ -1,18 +1,43 @@
-import React from "react";
+import React, {useState} from "react";
+// import StylesList from "./stylesList.tsx";
+import SidePanel from "./SidePanel/sidePanel.tsx";
 import useClient from "../hooks/useClient.tsx";
-import {StylesList} from "./stylesList.tsx";
+import ProductListPage, {Product} from "./ProductPage.tsx";
 
 
 const Dashboard: React.FC = () => {
+
     const client = useClient()
-    const logOut = async () => {
-        await client.auth.signOut()
-    }
+    const [currentPage, setCurrentPage] = useState(1);
+
+    //TODO: Get the real data
+    const products: Product[] = [
+        { id: 1, title: "Product 1", sku: "SKU001", type: "Type A", msrp: 100, createdDate: "2024-07-12", status: "Active" },
+        { id: 2, title: "Product 2", sku: "SKU002", type: "Type B", msrp: 150, createdDate: "2024-07-11", status: "Inactive" },
+    ];
+
+    const totalPages = Math.ceil(products.length / 10); // Assuming 10 products per page
+    const onNextPage = () => {
+        setCurrentPage((prevPage) => prevPage + 1);
+    };
+
+    const onPrevPage = () => {
+        setCurrentPage((prevPage) => prevPage - 1);
+    };
+
 
     return (
         <>
-            <button onClick={logOut}>Log out</button>
-            <StylesList styleId={"ELS"}/>
+            <SidePanel client={client}/>
+            <ProductListPage
+                products={products.slice((currentPage - 1) * 10, currentPage * 10)}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onNextPage={onNextPage}
+                onPrevPage={onPrevPage}
+            />
+            {/*<button onClick={logOut}>Log out</button>*/}
+            {/*<StylesList/>*/}
         </>
     )
 }
