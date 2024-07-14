@@ -12,8 +12,24 @@ const Dashboard: React.FC = () => {
 
     //TODO: Get the real data
     const products: Product[] = [
-        { id: 1, title: "Product 1", sku: "SKU001", type: "Type A", msrp: 100, createdDate: "2024-07-12", status: "Active" },
-        { id: 2, title: "Product 2", sku: "SKU002", type: "Type B", msrp: 150, createdDate: "2024-07-11", status: "Inactive" },
+        {
+            id: 1,
+            title: "Product 1",
+            sku: "SKU001",
+            type: "Type A",
+            msrp: 100,
+            createdDate: "2024-07-12",
+            status: "Active"
+        },
+        {
+            id: 2,
+            title: "Product 2",
+            sku: "SKU002",
+            type: "Type B",
+            msrp: 150,
+            createdDate: "2024-07-11",
+            status: "Inactive"
+        },
     ];
 
     const totalPages = Math.ceil(products.length / 10); // Assuming 10 products per page
@@ -27,18 +43,22 @@ const Dashboard: React.FC = () => {
 
 
     return (
-        <>
-            <SidePanel client={client}/>
-            <ProductListPage
-                products={products.slice((currentPage - 1) * 10, currentPage * 10)}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onNextPage={onNextPage}
-                onPrevPage={onPrevPage}
-            />
-            {/*<button onClick={logOut}>Log out</button>*/}
-            {/*<StylesList/>*/}
-        </>
+        <div className="container">
+            <div className="grid grid-cols-6 gap-2 h-screen w-screen">
+                <div className="col-span-1">
+                    <SidePanel client={client}/>
+                </div>
+                <div className="col-span-5">
+                    <ProductListPage
+                        products={products.slice((currentPage - 1) * 10, currentPage * 10)}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onNextPage={onNextPage}
+                        onPrevPage={onPrevPage}
+                    />
+                </div>
+            </div>
+        </div>
     )
 }
 

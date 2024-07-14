@@ -26,7 +26,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({
                                                              onPrevPage,
                                                          }) => {
     return (
-        <div className="flex-grow mx-10 my-10 bg-white rounded-lg shadow-md p-6">
+        <div className="mx-10 my-10 bg-white rounded-lg shadow-md p-6">
             <div className="flex justify-between mb-4">
                 <h2 className="font-bold text-xl">Product List</h2>
                 <div className="space-x-2">

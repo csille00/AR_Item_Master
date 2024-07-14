@@ -26,8 +26,8 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
     }
 
     return (
-        <div className="fixed top-0 left-0 h-full w-64 bg-argray shadow-md flex flex-col p-4">
-            <div className="mb-4 p-4">
+        <div className="bg-argray h-full shadow-md p-2">
+            <div className="mb-4 mt-4">
                 <img src={logoSrc} alt="Logo" className="w-full" />
             </div>
             <div className="mb-auto">
@@ -55,7 +55,7 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
                     onClick = {buttonClicked}
                 />
             </div>
-            <div className="mt-auto">
+            <div className="mt-auto fixed bottom-0">
                 <ButtonAndIcon
                    icon={logout}
                    onClick={logOut}
