@@ -1,12 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
-  theme: {
-      colors: {
-        argray: '#414043',
-        current: 'currentColor',
-      },
-  },
-  plugins: [],
+    content: ["./src/**/*.{js,jsx,ts,tsx}"],
+    theme: {
+        colors: {
+            argray: '#414043',
+            current: 'currentColor',
+            red: '#ff5555',
+            lightgr: '#babcbe',
+            white: '#ffffff'
+        },
+    },
+    plugins: [],
 }
 
