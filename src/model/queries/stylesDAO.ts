@@ -1,9 +1,13 @@
-import {SupabaseClient} from "@supabase/supabase-js";
+import {getClient} from "../getClient.ts";
 
-export function getStyles(
-    client: SupabaseClient,
-) {
-    return client
-        .from('ar_styles')
-        .select().throwOnError()
+const client = getClient()
+
+export async function getStylesFromClient() {
+    const { data, error } = await client.from("ar_styles").select(); // Adjust table name as per your Supabase schema
+    if (error) {
+        throw error;
+    }
+    if (data) {
+        return data
+    }
 }
