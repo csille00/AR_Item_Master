@@ -7,7 +7,9 @@ export default {
             current: 'currentColor',
             red: '#ff5555',
             lightgr: '#babcbe',
-            white: '#ffffff'
+            white: '#ffffff',
+            arbrown: '#A6947A',
+            superlightgr: '#F0F1F3'
         },
     },
     plugins: [],
