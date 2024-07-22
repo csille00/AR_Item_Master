@@ -3,6 +3,8 @@ import React, {useState} from "react";
 import SidePanel from "./SidePanel/sidePanel.tsx";
 import useClient from "../hooks/useClient.tsx";
 import ProductListPage, {Product} from "./ProductPage.tsx";
+import AddForm from "./AddForm.tsx";
+import {LabeledInputType} from "./Util/LabeledInput.tsx";
 
 
 const Dashboard: React.FC = () => {
@@ -41,21 +43,38 @@ const Dashboard: React.FC = () => {
         setCurrentPage((prevPage) => prevPage - 1);
     };
 
+    const stoneColumns = [
+        {label: "Product Name", type: LabeledInputType.String},
+        {label: "Product Id", type: LabeledInputType.String},
+        {label: "Category", type: LabeledInputType.String},
+        {label: "Buying Price", type: LabeledInputType.Number},
+        {label: "Quantity", type: LabeledInputType.Number},
+        {label: "Unit", type: LabeledInputType.Number},
+        {label: "Expiration Date", type: LabeledInputType.DateTime},
+        {label: "Threshold Value", type: LabeledInputType.Number},
+    ]
 
     return (
-        <div className="container">
+        <div className="bg-superlightgr">
             <div className="grid grid-cols-6 gap-2 h-screen w-screen">
                 <div className="col-span-1">
                     <SidePanel client={client}/>
                 </div>
                 <div className="col-span-5">
-                    <ProductListPage
-                        products={products.slice((currentPage - 1) * 10, currentPage * 10)}
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onNextPage={onNextPage}
-                        onPrevPage={onPrevPage}
-                    />
+                    <div className="flex justify-around">
+                        <div className="">
+                            <ProductListPage
+                                products={products.slice((currentPage - 1) * 10, currentPage * 10)}
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onNextPage={onNextPage}
+                                onPrevPage={onPrevPage}
+                            />
+                        </div>
+                        <div className="w-1/2">
+                            <AddForm title={"New Jewelry Info"} addProduct={onNextPage} columns={stoneColumns}/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

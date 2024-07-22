@@ -30,9 +30,9 @@ const ProductListPage: React.FC<ProductListPageProps> = ({
             <div className="flex justify-between mb-4">
                 <h2 className="font-bold text-xl">Product List</h2>
                 <div className="space-x-2">
-                    <button className="px-4 py-2 bg-blue-500 text-white rounded-md">Add Product</button>
+                    <button className="px-4 py-2 bg-blue-500 text-gray-700 rounded-md">Add Product</button>
                     <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md">Filter</button>
-                    <button className="px-4 py-2 bg-green-500 text-white rounded-md">Download All</button>
+                    <button className="px-4 py-2 bg-green-500 text-gray-700 rounded-md">Download All</button>
                 </div>
             </div>
             <div className="mb-4">

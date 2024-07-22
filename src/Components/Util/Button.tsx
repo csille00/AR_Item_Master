@@ -9,7 +9,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ icon = null, text, onClick, style = "" }) => {
 
-    const styles = `btn flex items-center w-full py-4 px-6 mb-2 bg-argray text-left hover:outline-none ${style}`;
+    const styles = `m-2 btn flex items-center py-1 px-2 mb-2 bg-argray text-left hover:outline-none ${style}`;
 
     return (
         <a
