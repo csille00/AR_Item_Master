@@ -9,11 +9,9 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ icon = null, text, onClick, style = "" }) => {
 
-    const styles = `m-2 btn flex items-center py-1 px-2 mb-2 bg-argray text-left hover:outline-none ${style}`;
-
     return (
         <a
-            className={styles}
+            className={`m-2 btn flex items-center py-1 px-2 mb-2 text-left hover:outline-none ${style ? style : ''}`}
             onClick={onClick}
         >
             {icon && (

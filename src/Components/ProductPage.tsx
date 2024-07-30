@@ -55,22 +55,22 @@ const ProductListPage: React.FC<ProductListPageProps> = ({
                     </div>
                 ))}
             </div>
-            <div className="flex justify-between mt-4">
-                <button
-                    className={`px-4 py-2 ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"} rounded-md`}
-                    onClick={onPrevPage}
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
-                <button
-                    className={`px-4 py-2 ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"} rounded-md`}
-                    onClick={onNextPage}
-                    disabled={currentPage === totalPages}
-                >
-                    Next
-                </button>
-            </div>
+            {/*<div className="flex justify-between mt-4">*/}
+            {/*    <button*/}
+            {/*        className={`px-4 py-2 ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"} rounded-md`}*/}
+            {/*        onClick={onPrevPage}*/}
+            {/*        disabled={currentPage === 1}*/}
+            {/*    >*/}
+            {/*        Previous*/}
+            {/*    </button>*/}
+            {/*    <button*/}
+            {/*        className={`px-4 py-2 ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"} rounded-md`}*/}
+            {/*        onClick={onNextPage}*/}
+            {/*        disabled={currentPage === totalPages}*/}
+            {/*    >*/}
+            {/*        Next*/}
+            {/*    </button>*/}
+            {/*</div>*/}
         </div>
     );
 };

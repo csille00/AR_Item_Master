@@ -24,20 +24,16 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
     }
 
     return (
-        <div className="bg-argray h-full shadow-md p-2">
+        <div className="flex flex-col items-center bg-argray h-full shadow-md p-2">
             <div className="mb-4 mt-4">
                 <img src={logoSrc} alt="Logo" className="w-full"/>
             </div>
             <div className="mb-auto">
-                {/*<ButtonAndIcon*/}
-                {/*    icon = {diamond}*/}
-                {/*    text = {"Jewelry"}*/}
-                {/*    onClick = {buttonClicked}*/}
-                {/*/>*/}
                 <Button
                     icon={diamond}
                     text={"Jewelry"}
-                    onClick={buttonClicked}/>
+                    onClick={buttonClicked}
+                />
 
                 <Button
                     icon={jewel}
@@ -47,7 +43,7 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
 
                 <Button
                     icon={add}
-                    text={"Add Form"}
+                    text={"Add"}
                     onClick={buttonClicked}
                 />
 
