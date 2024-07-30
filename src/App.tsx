@@ -8,6 +8,7 @@ import Layout from "./Components/Layout.tsx";
 import Stone from "./Components/Stone.tsx";
 import Logout from "./Components/Logout.tsx";
 import useClient from "./hooks/useClient.tsx";
+import Admin from "./Components/Admin.tsx";
 
 function App() {
     const queryClient = new QueryClient();
@@ -23,7 +24,7 @@ function App() {
                         <Route path="stone" element={<Stone/>}/>
                         <Route path="add" element={<AddForm/>}/>
                         <Route path="logout" element={<Logout/>}/>
-                        {/*<Route path="admin" element={<Admin />}>*/}
+                        <Route path="admin" element={<Admin />} />
                         {/*<Route path="*" element={<NoPage />} />*/}
                     </Route>
                 </Routes>
