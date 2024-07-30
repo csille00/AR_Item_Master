@@ -10,32 +10,8 @@ import {Tables} from "../Definitions/definitions.ts";
 import JewelryRow, {JewelryItem} from "./Util/JewelryRow.tsx";
 
 
-const Dashboard: React.FC = () => {
-
-    const client = useClient()
+const Jewelry: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
-
-    //TODO: Get the real data
-    const products: Product[] = [
-        {
-            id: 1,
-            title: "Product 1",
-            sku: "SKU001",
-            type: "Type A",
-            msrp: 100,
-            createdDate: "2024-07-12",
-            status: "Active"
-        },
-        {
-            id: 2,
-            title: "Product 2",
-            sku: "SKU002",
-            type: "Type B",
-            msrp: 150,
-            createdDate: "2024-07-11",
-            status: "Inactive"
-        },
-    ];
 
     const ar_jewelry_mock: JewelryItem[] = [
         {
@@ -196,94 +172,24 @@ const Dashboard: React.FC = () => {
         }
     ]
 
-    const ar_stone_columns = [
-        "Product Name",
+    const ar_jewelry_columns = [
         "SKU",
+        "Product Name",
         "Product Type",
         "MSRP",
         "Date Added",
         "Status"
-        // "productType",
-        // "prodCode",
-        // "matCode",
-        // "matColor",
-        // "msrp",
-        // "cost",
-        // "color",
-        // "shape",
-        // "cut",
-        // "dimensions",
-        // "caratWeight",
-    ]
-
-    const ar_stone_mock = [
-        {
-            "serialNo": 1,
-            "skuNumber": "SKU001",
-            "date": "2024-07-18",
-            "styleNumber": "ST001",
-            "stoneType": "Diamond",
-            "productType": "Ring",
-            "prodCode": "PR001",
-            "matCode": "MC001",
-            "matColor": "Gold",
-            "msrp": 500,
-            "cost": 250,
-            "color": "Clear",
-            "shape": "Round",
-            "cut": "Brilliant",
-            "dimensions": "4.5mm",
-            "caratWeight": 0.5,
-            "caratRange": "0.4-0.6",
-            "certType": "GIA",
-            "certNumber": "1234567890",
-            "certCut": "Excellent",
-            "certColor": "D",
-            "certClarity": "VS1",
-            "stoneNumber": "S001",
-            "catStatus": "Available",
-            "stoneSku": "STN001",
-            "refinedShape": "Round"
-        },
-        {
-            "serialNo": 2,
-            "skuNumber": "SKU002",
-            "date": "2024-07-17",
-            "styleNumber": "ST002",
-            "stoneType": "Emerald",
-            "productType": "Necklace",
-            "prodCode": "PR002",
-            "matCode": "MC002",
-            "matColor": "Silver",
-            "msrp": 800,
-            "cost": 400,
-            "color": "Green",
-            "shape": "Oval",
-            "cut": "Faceted",
-            "dimensions": "6.2x4.8mm",
-            "caratWeight": 1.2,
-            "caratRange": "1.0-1.5",
-            "certType": "IGI",
-            "certNumber": "0987654321",
-            "certCut": "Very Good",
-            "certColor": "F",
-            "certClarity": "SI1",
-            "stoneNumber": "S002",
-            "catStatus": "Available",
-            "stoneSku": "STN002",
-            "refinedShape": "Oval"
-        }
     ]
 
 
-    const totalPages = Math.ceil(products.length / 10); // Assuming 10 products per page
-    const onNextPage = () => {
-        setCurrentPage((prevPage) => prevPage + 1);
-    };
-
-    const onPrevPage = () => {
-        setCurrentPage((prevPage) => prevPage - 1);
-    };
+    // const totalPages = Math.ceil(products.length / 10); // Assuming 10 products per page
+    // const onNextPage = () => {
+    //     setCurrentPage((prevPage) => prevPage + 1);
+    // };
+    //
+    // const onPrevPage = () => {
+    //     setCurrentPage((prevPage) => prevPage - 1);
+    // };
 
     const handleAddProduct = (formData: { [key: string]: string }) => {
         console.log("Form Data:", formData);
@@ -305,34 +211,24 @@ const Dashboard: React.FC = () => {
     ]
 
     return (
-        <div className="bg-superlightgr">
-            <div className="grid grid-cols-6 gap-2 h-screen w-screen">
-                <div className="col-span-1">
-                    <SidePanel client={client}/>
-                </div>
-                <div className="col-span-5">
-                    {/*<div className="flex justify-center items-center align-middle">*/}
-                        <div className="">
-                            <Table columns={ar_stone_columns} data={ar_jewelry_mock} title={"Jewelry Master"}>
-                                {(item: JewelryItem) => <JewelryRow {...item} />}
-                            </Table>
+        <>
+            <Table columns={ar_jewelry_columns} data={ar_jewelry_mock} title={"Jewelry Master"}>
+                {(item: JewelryItem) => <JewelryRow {...item} />}
+            </Table>
 
-                            {/*<ProductListPage*/}
-                            {/*    products={products.slice((currentPage - 1) * 10, currentPage * 10)}*/}
-                            {/*    currentPage={currentPage}*/}
-                            {/*    totalPages={totalPages}*/}
-                            {/*    onNextPage={onNextPage}*/}
-                            {/*    onPrevPage={onPrevPage}*/}
-                            {/*/>*/}
-                        </div>
-                        {/*<div className="w-1/2">*/}
-                        {/*    <AddForm title={"New Jewelry Info"} addProduct={onNextPage} columns={stoneColumns}/>*/}
-                        {/*</div>*/}
-                    {/*</div>*/}
-                </div>
-            </div>
-        </div>
+            {/*<ProductListPage*/}
+            {/*    products={products.slice((currentPage - 1) * 10, currentPage * 10)}*/}
+            {/*    currentPage={currentPage}*/}
+            {/*    totalPages={totalPages}*/}
+            {/*    onNextPage={onNextPage}*/}
+            {/*    onPrevPage={onPrevPage}*/}
+            {/*/>*/}
+
+            {/*<div className="w-1/2">*/}
+            {/*    <AddForm title={"New Jewelry Info"} addProduct={onNextPage} columns={stoneColumns}/>*/}
+            {/*</div>*/}
+        </>
     )
 }
 
-export default Dashboard
+export default Jewelry

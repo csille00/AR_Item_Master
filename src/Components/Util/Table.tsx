@@ -2,13 +2,15 @@ import React from "react";
 import {Tables} from "../../Definitions/definitions.ts";
 import Button from "./Button.tsx";
 import {JewelryItem} from "./JewelryRow.tsx";
+import {StoneItem} from "./StoneRow.tsx";
+import Stone from "../Stone.tsx";
 
 export interface TableProps {
     title: string;
     columns: string[];
-    data: JewelryItem[];
+    data: JewelryItem[] | StoneItem[];
     style?: string | null;
-    children?: (item: JewelryItem) => React.JSX.Element
+    children?: (item: JewelryItem | StoneItem) => React.JSX.Element
 }
 
 const filter = () => {

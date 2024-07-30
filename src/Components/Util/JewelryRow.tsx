@@ -1,5 +1,4 @@
 import React from "react";
-import {Tables} from "../../Definitions/definitions.ts";
 
 export interface JewelryItem {
     adjustable: boolean | null;
@@ -56,10 +55,10 @@ export interface JewelryItem {
 
 const JewelryRow = (item: JewelryItem): React.ReactNode => (
     <>
+        <td className="p-4">{item.sku_number}</td>
         <td className="p-4">{item.title}</td>
-        <td className="p-4">{item.id}</td>
         <td className="p-4">{item.product_type}</td>
-        <td className="p-4">{item.cost}</td>
+        <td className="p-4">{item.msrp}</td>
         <td className="p-4">{item.create_date}</td>
         <td className="p-4">{item.status}</td>
     </>
