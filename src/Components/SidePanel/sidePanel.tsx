@@ -6,6 +6,7 @@ import settings from "../../assets/Settings.png"
 import logoSrc from "../../assets/Logo.png"
 import {SupabaseClient} from "@supabase/supabase-js";
 import Button from "../Util/Button.tsx";
+import {useNavigate} from "react-router-dom";
 
 
 interface SidePanelProps {
@@ -23,6 +24,8 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
         console.log("clicked")
     }
 
+    const navigate = useNavigate();
+
     return (
         <div className="flex flex-col items-center bg-argray h-full shadow-md p-2">
             <div className="mb-4 mt-4">
@@ -32,25 +35,25 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
                 <Button
                     icon={diamond}
                     text={"Jewelry"}
-                    onClick={buttonClicked}
+                    onClick={() => navigate('/')}
                 />
 
                 <Button
                     icon={jewel}
                     text={"Stones"}
-                    onClick={buttonClicked}
+                    onClick={() => navigate('/stone')}
                 />
 
                 <Button
                     icon={add}
                     text={"Add"}
-                    onClick={buttonClicked}
+                    onClick={() => navigate('/add')}
                 />
 
                 <Button
                     icon={settings}
                     text={"Admin"}
-                    onClick={buttonClicked}
+                    onClick={() => navigate('/admin')}
                 />
             </div>
             <div className="mt-auto fixed bottom-0">
