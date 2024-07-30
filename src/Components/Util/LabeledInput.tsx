@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React from "react";
 
 interface LabeledInputProps {
     label: string;
@@ -6,27 +6,40 @@ interface LabeledInputProps {
     placeholder?: string | null
     style?: string | null;
     value: string;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    options?: string[];
+    onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
 export enum LabeledInputType {
     String = "text",
     Number = "number",
     DateTime = "datetime-local",
-    ProductId = "text" // Assuming ProductId is a string
+    ProductId = "text",
+    Select = "select"  // Add a type for select
 }
 
-const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = null, style = null, value, onChange }) => {
-    const inputRef = useRef<HTMLInputElement>(null);
+const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = null, style = null, value, options, onChange }) => {
 
     const labeledInput = `py-2 flex justify-between items-center ${style ?? ''}`;
 
     return (
-        <>
-            <label className={labeledInput}>
-                {label}
+        <label className={labeledInput}>
+            {label}
+            {type === LabeledInputType.Select && options ? (
+                <select
+                    className="p-2 rounded-lg border"
+                    name="mySelect"
+                    value={value}
+                    onChange={onChange}
+                >
+                    {options.map((option, index) => (
+                        <option key={index} value={option}>
+                            {option}
+                        </option>
+                    ))}
+                </select>
+            ) : (
                 <input
-                    ref={inputRef}
                     className="p-2 rounded-lg border"
                     name="myInput"
                     type={type}
@@ -34,8 +47,8 @@ const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = 
                     value={value}
                     onChange={onChange}
                 />
-            </label>
-        </>
+            )}
+        </label>
     );
 };
 export default LabeledInput

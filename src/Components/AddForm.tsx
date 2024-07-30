@@ -1,17 +1,18 @@
-import LabeledInput, {LabeledInputType} from "./Util/LabeledInput.tsx";
+import LabeledInput from "./Util/LabeledInput.tsx";
 import Button from "./Util/Button.tsx";
 import React, {useState} from "react";
+import {FormColumn} from "../Definitions/FormColumn.ts";
 
 interface AddFormProps {
     title: string;
     addProduct: (formData: { [key: string]: string }) => void;
-    columns: { label: string; type: LabeledInputType }[];
+    columns: FormColumn[];
 }
 
 const AddForm: React.FC<AddFormProps> = ({ title, addProduct, columns }) => {
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
 
-    const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
             ...formData,
             [label]: event.target.value
@@ -48,6 +49,7 @@ const AddForm: React.FC<AddFormProps> = ({ title, addProduct, columns }) => {
                                 type={column.type}
                                 placeholder={`Enter ${column.label.toLowerCase()}`}
                                 value={formData[column.label] || ''}
+                                options={column.options}
                                 onChange={(e) => handleChange(column.label, e)}
                             />
                         </div>
