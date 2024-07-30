@@ -13,8 +13,14 @@ const Button: React.FC<ButtonProps> = ({ icon = null, text, onClick, style = "" 
 
     return (
         <a
-            className={styles}
+            role="button"
             onClick={onClick}
+            className={styles}
+            onKeyPress={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    onClick();
+                }
+            }}
         >
             {icon && (
                 <img
