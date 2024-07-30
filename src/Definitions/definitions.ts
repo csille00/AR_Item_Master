@@ -9,393 +9,905 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      ar_can_select_for_styles: {
-        Row: {
-          color_id: number | null
-          id: number
-          mat_subcat: string | null
-          style_id: string
-        }
-        Insert: {
-          color_id?: number | null
-          id?: number
-          mat_subcat?: string | null
-          style_id: string
-        }
-        Update: {
-          color_id?: number | null
-          id?: number
-          mat_subcat?: string | null
-          style_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ar_can_select_for_styles_color_id_fkey"
-            columns: ["color_id"]
-            isOneToOne: false
-            referencedRelation: "ar_material_colors"
-            referencedColumns: ["mat_color"]
-          },
-          {
-            foreignKeyName: "ar_can_select_for_styles_mat_subcat_fkey"
-            columns: ["mat_subcat"]
-            isOneToOne: false
-            referencedRelation: "ar_materials"
-            referencedColumns: ["id_subcat"]
-          },
-          {
-            foreignKeyName: "ar_can_select_for_styles_style_id_fkey"
-            columns: ["style_id"]
-            isOneToOne: false
-            referencedRelation: "ar_styles"
-            referencedColumns: ["style_id"]
-          },
-        ]
-      }
-      ar_jewelry_items: {
+      ar_jewelry_master: {
         Row: {
           adjustable: boolean | null
           age: string | null
-          ar_style: string | null
-          band_style: string | null
+          ar_style: number | null
+          band_style: number | null
           band_width: number | null
           bundle: boolean | null
-          chain_type: string | null
-          charm_type: string | null
+          chain_type: number | null
+          charm_type: number | null
           configurator: boolean | null
-          cost: number | null
-          create_date: string | null
-          earring_type: string | null
+          cost: unknown | null
+          date: string | null
+          earring_type: number | null
           engravable: boolean | null
           gender: string | null
-          id: string | null
-          length: string | null
+          id: number | null
+          length: number | null
           made_to_order: boolean | null
-          mat_code: string | null
-          mat_color: number | null
-          metal_finish: string | null
-          metal_texture: string | null
-          metal_type: string | null
-          msrp: number | null
+          material_type_id: number | null
+          metal_finish: number | null
+          metal_texture: number | null
+          msrp: unknown | null
           multi_finish: boolean | null
           multi_texture: boolean | null
-          pendant_type: string | null
-          primary_setting: string | null
+          pendant_type: number | null
           prod_code: string | null
-          product_type: string | null
+          prod_name: string | null
           repair_upgrade: string | null
           returnable: boolean | null
-          serial_no: number
-          setting_style: string | null
-          shape: string | null
-          sku_number: string
+          serial_number: number
+          setting: number | null
+          side_stones: number | null
+          sku_number: string | null
+          st_cert_clarity: number | null
+          st_cert_color: number | null
+          st_cert_cut: number | null
+          st_cert_type: number | null
+          st_color: number | null
+          st_cost: unknown | null
+          st_ctw: number | null
+          st_ctw_range: string | null
+          st_cut: number | null
+          st_height: number | null
+          st_orientation: number | null
+          st_origin: number | null
+          st_shape: number | null
+          st_source: number | null
+          st_table: string | null
+          st_type: string | null
+          st_width: number | null
           status: string | null
-          stone_carat_size: number | null
-          stone_clarity: string | null
-          stone_color: string | null
-          stone_cut: string | null
-          stone_height: number | null
-          stone_orientation: string | null
-          stone_origin: string | null
-          stone_shape: string | null
-          stone_type: string | null
-          stone_width: number | null
           style_number: number | null
-          title: string | null
-          variant_id: string | null
+          variant_id: number | null
           weight: number | null
         }
         Insert: {
           adjustable?: boolean | null
           age?: string | null
-          ar_style?: string | null
-          band_style?: string | null
+          ar_style?: number | null
+          band_style?: number | null
           band_width?: number | null
           bundle?: boolean | null
-          chain_type?: string | null
-          charm_type?: string | null
+          chain_type?: number | null
+          charm_type?: number | null
           configurator?: boolean | null
-          cost?: number | null
-          create_date?: string | null
-          earring_type?: string | null
+          cost?: unknown | null
+          date?: string | null
+          earring_type?: number | null
           engravable?: boolean | null
           gender?: string | null
-          id?: string | null
-          length?: string | null
+          id?: number | null
+          length?: number | null
           made_to_order?: boolean | null
-          mat_code?: string | null
-          mat_color?: number | null
-          metal_finish?: string | null
-          metal_texture?: string | null
-          metal_type?: string | null
-          msrp?: number | null
+          material_type_id?: number | null
+          metal_finish?: number | null
+          metal_texture?: number | null
+          msrp?: unknown | null
           multi_finish?: boolean | null
           multi_texture?: boolean | null
-          pendant_type?: string | null
-          primary_setting?: string | null
+          pendant_type?: number | null
           prod_code?: string | null
-          product_type?: string | null
+          prod_name?: string | null
           repair_upgrade?: string | null
           returnable?: boolean | null
-          serial_no?: number
-          setting_style?: string | null
-          shape?: string | null
-          sku_number: string
+          serial_number?: number
+          setting?: number | null
+          side_stones?: number | null
+          sku_number?: string | null
+          st_cert_clarity?: number | null
+          st_cert_color?: number | null
+          st_cert_cut?: number | null
+          st_cert_type?: number | null
+          st_color?: number | null
+          st_cost?: unknown | null
+          st_ctw?: number | null
+          st_ctw_range?: string | null
+          st_cut?: number | null
+          st_height?: number | null
+          st_orientation?: number | null
+          st_origin?: number | null
+          st_shape?: number | null
+          st_source?: number | null
+          st_table?: string | null
+          st_type?: string | null
+          st_width?: number | null
           status?: string | null
-          stone_carat_size?: number | null
-          stone_clarity?: string | null
-          stone_color?: string | null
-          stone_cut?: string | null
-          stone_height?: number | null
-          stone_orientation?: string | null
-          stone_origin?: string | null
-          stone_shape?: string | null
-          stone_type?: string | null
-          stone_width?: number | null
           style_number?: number | null
-          title?: string | null
-          variant_id?: string | null
+          variant_id?: number | null
           weight?: number | null
         }
         Update: {
           adjustable?: boolean | null
           age?: string | null
-          ar_style?: string | null
-          band_style?: string | null
+          ar_style?: number | null
+          band_style?: number | null
           band_width?: number | null
           bundle?: boolean | null
-          chain_type?: string | null
-          charm_type?: string | null
+          chain_type?: number | null
+          charm_type?: number | null
           configurator?: boolean | null
-          cost?: number | null
-          create_date?: string | null
-          earring_type?: string | null
+          cost?: unknown | null
+          date?: string | null
+          earring_type?: number | null
           engravable?: boolean | null
           gender?: string | null
-          id?: string | null
-          length?: string | null
+          id?: number | null
+          length?: number | null
           made_to_order?: boolean | null
-          mat_code?: string | null
-          mat_color?: number | null
-          metal_finish?: string | null
-          metal_texture?: string | null
-          metal_type?: string | null
-          msrp?: number | null
+          material_type_id?: number | null
+          metal_finish?: number | null
+          metal_texture?: number | null
+          msrp?: unknown | null
           multi_finish?: boolean | null
           multi_texture?: boolean | null
-          pendant_type?: string | null
-          primary_setting?: string | null
+          pendant_type?: number | null
           prod_code?: string | null
-          product_type?: string | null
+          prod_name?: string | null
           repair_upgrade?: string | null
           returnable?: boolean | null
-          serial_no?: number
-          setting_style?: string | null
-          shape?: string | null
-          sku_number?: string
+          serial_number?: number
+          setting?: number | null
+          side_stones?: number | null
+          sku_number?: string | null
+          st_cert_clarity?: number | null
+          st_cert_color?: number | null
+          st_cert_cut?: number | null
+          st_cert_type?: number | null
+          st_color?: number | null
+          st_cost?: unknown | null
+          st_ctw?: number | null
+          st_ctw_range?: string | null
+          st_cut?: number | null
+          st_height?: number | null
+          st_orientation?: number | null
+          st_origin?: number | null
+          st_shape?: number | null
+          st_source?: number | null
+          st_table?: string | null
+          st_type?: string | null
+          st_width?: number | null
           status?: string | null
-          stone_carat_size?: number | null
-          stone_clarity?: string | null
-          stone_color?: string | null
-          stone_cut?: string | null
-          stone_height?: number | null
-          stone_orientation?: string | null
-          stone_origin?: string | null
-          stone_shape?: string | null
-          stone_type?: string | null
-          stone_width?: number | null
           style_number?: number | null
-          title?: string | null
-          variant_id?: string | null
+          variant_id?: number | null
           weight?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "jewelry_items_mat_code_fkey"
-            columns: ["mat_code"]
+            foreignKeyName: "ar_jewelry_master_ar_style_fkey"
+            columns: ["ar_style"]
             isOneToOne: false
-            referencedRelation: "ar_materials"
-            referencedColumns: ["mat_code"]
+            referencedRelation: "ar_style"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "jewelry_items_mat_color_fkey"
-            columns: ["mat_color"]
+            foreignKeyName: "ar_jewelry_master_band_style_fkey"
+            columns: ["band_style"]
             isOneToOne: false
-            referencedRelation: "ar_material_colors"
-            referencedColumns: ["mat_color"]
+            referencedRelation: "band_style"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "jewelry_items_prod_code_fkey"
+            foreignKeyName: "ar_jewelry_master_band_width_fkey"
+            columns: ["band_width"]
+            isOneToOne: false
+            referencedRelation: "band_width"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_chain_type_fkey"
+            columns: ["chain_type"]
+            isOneToOne: false
+            referencedRelation: "chain_type"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_charm_type_fkey"
+            columns: ["charm_type"]
+            isOneToOne: false
+            referencedRelation: "charm_type"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_earring_type_fkey"
+            columns: ["earring_type"]
+            isOneToOne: false
+            referencedRelation: "earring_type"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_length_fkey"
+            columns: ["length"]
+            isOneToOne: false
+            referencedRelation: "length"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_material_type_id_fkey"
+            columns: ["material_type_id"]
+            isOneToOne: false
+            referencedRelation: "material_type"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_metal_finish_fkey"
+            columns: ["metal_finish"]
+            isOneToOne: false
+            referencedRelation: "metal_finish"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_metal_texture_fkey"
+            columns: ["metal_texture"]
+            isOneToOne: false
+            referencedRelation: "metal_texture"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_pendant_type_fkey"
+            columns: ["pendant_type"]
+            isOneToOne: false
+            referencedRelation: "pendant_type"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_prod_code_fkey"
             columns: ["prod_code"]
             isOneToOne: false
-            referencedRelation: "ar_styles"
-            referencedColumns: ["style_id"]
+            referencedRelation: "product_type"
+            referencedColumns: ["prod_code"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_setting_fkey"
+            columns: ["setting"]
+            isOneToOne: false
+            referencedRelation: "jewelry_setting"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_side_stones_fkey"
+            columns: ["side_stones"]
+            isOneToOne: false
+            referencedRelation: "side_stones"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_cert_clarity_fkey"
+            columns: ["st_cert_clarity"]
+            isOneToOne: false
+            referencedRelation: "st_clarity_grade"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_cert_color_fkey"
+            columns: ["st_cert_color"]
+            isOneToOne: false
+            referencedRelation: "st_color_grade"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_cert_cut_fkey"
+            columns: ["st_cert_cut"]
+            isOneToOne: false
+            referencedRelation: "st_cert_cut"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_cert_type_fkey"
+            columns: ["st_cert_type"]
+            isOneToOne: false
+            referencedRelation: "st_cert_type"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_color_fkey"
+            columns: ["st_color"]
+            isOneToOne: false
+            referencedRelation: "stone_color"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_cut_fkey"
+            columns: ["st_cut"]
+            isOneToOne: false
+            referencedRelation: "stone_cut"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_orientation_fkey"
+            columns: ["st_orientation"]
+            isOneToOne: false
+            referencedRelation: "stone_orientation"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_origin_fkey"
+            columns: ["st_origin"]
+            isOneToOne: false
+            referencedRelation: "stone_origin"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_shape_fkey"
+            columns: ["st_shape"]
+            isOneToOne: false
+            referencedRelation: "stone_shape"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_source_fkey"
+            columns: ["st_source"]
+            isOneToOne: false
+            referencedRelation: "st_source"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_type_fkey"
+            columns: ["st_type"]
+            isOneToOne: false
+            referencedRelation: "stone_type"
+            referencedColumns: ["stone_type"]
           },
         ]
       }
-      ar_material_colors: {
+      ar_style: {
         Row: {
-          can_select_for: number | null
-          color_name: string
           id: number
-          mat_color: number
+          style: string
         }
         Insert: {
-          can_select_for?: number | null
-          color_name?: string
           id?: number
-          mat_color: number
+          style: string
         }
         Update: {
-          can_select_for?: number | null
-          color_name?: string
           id?: number
-          mat_color?: number
+          style?: string
         }
         Relationships: []
       }
-      ar_materials: {
+      band_style: {
         Row: {
-          can_select_for: string | null
-          id_subcat: string
-          mat_code: string
-          material: string | null
+          id: number
+          style: string
         }
         Insert: {
-          can_select_for?: string | null
-          id_subcat: string
-          mat_code: string
-          material?: string | null
+          id?: number
+          style: string
         }
         Update: {
-          can_select_for?: string | null
-          id_subcat?: string
+          id?: number
+          style?: string
+        }
+        Relationships: []
+      }
+      band_width: {
+        Row: {
+          id: number
+          width: number
+        }
+        Insert: {
+          id?: number
+          width: number
+        }
+        Update: {
+          id?: number
+          width?: number
+        }
+        Relationships: []
+      }
+      chain_type: {
+        Row: {
+          id: number
+          type: string
+        }
+        Insert: {
+          id?: number
+          type: string
+        }
+        Update: {
+          id?: number
+          type?: string
+        }
+        Relationships: []
+      }
+      charm_type: {
+        Row: {
+          id: number
+          type: string
+        }
+        Insert: {
+          id?: number
+          type: string
+        }
+        Update: {
+          id?: number
+          type?: string
+        }
+        Relationships: []
+      }
+      ctw_range: {
+        Row: {
+          ctw: number
+          id: number
+          range: unknown
+        }
+        Insert: {
+          ctw: number
+          id?: number
+          range: unknown
+        }
+        Update: {
+          ctw?: number
+          id?: number
+          range?: unknown
+        }
+        Relationships: []
+      }
+      earring_type: {
+        Row: {
+          id: number
+          type: string
+        }
+        Insert: {
+          id?: number
+          type: string
+        }
+        Update: {
+          id?: number
+          type?: string
+        }
+        Relationships: []
+      }
+      jewelry_setting: {
+        Row: {
+          id: number
+          setting: string
+        }
+        Insert: {
+          id?: number
+          setting: string
+        }
+        Update: {
+          id?: number
+          setting?: string
+        }
+        Relationships: []
+      }
+      length: {
+        Row: {
+          id: number
+          length: unknown | null
+        }
+        Insert: {
+          id?: number
+          length?: unknown | null
+        }
+        Update: {
+          id?: number
+          length?: unknown | null
+        }
+        Relationships: []
+      }
+      material_type: {
+        Row: {
+          id: number
+          mat_code: string
+          mat_color: number
+          metal_type: string
+        }
+        Insert: {
+          id?: number
+          mat_code: string
+          mat_color: number
+          metal_type: string
+        }
+        Update: {
+          id?: number
           mat_code?: string
-          material?: string | null
+          mat_color?: number
+          metal_type?: string
         }
         Relationships: []
       }
-      ar_stones: {
+      metal_finish: {
         Row: {
-          carat_range: string | null
-          carat_weight: number | null
-          cat_status: string | null
-          cert_clarity: string | null
-          cert_color: string | null
-          cert_cut: string | null
-          cert_number: string | null
-          cert_type: string | null
-          color: string | null
-          cost: number | null
-          cut: string | null
-          date: string | null
-          dimensions: string | null
-          mat_code: string | null
-          mat_color: number | null
-          msrp: number | null
-          prod_code: string | null
-          product_type: string | null
-          refined_shape: string | null
-          serial_no: number
-          shape: string | null
-          sku_number: string
-          stone_number: string | null
-          stone_sku: string | null
-          stone_type: string | null
-          style_number: number | null
+          finish: string
+          id: number
         }
         Insert: {
-          carat_range?: string | null
-          carat_weight?: number | null
-          cat_status?: string | null
-          cert_clarity?: string | null
-          cert_color?: string | null
-          cert_cut?: string | null
-          cert_number?: string | null
-          cert_type?: string | null
-          color?: string | null
-          cost?: number | null
-          cut?: string | null
-          date?: string | null
-          dimensions?: string | null
-          mat_code?: string | null
-          mat_color?: number | null
-          msrp?: number | null
-          prod_code?: string | null
-          product_type?: string | null
-          refined_shape?: string | null
-          serial_no?: number
-          shape?: string | null
-          sku_number: string
-          stone_number?: string | null
-          stone_sku?: string | null
-          stone_type?: string | null
-          style_number?: number | null
+          finish: string
+          id?: number
         }
         Update: {
-          carat_range?: string | null
-          carat_weight?: number | null
-          cat_status?: string | null
-          cert_clarity?: string | null
-          cert_color?: string | null
-          cert_cut?: string | null
-          cert_number?: string | null
-          cert_type?: string | null
-          color?: string | null
-          cost?: number | null
-          cut?: string | null
-          date?: string | null
-          dimensions?: string | null
-          mat_code?: string | null
-          mat_color?: number | null
-          msrp?: number | null
-          prod_code?: string | null
-          product_type?: string | null
-          refined_shape?: string | null
-          serial_no?: number
-          shape?: string | null
-          sku_number?: string
-          stone_number?: string | null
-          stone_sku?: string | null
-          stone_type?: string | null
-          style_number?: number | null
+          finish?: string
+          id?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "stones_mat_code_fkey"
-            columns: ["mat_code"]
-            isOneToOne: false
-            referencedRelation: "ar_materials"
-            referencedColumns: ["mat_code"]
-          },
-          {
-            foreignKeyName: "stones_mat_color_fkey"
-            columns: ["mat_color"]
-            isOneToOne: false
-            referencedRelation: "ar_material_colors"
-            referencedColumns: ["mat_color"]
-          },
-          {
-            foreignKeyName: "stones_prod_code_fkey"
-            columns: ["prod_code"]
-            isOneToOne: false
-            referencedRelation: "ar_styles"
-            referencedColumns: ["style_id"]
-          },
-        ]
+        Relationships: []
       }
-      ar_styles: {
+      metal_texture: {
         Row: {
-          style_id: string
-          style_name: string
+          id: number
+          texture: string
         }
         Insert: {
-          style_id: string
-          style_name: string
+          id?: number
+          texture: string
         }
         Update: {
-          style_id?: string
-          style_name?: string
+          id?: number
+          texture?: string
+        }
+        Relationships: []
+      }
+      pendant_type: {
+        Row: {
+          id: number
+          type: string
+        }
+        Insert: {
+          id?: number
+          type: string
+        }
+        Update: {
+          id?: number
+          type?: string
+        }
+        Relationships: []
+      }
+      product_type: {
+        Row: {
+          code: string
+          prod_code: string
+          product_type: string
+        }
+        Insert: {
+          code: string
+          prod_code: string
+          product_type: string
+        }
+        Update: {
+          code?: string
+          prod_code?: string
+          product_type?: string
+        }
+        Relationships: []
+      }
+      side_stones: {
+        Row: {
+          id: number
+          stone: string
+        }
+        Insert: {
+          id?: number
+          stone: string
+        }
+        Update: {
+          id?: number
+          stone?: string
+        }
+        Relationships: []
+      }
+      st_cert_cut: {
+        Row: {
+          cut: string
+          id: number
+        }
+        Insert: {
+          cut: string
+          id?: number
+        }
+        Update: {
+          cut?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      st_cert_type: {
+        Row: {
+          cert_type: string
+          id: number
+        }
+        Insert: {
+          cert_type: string
+          id?: number
+        }
+        Update: {
+          cert_type?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      st_clarity_grade: {
+        Row: {
+          grade: string
+          id: number
+        }
+        Insert: {
+          grade: string
+          id?: number
+        }
+        Update: {
+          grade?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      st_color_grade: {
+        Row: {
+          grade: string
+          id: number
+        }
+        Insert: {
+          grade: string
+          id?: number
+        }
+        Update: {
+          grade?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      st_price_range: {
+        Row: {
+          id: number
+          price: unknown
+          range: unknown
+        }
+        Insert: {
+          id?: number
+          price: unknown
+          range: unknown
+        }
+        Update: {
+          id?: number
+          price?: unknown
+          range?: unknown
+        }
+        Relationships: []
+      }
+      st_source: {
+        Row: {
+          id: number
+          source: string
+        }
+        Insert: {
+          id?: number
+          source: string
+        }
+        Update: {
+          id?: number
+          source?: string
+        }
+        Relationships: []
+      }
+      stone_color: {
+        Row: {
+          color: string
+          id: number
+        }
+        Insert: {
+          color: string
+          id?: number
+        }
+        Update: {
+          color?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      stone_cut: {
+        Row: {
+          cut: string
+          id: number
+          st_table: string
+        }
+        Insert: {
+          cut: string
+          id?: number
+          st_table: string
+        }
+        Update: {
+          cut?: string
+          id?: number
+          st_table?: string
+        }
+        Relationships: []
+      }
+      stone_orientation: {
+        Row: {
+          id: number
+          orientation: string
+        }
+        Insert: {
+          id?: number
+          orientation: string
+        }
+        Update: {
+          id?: number
+          orientation?: string
+        }
+        Relationships: []
+      }
+      stone_origin: {
+        Row: {
+          id: number
+          origin: string
+        }
+        Insert: {
+          id?: number
+          origin: string
+        }
+        Update: {
+          id?: number
+          origin?: string
+        }
+        Relationships: []
+      }
+      stone_product_type: {
+        Row: {
+          prod_code: string
+          type: string
+        }
+        Insert: {
+          prod_code: string
+          type: string
+        }
+        Update: {
+          prod_code?: string
+          type?: string
+        }
+        Relationships: []
+      }
+      stone_shape: {
+        Row: {
+          id: number
+          shape: string
+        }
+        Insert: {
+          id?: number
+          shape: string
+        }
+        Update: {
+          id?: number
+          shape?: string
+        }
+        Relationships: []
+      }
+      stone_type: {
+        Row: {
+          mat_code: string | null
+          mat_color: string | null
+          mat_color_name: string | null
+          price_10_to_20: number | null
+          price_100_to_125: number | null
+          price_1000_to_1200: number | null
+          price_1200_to_1400: number | null
+          price_125_to_150: number | null
+          price_1400_to_1600: number | null
+          price_150_to_175: number | null
+          price_1600_to_1800: number | null
+          price_175_to_200: number | null
+          price_1800_to_2000: number | null
+          price_20_to_30: number | null
+          price_200_to_225: number | null
+          price_2000_to_2400: number | null
+          price_225_to_250: number | null
+          price_2400_to_2800: number | null
+          price_250_to_300: number | null
+          price_2800_to_3200: number | null
+          price_30_to_40: number | null
+          price_300_to_350: number | null
+          price_3200_to_3600: number | null
+          price_350_to_400: number | null
+          price_3600_to_4000: number | null
+          price_40_to_50: number | null
+          price_400_to_450: number | null
+          price_4000_to_4500: number | null
+          price_450_to_500: number | null
+          price_4500_to_5000: number | null
+          price_5_to_10: number | null
+          price_50_to_75: number | null
+          price_500_to_600: number | null
+          price_5000_to_5500: number | null
+          price_600_to_700: number | null
+          price_700_to_800: number | null
+          price_75_to_100: number | null
+          price_800_to_900: number | null
+          price_900_to_1000: number | null
+          price_gt_5500: number | null
+          price_lt_5: number | null
+          stone_type: string
+        }
+        Insert: {
+          mat_code?: string | null
+          mat_color?: string | null
+          mat_color_name?: string | null
+          price_10_to_20?: number | null
+          price_100_to_125?: number | null
+          price_1000_to_1200?: number | null
+          price_1200_to_1400?: number | null
+          price_125_to_150?: number | null
+          price_1400_to_1600?: number | null
+          price_150_to_175?: number | null
+          price_1600_to_1800?: number | null
+          price_175_to_200?: number | null
+          price_1800_to_2000?: number | null
+          price_20_to_30?: number | null
+          price_200_to_225?: number | null
+          price_2000_to_2400?: number | null
+          price_225_to_250?: number | null
+          price_2400_to_2800?: number | null
+          price_250_to_300?: number | null
+          price_2800_to_3200?: number | null
+          price_30_to_40?: number | null
+          price_300_to_350?: number | null
+          price_3200_to_3600?: number | null
+          price_350_to_400?: number | null
+          price_3600_to_4000?: number | null
+          price_40_to_50?: number | null
+          price_400_to_450?: number | null
+          price_4000_to_4500?: number | null
+          price_450_to_500?: number | null
+          price_4500_to_5000?: number | null
+          price_5_to_10?: number | null
+          price_50_to_75?: number | null
+          price_500_to_600?: number | null
+          price_5000_to_5500?: number | null
+          price_600_to_700?: number | null
+          price_700_to_800?: number | null
+          price_75_to_100?: number | null
+          price_800_to_900?: number | null
+          price_900_to_1000?: number | null
+          price_gt_5500?: number | null
+          price_lt_5?: number | null
+          stone_type: string
+        }
+        Update: {
+          mat_code?: string | null
+          mat_color?: string | null
+          mat_color_name?: string | null
+          price_10_to_20?: number | null
+          price_100_to_125?: number | null
+          price_1000_to_1200?: number | null
+          price_1200_to_1400?: number | null
+          price_125_to_150?: number | null
+          price_1400_to_1600?: number | null
+          price_150_to_175?: number | null
+          price_1600_to_1800?: number | null
+          price_175_to_200?: number | null
+          price_1800_to_2000?: number | null
+          price_20_to_30?: number | null
+          price_200_to_225?: number | null
+          price_2000_to_2400?: number | null
+          price_225_to_250?: number | null
+          price_2400_to_2800?: number | null
+          price_250_to_300?: number | null
+          price_2800_to_3200?: number | null
+          price_30_to_40?: number | null
+          price_300_to_350?: number | null
+          price_3200_to_3600?: number | null
+          price_350_to_400?: number | null
+          price_3600_to_4000?: number | null
+          price_40_to_50?: number | null
+          price_400_to_450?: number | null
+          price_4000_to_4500?: number | null
+          price_450_to_500?: number | null
+          price_4500_to_5000?: number | null
+          price_5_to_10?: number | null
+          price_50_to_75?: number | null
+          price_500_to_600?: number | null
+          price_5000_to_5500?: number | null
+          price_600_to_700?: number | null
+          price_700_to_800?: number | null
+          price_75_to_100?: number | null
+          price_800_to_900?: number | null
+          price_900_to_1000?: number | null
+          price_gt_5500?: number | null
+          price_lt_5?: number | null
+          stone_type?: string
         }
         Relationships: []
       }
