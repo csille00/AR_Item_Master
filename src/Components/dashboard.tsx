@@ -285,15 +285,23 @@ const Dashboard: React.FC = () => {
         setCurrentPage((prevPage) => prevPage - 1);
     };
 
+    const handleAddProduct = (formData: { [key: string]: string }) => {
+        console.log("Form Data:", formData);
+        // Insert into your database here
+    };
+
     const stoneColumns = [
-        {label: "Product Name", type: LabeledInputType.String},
-        {label: "Product Id", type: LabeledInputType.String},
+        {label: "Serial Number", type: LabeledInputType.Number},
+        {label: "SKU Number", type: LabeledInputType.String},
+        {label: "Create Date", type: LabeledInputType.DateTime},
+        {label: "Style Number", type: LabeledInputType.Number},
+        {label: "Title", type: LabeledInputType.String},
         {label: "Category", type: LabeledInputType.String},
-        {label: "Buying Price", type: LabeledInputType.Number},
-        {label: "Quantity", type: LabeledInputType.Number},
-        {label: "Unit", type: LabeledInputType.Number},
-        {label: "Expiration Date", type: LabeledInputType.DateTime},
-        {label: "Threshold Value", type: LabeledInputType.Number},
+        {label: "Product Type", type: LabeledInputType.String},
+        {label: "Prod Code", type: LabeledInputType.String},
+        {label: "Cost", type: LabeledInputType.Number},
+        {label: "Style", type: LabeledInputType.String},
+        {label: "Color", type: LabeledInputType.String}
     ]
 
     return (

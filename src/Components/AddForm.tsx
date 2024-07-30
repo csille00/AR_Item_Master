@@ -8,24 +8,31 @@ interface AddFormProps {
     columns: { label: string; type: LabeledInputType }[];
 }
 
-const AddForm: React.FC<AddFormProps> = ({title, addProduct, columns}) => {
+const AddForm: React.FC<AddFormProps> = ({ title, addProduct, columns }) => {
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
 
-    const handleChange = (label: string, value: string) => {
+    const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
-            [label]: value
+            [label]: event.target.value
         });
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = (event: React.FormEvent | undefined) => {
+        if(!event) return;
         event.preventDefault();
         addProduct(formData);
     };
 
-    const onClick = () => {
-        console.log("add product clicked")
-    }
+    const handleClear = () => {
+
+        const clearedData = Object.keys(formData).reduce((acc, key) => {
+            acc[key] = '';
+            return acc;
+        }, {} as { [key: string]: string });
+        setFormData(clearedData);
+    };
+
 
     return (
         <div className="m-10 bg-white rounded-lg shadow-md p-4">
@@ -33,25 +40,27 @@ const AddForm: React.FC<AddFormProps> = ({title, addProduct, columns}) => {
                 <h1 className="text-4xl font-medium py-10">{title}</h1>
             </div>
             <div className="flex justify-center">
-                <form className="" onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     {columns.map((column, index) => (
                         <div className="mb-4" key={index}>
                             <LabeledInput
                                 label={column.label}
                                 type={column.type}
-                                onChange={(e) => handleChange(column.label, e.target.value)}
+                                placeholder={`Enter ${column.label.toLowerCase()}`}
+                                value={formData[column.label] || ''}
+                                onChange={(e) => handleChange(column.label, e)}
                             />
                         </div>
                     ))}
-                    <div className="flex justify-end mt-4">
+                    <div className="flex justify-end mt-4 space-x-4">
                         <Button
                             text="Clear"
-                            onClick={onClick}
+                            onClick={handleClear}
                             style="bg-superlightgr rounded-lg"
                         />
                         <Button
                             text="Add Product"
-                            onClick={onClick}
+                            onClick={handleSubmit} // Updated here to use handleSubmit
                             style="bg-arbrown rounded-lg"
                         />
                     </div>
