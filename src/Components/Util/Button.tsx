@@ -4,7 +4,7 @@ interface ButtonProps {
     icon?: string | null;
     text: string;
     style?: string | null;
-    onClick: () => void;
+    onClick: (event?: React.FormEvent | undefined) => void;
 }
 
 const Button: React.FC<ButtonProps> = ({ icon = null, text, onClick, style = "" }) => {

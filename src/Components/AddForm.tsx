@@ -11,21 +11,28 @@ interface AddFormProps {
 const AddForm: React.FC<AddFormProps> = ({ title, addProduct, columns }) => {
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
 
-    const handleChange = (label: string, value: string) => {
+    const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
-            [label]: value
+            [label]: event.target.value
         });
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = (event: React.FormEvent | undefined) => {
+        if(!event) return;
         event.preventDefault();
         addProduct(formData);
     };
 
     const handleClear = () => {
-        setFormData({});
+
+        const clearedData = Object.keys(formData).reduce((acc, key) => {
+            acc[key] = '';
+            return acc;
+        }, {} as { [key: string]: string });
+        setFormData(clearedData);
     };
+
 
     return (
         <div className="m-10 bg-white rounded-lg shadow-md p-4">
@@ -40,7 +47,8 @@ const AddForm: React.FC<AddFormProps> = ({ title, addProduct, columns }) => {
                                 label={column.label}
                                 type={column.type}
                                 placeholder={`Enter ${column.label.toLowerCase()}`}
-                                onChange={(e) => handleChange(column.label, e.target.value)}
+                                value={formData[column.label] || ''}
+                                onChange={(e) => handleChange(column.label, e)}
                             />
                         </div>
                     ))}
