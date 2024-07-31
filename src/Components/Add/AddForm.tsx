@@ -3,6 +3,7 @@ import LabeledInput, {LabeledInputType} from "../Util/LabeledInput.tsx";
 import Button from "../Util/Button.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
+import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 
 interface SharedFormProps {
     title: string;
@@ -94,7 +95,9 @@ export const AddForm: React.FC<SharedFormProps> = ({
 
     const handleClear = () => {
         const clearedData = Object.keys(formData).reduce((acc, key) => {
-            acc[key] = '';
+            if(key !== ArJewelryMasterColumns.TYPE) {
+                acc[key] = '';
+            }
             return acc;
         }, {} as { [key: string]: string });
         setFormData(clearedData);
