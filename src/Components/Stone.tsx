@@ -1,13 +1,10 @@
-import React, {useState} from "react";
-import Table, {TableProps} from "../Components/Util/Table.tsx";
-import AddForm from "./AddForm.tsx";
+import React from "react";
+import Table from "../Components/Util/Table.tsx";
 import {LabeledInputType} from "./Util/LabeledInput.tsx";
 import {StoneRow, StoneItem} from "./Util/StoneRow.tsx";
 
 
 const Stone: React.FC = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-
     const ar_stone_columns = [
         "SKU",
         "Stone Type",
