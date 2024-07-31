@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
-import LabeledInput, { LabeledInputType } from "./Util/LabeledInput.tsx";
-import Button from "./Util/Button.tsx";
-import { FormColumn } from "../Definitions/FormColumn.ts";
-import { Option } from "../Definitions/DropdownOption.ts";
+import React, {useEffect, useState} from "react";
+import LabeledInput, {LabeledInputType} from "../Util/LabeledInput.tsx";
+import Button from "../Util/Button.tsx";
+import {FormColumn} from "../../Definitions/FormColumn.ts";
+import {Option} from "../../Definitions/DropdownOption.ts";
 
 interface SharedFormProps {
     title: string;
-    columnsConfig: FormColumn[];
     fetchColumns: (type: string) => Promise<FormColumn[]>;
     fetchProductTypes: () => Promise<Option[] | undefined>;
     initialType: string;
-    submitForm: (formData: { [key: string]: string }) => void;
+    submitForm: (formData: { [key: string]: string | number }, columns: FormColumn[]) => void;
 }
 
 export const AddForm: React.FC<SharedFormProps> = ({
@@ -20,10 +19,10 @@ export const AddForm: React.FC<SharedFormProps> = ({
                                                    initialType,
                                                    submitForm,
                                                }) => {
-    const [formData, setFormData] = useState<{ [key: string]: string }>({});
     const [productTypes, setProductTypes] = useState<Option[]>([]);
     const [columns, setColumns] = useState<FormColumn[]>([]);
     const [type, setType] = useState<string>(initialType);
+    const [formData, setFormData] = useState<{ [key: string]: string | number }>({["Type"]: initialType});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -51,6 +50,10 @@ export const AddForm: React.FC<SharedFormProps> = ({
             setIsLoading(true);
             try {
                 const config = await fetchColumns(type);
+                //set none value at the top of each select option
+                config.forEach(col => {
+                    col.options?.unshift({description: "--"})
+                })
                 config.unshift(new FormColumn("Type", LabeledInputType.Select, productTypes));
                 setColumns(config);
             } catch (error) {
@@ -83,7 +86,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
     const handleSubmit = (event: React.FormEvent | undefined) => {
         if (!event) return;
         event.preventDefault();
-        submitForm(formData);
+        submitForm(formData, columns);
     };
 
     const handleClear = () => {
