@@ -1,5 +1,5 @@
 import {getFormConfig} from "../../Definitions/formConfig.ts";
-import {getProductTypesFromClient} from "../../model/queries/productTypeDAO.ts";
+import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
 import {ProductTypes} from "../../Definitions/enum.ts";
 import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";

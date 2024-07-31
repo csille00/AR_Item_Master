@@ -4,7 +4,7 @@ import SidePanel from "./SidePanel/sidePanel.tsx";
 import useClient from "../hooks/useClient.tsx";
 import ProductListPage, {Product} from "./ProductPage.tsx";
 import Table, {TableProps} from "../Components/Util/Table.tsx";
-import AddForm from "./AddForm.tsx";
+import AddForm from "./Add/AddForm.tsx";
 import {LabeledInputType} from "./Util/LabeledInput.tsx";
 import {Tables} from "../Definitions/definitions.ts";
 import JewelryRow, {JewelryItem} from "./Util/JewelryRow.tsx";

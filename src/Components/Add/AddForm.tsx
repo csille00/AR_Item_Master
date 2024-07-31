@@ -13,16 +13,16 @@ interface SharedFormProps {
 }
 
 export const AddForm: React.FC<SharedFormProps> = ({
-                                                   title,
-                                                   fetchColumns,
-                                                   fetchProductTypes,
-                                                   initialType,
-                                                   submitForm,
-                                               }) => {
+                                                       title,
+                                                       fetchColumns,
+                                                       fetchProductTypes,
+                                                       initialType,
+                                                       submitForm,
+                                                   }) => {
     const [productTypes, setProductTypes] = useState<Option[]>([]);
     const [columns, setColumns] = useState<FormColumn[]>([]);
     const [type, setType] = useState<string>(initialType);
-    const [formData, setFormData] = useState<{ [key: string]: string | number }>({["Type"]: initialType});
+    const [formData, setFormData] = useState<{ [key: string]: string }>({["Type"]: initialType});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -83,10 +83,13 @@ export const AddForm: React.FC<SharedFormProps> = ({
         });
     };
 
-    const handleSubmit = (event: React.FormEvent | undefined) => {
+    const handleSubmit = async (event: React.FormEvent | undefined) => {
         if (!event) return;
         event.preventDefault();
+        columns.push(new FormColumn("Type", LabeledInputType.Select, productTypes))
         submitForm(formData, columns);
+        //TODO: go through and make sure that all of the required fields are filled in
+        handleClear()
     };
 
     const handleClear = () => {
@@ -117,8 +120,8 @@ export const AddForm: React.FC<SharedFormProps> = ({
                         </div>
                     ))}
                     <div className="flex justify-end mt-4 space-x-4">
-                        <Button text="Clear" onClick={handleClear} style="bg-superlightgr rounded-lg" />
-                        <Button text="Add Product" onClick={handleSubmit} style="bg-arbrown rounded-lg" />
+                        <Button text="Clear" onClick={handleClear} style="bg-superlightgr rounded-lg"/>
+                        <Button text="Add Product" onClick={handleSubmit} style="bg-arbrown rounded-lg"/>
                     </div>
                 </form>
             </div>
