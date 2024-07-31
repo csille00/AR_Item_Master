@@ -1,0 +1,130 @@
+import React, {useState} from "react";
+import Table, {TableProps} from "../Components/Util/Table.tsx";
+import AddForm from "./AddForm.tsx";
+import {LabeledInputType} from "./Util/LabeledInput.tsx";
+import {StoneRow, StoneItem} from "./Util/StoneRow.tsx";
+
+
+const Stone: React.FC = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const ar_stone_columns = [
+        "SKU",
+        "Stone Type",
+        "Product Type",
+        "Style Number",
+        "Shape",
+        "Cut",
+        "Carat"
+    ]
+
+    const ar_stone_mock: StoneItem[] = [
+        {
+            "serialNo": 1,
+            "skuNumber": "SKU001",
+            "date": "2024-07-18",
+            "styleNumber": "ST001",
+            "stoneType": "Diamond",
+            "productType": "Ring",
+            "prodCode": "PR001",
+            "matCode": "MC001",
+            "matColor": "Gold",
+            "msrp": 500,
+            "cost": 250,
+            "color": "Clear",
+            "shape": "Round",
+            "cut": "Brilliant",
+            "dimensions": "4.5mm",
+            "caratWeight": 0.5,
+            "caratRange": "0.4-0.6",
+            "certType": "GIA",
+            "certNumber": "1234567890",
+            "certCut": "Excellent",
+            "certColor": "D",
+            "certClarity": "VS1",
+            "stoneNumber": "S001",
+            "catStatus": "Available",
+            "stoneSku": "STN001",
+            "refinedShape": "Round"
+        },
+        {
+            "serialNo": 2,
+            "skuNumber": "SKU002",
+            "date": "2024-07-17",
+            "styleNumber": "ST002",
+            "stoneType": "Emerald",
+            "productType": "Necklace",
+            "prodCode": "PR002",
+            "matCode": "MC002",
+            "matColor": "Silver",
+            "msrp": 800,
+            "cost": 400,
+            "color": "Green",
+            "shape": "Oval",
+            "cut": "Faceted",
+            "dimensions": "6.2x4.8mm",
+            "caratWeight": 1.2,
+            "caratRange": "1.0-1.5",
+            "certType": "IGI",
+            "certNumber": "0987654321",
+            "certCut": "Very Good",
+            "certColor": "F",
+            "certClarity": "SI1",
+            "stoneNumber": "S002",
+            "catStatus": "Available",
+            "stoneSku": "STN002",
+            "refinedShape": "Oval"
+        }
+    ]
+
+    //
+    // const totalPages = Math.ceil(products.length / 10); // Assuming 10 products per page
+    // const onNextPage = () => {
+    //     setCurrentPage((prevPage) => prevPage + 1);
+    // };
+    //
+    // const onPrevPage = () => {
+    //     setCurrentPage((prevPage) => prevPage - 1);
+    // };
+
+    const handleAddProduct = (formData: { [key: string]: string }) => {
+        console.log("Form Data:", formData);
+        // Insert into your database here
+    };
+
+    const stoneColumns = [
+        {label: "Serial Number", type: LabeledInputType.Number},
+        {label: "SKU Number", type: LabeledInputType.String},
+        {label: "Create Date", type: LabeledInputType.DateTime},
+        {label: "Style Number", type: LabeledInputType.Number},
+        {label: "Title", type: LabeledInputType.String},
+        {label: "Category", type: LabeledInputType.String},
+        {label: "Product Type", type: LabeledInputType.String},
+        {label: "Prod Code", type: LabeledInputType.String},
+        {label: "Cost", type: LabeledInputType.Number},
+        {label: "Style", type: LabeledInputType.String},
+        {label: "Color", type: LabeledInputType.String}
+    ]
+
+    return (
+        <>
+            <Table columns={ar_stone_columns} data={ar_stone_mock} title={"Stone Master"}>
+                {(item: StoneItem) => <StoneRow {...item} />}
+            </Table>
+
+            {/*<ProductListPage*/}
+            {/*    products={products.slice((currentPage - 1) * 10, currentPage * 10)}*/}
+            {/*    currentPage={currentPage}*/}
+            {/*    totalPages={totalPages}*/}
+            {/*    onNextPage={onNextPage}*/}
+            {/*    onPrevPage={onPrevPage}*/}
+            {/*/>*/}
+
+            {/*<div className="w-1/2">*/}
+            {/*    <AddForm title={"New Jewelry Info"} addProduct={onNextPage} columns={stoneColumns}/>*/}
+            {/*</div>*/}
+        </>
+    )
+}
+
+export default Stone

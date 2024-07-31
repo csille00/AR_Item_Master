@@ -2,7 +2,7 @@ import '../index.css'
 import { useState, useEffect, SetStateAction} from 'react'
 import {Auth} from '@supabase/auth-ui-react'
 import {ThemeSupa} from '@supabase/auth-ui-shared'
-import Dashboard from "./dashboard.tsx";
+import Jewelry from "./Jewelry.tsx";
 import {Session} from "@supabase/supabase-js";
 import useClient from "../hooks/useClient.tsx";
 import logoSrc from "../assets/Logo.png"
@@ -66,8 +66,6 @@ const Authentication: React.FC = () => {
                 </div>
             </div>
         )
-    } else {
-        return <Dashboard/>
     }
 }
 
