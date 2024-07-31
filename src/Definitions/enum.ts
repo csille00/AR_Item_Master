@@ -1,4 +1,4 @@
-export enum gender {
+export enum age {
     ADULT = "adult"
 }
 
