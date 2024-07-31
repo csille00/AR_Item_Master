@@ -1,6 +1,6 @@
 import {FormColumn} from "./FormColumn.ts"
 import {LabeledInputType} from "../Components/Util/LabeledInput.tsx";
-import {age, gender} from "./enum.ts";
+import {age, gender, ProductTypes} from "./enum.ts";
 import {Option} from "./DropdownOption.ts";
 import {getStoneTypesFromClient} from "../model/queries/stoneTypeDAO.ts";
 import {getCertTypesFromClient} from "../model/queries/st_cert_typeDAO.ts";
@@ -15,22 +15,16 @@ import {getSettingsFromClient} from "../model/queries/jewelry_settingDAO.ts";
 import {getSideStonesFromClient} from "../model/queries/side_stonesDAO.ts";
 import {getStylesFromClient} from "../model/queries/ar_styleDAO.ts";
 
-export interface FormConfig {
-    [key: string]: FormColumn[]
-}
-
 const yesNoOption: Option[] = [
     {description: 'Yes'},
     {description: 'No'}
 ]
 
 export const getFormConfig = async (type: string): Promise<FormColumn[]> => {
-
-
     switch (type) {
-        case 'ENG':
+        case ProductTypes.ENG:
             return getEngagementRingRows()
-        case 'WED':
+        case ProductTypes.WED:
             return getWeddingRingRows()
         default: return []
     }
@@ -38,9 +32,46 @@ export const getFormConfig = async (type: string): Promise<FormColumn[]> => {
 
 const getEngagementRingRows = async (): Promise<FormColumn[]> => {
 
-    const foo = [
-        new FormColumn("Style Number", LabeledInputType.Number),
-        new FormColumn("Product Name", LabeledInputType.String),
+    try {
+        return [
+            new FormColumn("Style Number", LabeledInputType.Number),
+            new FormColumn("Product Name", LabeledInputType.String),
+            new FormColumn("MSRP", LabeledInputType.Number),
+            new FormColumn("Cost", LabeledInputType.Number),
+            new FormColumn("ST Type", LabeledInputType.Select, await getStoneTypesFromClient()),
+            new FormColumn("ST CTW", LabeledInputType.Number),
+            new FormColumn("ST Cert Type", LabeledInputType.Select, await getCertTypesFromClient()),
+            new FormColumn("ST Cert Color", LabeledInputType.Select, await getColorGradeFromClient()),
+            new FormColumn("ST Cert Clarity", LabeledInputType.Select, await getCertClarityFromClient()),
+            new FormColumn("AR Style", LabeledInputType.Select, await getStylesFromClient()),
+            new FormColumn("Age", LabeledInputType.Select, [{description: age.ADULT}]),
+            new FormColumn("Gender", LabeledInputType.Select, [
+                {description: gender.UNISEX},
+                {description: gender.MALE},
+                {description: gender.FEMALE}
+            ]),
+            new FormColumn("Returnable", LabeledInputType.Select, yesNoOption),
+            new FormColumn("Engravable", LabeledInputType.Select, yesNoOption),
+            new FormColumn("Made to Order", LabeledInputType.Select, yesNoOption),
+            new FormColumn("Adjustable", LabeledInputType.Select, yesNoOption),
+            new FormColumn("Metal Type", LabeledInputType.Select, await getMetalTypesFromClient()),
+            new FormColumn("Metal Finish", LabeledInputType.Select, await getMetalFinishesClient()),
+            new FormColumn("Metal Texture", LabeledInputType.Select, await getMetalTexturesFromClient()),
+            new FormColumn("Band Style", LabeledInputType.Select, await getBandStyleFromClient()),
+            new FormColumn("Band Width", LabeledInputType.Select, await getBandWidthFromClient()),
+            new FormColumn("Setting", LabeledInputType.Select, await getSettingsFromClient()),
+            new FormColumn("Side Stones", LabeledInputType.Select, await getSideStonesFromClient())
+        ]
+    } catch (error) {
+        throw new Error("Error Fetching objects from database. Please try again later")
+    }
+};
+
+const getWeddingRingRows = async (): Promise<FormColumn[]> => {
+
+    return [
+        new FormColumn("Style Number Wedding Band", LabeledInputType.Number),
+        new FormColumn("Product", LabeledInputType.String),
         new FormColumn("MSRP", LabeledInputType.Number),
         new FormColumn("Cost", LabeledInputType.Number),
         new FormColumn("ST Type", LabeledInputType.Select, await getStoneTypesFromClient()),
@@ -66,17 +97,5 @@ const getEngagementRingRows = async (): Promise<FormColumn[]> => {
         new FormColumn("Band Width", LabeledInputType.Select, await getBandWidthFromClient()),
         new FormColumn("Setting", LabeledInputType.Select, await getSettingsFromClient()),
         new FormColumn("Side Stones", LabeledInputType.Select, await getSideStonesFromClient())
-    ];
-
-    // foo.forEach(column => console.log(column.options))
-
-    return foo
-};
-
-const getWeddingRingRows = async (): Promise<FormColumn[]> => {
-
-    return [
-        new FormColumn("Style Number", LabeledInputType.Number),
-        new FormColumn("Product Name", LabeledInputType.String),
     ];
 };
