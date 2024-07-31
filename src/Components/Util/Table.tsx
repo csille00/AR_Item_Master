@@ -27,7 +27,7 @@ const Table = <T, >({title, columns, data, style, children}: TableProps) => {
 
     return (
         <>
-            <div className="mt-5 mx-2 flex justify-end">
+            <div className="mt-5 mx-4 flex justify-end">
                 <form className="flex items-center border border-lightgr rounded-lg bg-superlightgr px-5 h-12 w-fit">
                     <input
                         type="text"
@@ -39,7 +39,7 @@ const Table = <T, >({title, columns, data, style, children}: TableProps) => {
                     {/*</button>*/}
                 </form>
             </div>
-            <div className={`m-2 border border-lightgr rounded-lg mt-10 bg-white ${style ? style : ''}`}>
+            <div className={`mx-4 border border-lightgr rounded-lg mt-10 bg-white ${style ? style : ''}`}>
                 <div className="flex items-center justify-between p-4">
                     <h1 className="text-argray text-left my-8 text-4xl justify-start">{title}</h1>
                     <div className="flex justify-end items-center">
@@ -59,7 +59,7 @@ const Table = <T, >({title, columns, data, style, children}: TableProps) => {
                         </button>
                     </div>
                 </div>
-                <div className="flex justify-center">
+                <div className="flex justify-center pb-6 px-4">
                     <table className="w-full text-left text-argray">
                         <thead className="">
                         <tr>

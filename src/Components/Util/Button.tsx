@@ -9,7 +9,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ icon = null, text, onClick, style = "" }) => {
 
-    const styles = `m-2 btn flex items-center py-1 px-2 mb-2 bg-argray text-left hover:outline-none ${style}`;
+    const styles = `btn flex items-center py-1 px-2 mb-4 bg-argray text-left hover:outline-none ${style}`;
 
     return (
         <a
@@ -29,7 +29,7 @@ const Button: React.FC<ButtonProps> = ({ icon = null, text, onClick, style = "" 
                     alt={text}
                 />
             )}
-            <span className="p-2 font-extralight text-lightgr hover:text-white hover:font-bold">
+            <span className="p-2 font-light text-xl text-lightgr hover:text-lightgr hover:font-bold">
                 {text}
             </span>
         </a>

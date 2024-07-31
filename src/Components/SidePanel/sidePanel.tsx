@@ -28,7 +28,7 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
 
     return (
         <div className="flex flex-col items-center bg-argray h-full shadow-md p-2">
-            <div className="mb-4 mt-4">
+            <div className="mb-10 mt-4">
                 <img src={logoSrc} alt="Logo" className="w-full"/>
             </div>
             <div className="mb-auto">
