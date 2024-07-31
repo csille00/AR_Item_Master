@@ -1,56 +1,76 @@
-import LabeledInput, {LabeledInputType} from "./Util/LabeledInput.tsx";
+import React, { useEffect, useState } from "react";
+import LabeledInput, { LabeledInputType } from "./Util/LabeledInput.tsx";
 import Button from "./Util/Button.tsx";
-import React, {useEffect, useState} from "react";
-import {FormColumn} from "../Definitions/FormColumn.ts";
-import {getFormConfig} from "../Definitions/formConfig.ts";
-import {getProductTypesFromClient} from "../model/queries/productTypeDAO.ts";
-import {Option} from "../Definitions/DropdownOption.ts";
+import { FormColumn } from "../Definitions/FormColumn.ts";
+import { Option } from "../Definitions/DropdownOption.ts";
 
-interface AddFormProps {
+interface SharedFormProps {
     title: string;
-    addProduct: (formData: { [key: string]: string }) => void;
+    columnsConfig: FormColumn[];
+    fetchColumns: (type: string) => Promise<FormColumn[]>;
+    fetchProductTypes: () => Promise<Option[] | undefined>;
+    initialType: string;
+    submitForm: (formData: { [key: string]: string }) => void;
 }
 
-//TODO: I have accidentally made this now a jewelry specific thing. Figure out how to take the type stuff out and make it passed in
-//TODO: I also need to get the options to render correctly
-//TODO: I also need to set the type properly
-
-const AddForm: React.FC<AddFormProps> = ({ title, addProduct }) => {
+export const AddForm: React.FC<SharedFormProps> = ({
+                                                   title,
+                                                   fetchColumns,
+                                                   fetchProductTypes,
+                                                   initialType,
+                                                   submitForm,
+                                               }) => {
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
-    const [productTypes, setProductTypes] = useState<Option[]>([{description:'test'}]);
+    const [productTypes, setProductTypes] = useState<Option[]>([]);
     const [columns, setColumns] = useState<FormColumn[]>([]);
-    const [type, setType] = useState<string>('ENG');
+    const [type, setType] = useState<string>(initialType);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const getProductTypes = async () => {
+            setIsLoading(true);
             try {
-                const data = await getProductTypesFromClient();
+                const data = await fetchProductTypes();
                 if (data) {
-                    // data.forEach(option => console.log(option))
                     setProductTypes(data);
                 }
             } catch (error) {
                 console.error("Failed to fetch product types:", error);
+                setError("Failed to fetch product types: " + (error as Error).message);
+            } finally {
+                setIsLoading(false);
             }
         };
 
         getProductTypes();
-    }, []);
+    }, [fetchProductTypes]);
 
     useEffect(() => {
         const fetchFormConfig = async () => {
-            const config = await getFormConfig(type);
-            setColumns(config);
-
-            if (type === 'ENG') {
-                config.unshift({ label: "Type", type: LabeledInputType.Select, options: productTypes });
+            setIsLoading(true);
+            try {
+                const config = await fetchColumns(type);
+                config.unshift(new FormColumn("Type", LabeledInputType.Select, productTypes));
+                setColumns(config);
+            } catch (error) {
+                console.error("Failed to fetch form config:", error);
+                setError("Failed to fetch form config: " + (error as Error).message);
+            } finally {
+                setIsLoading(false);
             }
         };
-        columns.forEach(col => console.log(col.options))
 
         fetchFormConfig();
+    }, [type, productTypes, fetchColumns]);
 
-    }, [productTypes, type]);
+    if (isLoading) {
+        return <p>Loading...</p>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
 
     const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         if (label === 'Type') setType(event.target.value);
@@ -63,7 +83,7 @@ const AddForm: React.FC<AddFormProps> = ({ title, addProduct }) => {
     const handleSubmit = (event: React.FormEvent | undefined) => {
         if (!event) return;
         event.preventDefault();
-        addProduct(formData);
+        submitForm(formData);
     };
 
     const handleClear = () => {
@@ -88,24 +108,14 @@ const AddForm: React.FC<AddFormProps> = ({ title, addProduct }) => {
                                 type={column.type}
                                 placeholder={`Enter ${column.label.toLowerCase()}`}
                                 value={formData[column.label] || ''}
-                                options={
-                                    column.options?.map(option => option.description) || []
-                                }
+                                options={column.options?.map(option => option.description) || []}
                                 onChange={(e) => handleChange(column.label, e)}
                             />
                         </div>
                     ))}
                     <div className="flex justify-end mt-4 space-x-4">
-                        <Button
-                            text="Clear"
-                            onClick={handleClear}
-                            style="bg-superlightgr rounded-lg"
-                        />
-                        <Button
-                            text="Add Product"
-                            onClick={handleSubmit}
-                            style="bg-arbrown rounded-lg"
-                        />
+                        <Button text="Clear" onClick={handleClear} style="bg-superlightgr rounded-lg" />
+                        <Button text="Add Product" onClick={handleSubmit} style="bg-arbrown rounded-lg" />
                     </div>
                 </form>
             </div>
