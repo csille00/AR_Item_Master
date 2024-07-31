@@ -61,7 +61,7 @@ const AddForm: React.FC<AddFormProps> = ({ title, addProduct, columns }) => {
                         <Button
                             text="Add Product"
                             onClick={handleSubmit} // Updated here to use handleSubmit
-                            style="bg-arbrown rounded-lg"
+                            style="bg-argold rounded-lg"
                         />
                     </div>
                 </form>

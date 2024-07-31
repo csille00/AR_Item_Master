@@ -6,9 +6,9 @@ export default {
             argray: '#414043',
             current: 'currentColor',
             red: '#ff5555',
-            lightgr: '#babcbe',
+            lightgr: '#BABCBE',
             white: '#ffffff',
-            arbrown: '#A6947A',
+            argold: '#A6947A',
             superlightgr: '#F0F1F3'
         },
     },
