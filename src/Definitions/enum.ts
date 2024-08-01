@@ -4,6 +4,11 @@ export enum age {
     ADULT = "Adult"
 }
 
+export enum Status {
+    ACTIVE = "active",
+    ARCHIVED = "archived"
+}
+
 export enum gender {
     UNISEX = "unisex",
     MALE = "men",

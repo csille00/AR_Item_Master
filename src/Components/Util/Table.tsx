@@ -1,16 +1,13 @@
 import React from "react";
-import {Tables} from "../../Definitions/definitions.ts";
 import Button from "./Button.tsx";
-import {JewelryItem} from "./JewelryRow.tsx";
-import {StoneItem} from "./StoneRow.tsx";
-import Stone from "../Stone.tsx";
+import {Tables} from "../../Definitions/definitions.ts";
 
 export interface TableProps {
     title: string;
     columns: string[];
-    data: JewelryItem[] | StoneItem[];
+    data: Tables<'ar_jewelry_master'>[];
     style?: string | null;
-    children?: (item: JewelryItem | StoneItem) => React.JSX.Element
+    children?: (item: Tables<'ar_jewelry_master'>) => React.JSX.Element
 }
 
 const filter = () => {

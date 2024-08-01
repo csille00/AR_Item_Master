@@ -1,6 +1,6 @@
 import {getFormConfig} from "../../Definitions/formConfig.ts";
 import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
-import {ArJewelryMasterColumns, ProductTypes} from "../../Definitions/enum.ts";
+import {ArJewelryMasterColumns, ProductTypes, Status} from "../../Definitions/enum.ts";
 import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {LabeledInputType} from "../Util/LabeledInput.tsx";
@@ -104,6 +104,10 @@ const AddJewelryForm = () => {
                     break;
             }
         })
+
+        //add default values
+        data.date = new Date().toISOString()
+        data.status = Status.ACTIVE
 
         await insertIntoJewelryMaster(data)
     };
