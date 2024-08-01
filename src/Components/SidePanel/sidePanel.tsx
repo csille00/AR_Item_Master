@@ -1,8 +1,8 @@
-import logout from "../../assets/LogOut.png"
-import jewel from "../../assets/Jewel.png"
-import diamond from "../../assets/DiamondRing.png"
-import add from "../../assets/Add.png"
-import settings from "../../assets/Settings.png"
+import logoutIcon from "../../assets/logout.svg"
+import jewelIcon from "../../assets/jewel.svg"
+import sparkleIcon from "../../assets/sparkle.svg"
+import addIcon from "../../assets/add.svg"
+import adminIcon from "../../assets/admin.svg"
 import logoSrc from "../../assets/Logo.png"
 import {SupabaseClient} from "@supabase/supabase-js";
 import Button from "../Util/Button.tsx";
@@ -29,38 +29,38 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
             </div>
             <div className="mb-auto">
                 <Button
-                    icon={diamond}
+                    icon={sparkleIcon}
                     text={"Jewelry"}
                     onClick={() => navigate('/')}
                 />
 
                 <Button
-                    icon={jewel}
+                    icon={jewelIcon}
                     text={"Stones"}
                     onClick={() => navigate('/stone')}
                 />
 
                 <Button
-                    icon={add}
+                    icon={addIcon}
                     text={"Add Jewelry"}
                     onClick={() => navigate('/addJewelry')}
                 />
 
                 <Button
-                    icon={add}
+                    icon={addIcon}
                     text={"Add Stone"}
                     onClick={() => navigate('/addStone')}
                 />
 
                 <Button
-                    icon={settings}
+                    icon={adminIcon}
                     text={"Admin"}
                     onClick={() => navigate('/admin')}
                 />
             </div>
             <div className="mt-auto fixed bottom-0">
                 <Button
-                    icon={logout}
+                    icon={logoutIcon}
                     onClick={logOut}
                     text={"Log Out"}
                 />

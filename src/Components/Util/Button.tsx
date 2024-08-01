@@ -1,4 +1,4 @@
-import React from "react";
+import React, {SVGProps} from "react";
 
 interface ButtonProps {
     icon?: string | null;
@@ -7,7 +7,7 @@ interface ButtonProps {
     onClick: (event?: React.FormEvent | undefined) => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ icon = null, text, onClick, style = "" }) => {
+const Button: React.FC<ButtonProps> = ({icon = null, text, onClick, style = ""}) => {
 
     const styles = `btn flex items-center py-1 px-2 mb-4 bg-argray text-left hover:outline-none ${style}`;
 
@@ -23,11 +23,9 @@ const Button: React.FC<ButtonProps> = ({ icon = null, text, onClick, style = "" 
             }}
         >
             {icon && (
-                <img
-                    src={icon}
-                    className="mr-2 h-6 w-6"
-                    alt={text}
-                />
+                <span className="mr-2 h-6 w-6">
+                    <img src={icon}/>
+                </span>
             )}
             <span className="p-2 font-light text-xl text-lightgr hover:text-lightgr hover:font-bold">
                 {text}
