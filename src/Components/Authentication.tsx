@@ -1,5 +1,5 @@
 import '../index.css'
-import { useState, useEffect, SetStateAction} from 'react'
+import React, { useState, useEffect, SetStateAction} from 'react'
 import {Auth} from '@supabase/auth-ui-react'
 import {ThemeSupa} from '@supabase/auth-ui-shared'
 import {Session} from "@supabase/supabase-js";

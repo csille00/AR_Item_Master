@@ -7,21 +7,17 @@ import logoSrc from "../../assets/Logo.png"
 import {SupabaseClient} from "@supabase/supabase-js";
 import Button from "../Util/Button.tsx";
 import {useNavigate} from "react-router-dom";
-
+import React from "react";
 
 interface SidePanelProps {
     client: SupabaseClient
 }
 
-
 const SidePanel: React.FC<SidePanelProps> = ({client}) => {
 
     const logOut = async () => {
+        console.log("sign out")
         await client.auth.signOut()
-    }
-
-    const buttonClicked = () => {
-        console.log("clicked")
     }
 
     const navigate = useNavigate();
@@ -46,8 +42,14 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
 
                 <Button
                     icon={add}
-                    text={"Add"}
-                    onClick={() => navigate('/add')}
+                    text={"Add Jewelry"}
+                    onClick={() => navigate('/addJewelry')}
+                />
+
+                <Button
+                    icon={add}
+                    text={"Add Stone"}
+                    onClick={() => navigate('/addStone')}
                 />
 
                 <Button
