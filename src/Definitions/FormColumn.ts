@@ -1,5 +1,5 @@
-import {LabeledInputType} from "../Components/Util/LabeledInput.tsx";
 import {Option} from "./DropdownOption.ts";
+import {LabeledInputType} from "./enum.ts";
 
 export class FormColumn {
     label: string;
