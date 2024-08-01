@@ -1,10 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import {Tables} from "../../Definitions/definitions.ts";
-import Button from "./Button.tsx";
 import {JewelryItem} from "./JewelryRow.tsx";
 import {StoneItem} from "./StoneRow.tsx";
-import Stone from "../Stone.tsx";
 import {useNavigate} from "react-router-dom";
+import {FilterModal} from "./FilterModal.tsx";
 
 export interface TableProps {
     title: string;
@@ -14,9 +13,9 @@ export interface TableProps {
     children?: (item: JewelryItem | StoneItem) => React.JSX.Element
 }
 
-const filter = () => {
-    console.log("filter button")
-}
+// const filter = () => {
+//     console.log("filter button")
+// }
 
 const download = () => {
     console.log("export button")
@@ -24,6 +23,7 @@ const download = () => {
 
 const Table = <T, >({title, columns, data, style, children}: TableProps) => {
     const navigate = useNavigate();
+    const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
     return (
         <>
@@ -49,7 +49,7 @@ const Table = <T, >({title, columns, data, style, children}: TableProps) => {
                         </button>
                         <button
                             className="text-argray bg-white border border-argray rounded-lg text-sm px-5 h-12 mx-1.5"
-                            onClick={filter}>
+                            onClick={() => setModalOpen(true)}>
                             Filter
                         </button>
                         <button
@@ -78,6 +78,7 @@ const Table = <T, >({title, columns, data, style, children}: TableProps) => {
                     </table>
                 </div>
             </div>
+            <FilterModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
         </>
     );
 };
