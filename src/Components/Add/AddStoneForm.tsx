@@ -6,10 +6,11 @@ import {FormColumn} from "../../Definitions/FormColumn.ts";
 
 const AddStoneForm = () => {
 
-    const addStone = (formData: { [key: string]: string | number }, columns: FormColumn[]) => {
+    const addStone = async (formData: { [key: string]: string | number }, columns: FormColumn[]): Promise<boolean> => {
         console.log("Form Data:", formData);
         console.log(columns)
         // Insert into your database here
+        return true
     };
 
     return (

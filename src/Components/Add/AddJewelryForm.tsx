@@ -1,6 +1,6 @@
 import {getFormConfig} from "../../Definitions/formConfig.ts";
 import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
-import {ArJewelryMasterColumns, ProductTypes, Status} from "../../Definitions/enum.ts";
+import {MapFormDataToDatabaseColumns, ProductTypes, Status} from "../../Definitions/enum.ts";
 import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {LabeledInputType} from "../Util/LabeledInput.tsx";
@@ -9,107 +9,51 @@ import {insertIntoJewelryMaster} from "../../model/queries/ArJewelryMasterDAO.ts
 
 const AddJewelryForm = () => {
 
-    const addJewelry = async (formData: { [key: string]: string | number }, columns: FormColumn[]) => {
-        let data: TablesInsert<'ar_jewelry_master'> = {}
-        Object.keys(formData).forEach(key => {
-            let dataToAssign: string | number | null = formData[key]
+    const addJewelry = async (formData: { [key: string]: string | number }, columns: FormColumn[]): Promise<boolean> => {
+        // Ensure all required fields are filled out
+        for (const column of columns) {
+            if (column.required && (formData[column.label] === undefined || formData[column.label] === '')) {
+                alert(`${column.label} is required.`);
+                return false;
+            }
+        }
 
-            const column = columns.find(it => it.label === key)
+        let data: TablesInsert<'ar_jewelry_master'> = {};
 
-            if (column?.type === LabeledInputType.Select) {
+        // Iterate through formData keys to build the data object
+        for (const key of Object.keys(formData)) {
+            let dataToAssign: string | number | null = formData[key];
+            const column = columns.find(it => it.label === key);
 
-                const selectedOption = column.options?.find(opt => opt.description === formData[key]);
+            if (column?.type === LabeledInputType.SELECT) {
+                const selectedOption = column.options?.find(opt => opt.description == formData[key]);
                 if (selectedOption?.id) {
-                    dataToAssign = selectedOption?.id ;
+                    dataToAssign = selectedOption.id;
                 }
+            } else if (column?.type == LabeledInputType.NUMBER){
+                dataToAssign = Number(dataToAssign)
             }
-            if(formData[key] == "--") dataToAssign = null
 
-            switch(key){
-                case(ArJewelryMasterColumns.TYPE):
-                    data.prod_code = (dataToAssign as string)
-                    break;
-                case(ArJewelryMasterColumns.STYLE_NUMBER):
-                    data.style_number = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.PRODUCT_NAME):
-                    data.prod_name = (dataToAssign as string)
-                    break;
-                case(ArJewelryMasterColumns.MSRP):
-                    data.msrp = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.COST):
-                    data.cost = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.ST_TYPE):
-                    data.st_type = (dataToAssign as string)
-                    break;
-                case(ArJewelryMasterColumns.ST_CTW):
-                    data.st_ctw = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.ST_CERT_TYPE):
-                    data.st_cert_type = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.ST_CERT_COLOR):
-                    data.st_cert_color = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.ST_CERT_CLARITY):
-                    data.st_cert_clarity = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.AR_STYLE):
-                    data.ar_style = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.AGE):
-                    data.age = (dataToAssign as string)
-                    break;
-                case(ArJewelryMasterColumns.GENDER):
-                    data.gender = (dataToAssign as string)
-                    break;
-                case(ArJewelryMasterColumns.RETURNABLE):
-                    if(dataToAssign === 'Yes') data.returnable = true
-                    if(dataToAssign === 'No') data.returnable = false
-                    break;
-                case(ArJewelryMasterColumns.ENGRAVABLE):
-                    if(dataToAssign === 'Yes') data.engravable = true
-                    if(dataToAssign === 'No') data.engravable = false
-                    break;
-                case(ArJewelryMasterColumns.MADE_TO_ORDER):
-                    if(dataToAssign === 'Yes') data.made_to_order = true
-                    if(dataToAssign === 'No') data.made_to_order = false
-                    break;
-                case(ArJewelryMasterColumns.ADJUSTABLE):
-                    if(dataToAssign === 'Yes') data.adjustable = true
-                    if(dataToAssign === 'No') data.adjustable = false
-                    break;
-                case(ArJewelryMasterColumns.METAL_TYPE):
-                    data.material_type_id = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.METAL_FINISH):
-                    data.metal_finish = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.METAL_TEXTURE):
-                    data.metal_texture = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.BAND_STYLE):
-                    data.band_style = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.BAND_WIDTH):
-                    data.band_width = 1
-                    break;
-                case(ArJewelryMasterColumns.SETTING):
-                    data.setting = (dataToAssign as number)
-                    break;
-                case(ArJewelryMasterColumns.SIDE_STONES):
-                    data.side_stones = (dataToAssign as number)
-                    break;
+            if (formData[key] === '--') dataToAssign = null;
+
+            // Map form data to the corresponding database columns
+            const dbColumnKey = MapFormDataToDatabaseColumns[key as keyof typeof MapFormDataToDatabaseColumns];
+            if (dbColumnKey) {
+                (data as any)[dbColumnKey] = dataToAssign;
             }
-        })
+        }
 
-        //add default values
-        data.date = new Date().toISOString()
-        data.status = Status.ACTIVE
+        // Add default values
+        data.date = new Date().toISOString();
+        data.status = Status.ACTIVE;
 
-        await insertIntoJewelryMaster(data)
+        try {
+            await insertIntoJewelryMaster(data);
+            return true;
+        } catch (error) {
+            console.error("Error inserting data:", error);
+            return false;
+        }
     };
 
     return (

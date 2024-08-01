@@ -34,33 +34,33 @@ const getEngagementRingRows = async (): Promise<FormColumn[]> => {
 
     try {
         return [
-            new FormColumn(ArJewelryMasterColumns.STYLE_NUMBER, LabeledInputType.Number),
-            new FormColumn(ArJewelryMasterColumns.PRODUCT_NAME, LabeledInputType.String),
-            new FormColumn(ArJewelryMasterColumns.MSRP, LabeledInputType.Number),
-            new FormColumn(ArJewelryMasterColumns.COST, LabeledInputType.Number),
-            new FormColumn(ArJewelryMasterColumns.ST_TYPE, LabeledInputType.Select, await getStoneTypesFromClient()),
-            new FormColumn(ArJewelryMasterColumns.ST_CTW, LabeledInputType.Number),
-            new FormColumn(ArJewelryMasterColumns.ST_CERT_TYPE, LabeledInputType.Select, await getCertTypesFromClient()),
-            new FormColumn(ArJewelryMasterColumns.ST_CERT_COLOR, LabeledInputType.Select, await getColorGradeFromClient()),
-            new FormColumn(ArJewelryMasterColumns.ST_CERT_CLARITY, LabeledInputType.Select, await getCertClarityFromClient()),
-            new FormColumn(ArJewelryMasterColumns.AR_STYLE, LabeledInputType.Select, await getStylesFromClient()),
-            new FormColumn(ArJewelryMasterColumns.AGE, LabeledInputType.Select, [{description: age.ADULT}]),
-            new FormColumn(ArJewelryMasterColumns.GENDER, LabeledInputType.Select, [
+            new FormColumn(ArJewelryMasterColumns.STYLE_NUMBER, LabeledInputType.NUMBER, true),
+            new FormColumn(ArJewelryMasterColumns.PRODUCT_NAME, LabeledInputType.STRING, true),
+            new FormColumn(ArJewelryMasterColumns.MSRP, LabeledInputType.NUMBER, true),
+            new FormColumn(ArJewelryMasterColumns.COST, LabeledInputType.NUMBER, true),
+            new FormColumn(ArJewelryMasterColumns.ST_TYPE, LabeledInputType.SELECT, false, await getStoneTypesFromClient()),
+            new FormColumn(ArJewelryMasterColumns.ST_CTW, LabeledInputType.NUMBER, true),
+            new FormColumn(ArJewelryMasterColumns.ST_CERT_TYPE, LabeledInputType.SELECT, true, await getCertTypesFromClient()),
+            new FormColumn(ArJewelryMasterColumns.ST_CERT_COLOR, LabeledInputType.SELECT, true, await getColorGradeFromClient()),
+            new FormColumn(ArJewelryMasterColumns.ST_CERT_CLARITY, LabeledInputType.SELECT, true, await getCertClarityFromClient()),
+            new FormColumn(ArJewelryMasterColumns.AR_STYLE, LabeledInputType.SELECT, true, await getStylesFromClient()),
+            new FormColumn(ArJewelryMasterColumns.AGE, LabeledInputType.SELECT, true, [{description: age.ADULT}]),
+            new FormColumn(ArJewelryMasterColumns.GENDER, LabeledInputType.SELECT, true, [
                 {description: gender.UNISEX},
                 {description: gender.MALE},
                 {description: gender.FEMALE}
             ]),
-            new FormColumn(ArJewelryMasterColumns.RETURNABLE, LabeledInputType.Select, yesNoOption),
-            new FormColumn(ArJewelryMasterColumns.ENGRAVABLE, LabeledInputType.Select, yesNoOption),
-            new FormColumn(ArJewelryMasterColumns.MADE_TO_ORDER, LabeledInputType.Select, yesNoOption),
-            new FormColumn(ArJewelryMasterColumns.ADJUSTABLE, LabeledInputType.Select, yesNoOption),
-            new FormColumn(ArJewelryMasterColumns.METAL_TYPE, LabeledInputType.Select, await getMetalTypesFromClient()),
-            new FormColumn(ArJewelryMasterColumns.METAL_FINISH, LabeledInputType.Select, await getMetalFinishesClient()),
-            new FormColumn(ArJewelryMasterColumns.METAL_TEXTURE, LabeledInputType.Select, await getMetalTexturesFromClient()),
-            new FormColumn(ArJewelryMasterColumns.BAND_STYLE, LabeledInputType.Select, await getBandStyleFromClient()),
-            new FormColumn(ArJewelryMasterColumns.BAND_WIDTH, LabeledInputType.Select, await getBandWidthFromClient()),
-            new FormColumn(ArJewelryMasterColumns.SETTING, LabeledInputType.Select, await getSettingsFromClient()),
-            new FormColumn(ArJewelryMasterColumns.SIDE_STONES, LabeledInputType.Select, await getSideStonesFromClient())
+            new FormColumn(ArJewelryMasterColumns.RETURNABLE, LabeledInputType.SELECT, true, yesNoOption),
+            new FormColumn(ArJewelryMasterColumns.ENGRAVABLE, LabeledInputType.SELECT, true, yesNoOption),
+            new FormColumn(ArJewelryMasterColumns.MADE_TO_ORDER, LabeledInputType.SELECT, true, yesNoOption),
+            new FormColumn(ArJewelryMasterColumns.ADJUSTABLE, LabeledInputType.SELECT, true, yesNoOption),
+            new FormColumn(ArJewelryMasterColumns.METAL_TYPE, LabeledInputType.SELECT, true, await getMetalTypesFromClient()),
+            new FormColumn(ArJewelryMasterColumns.METAL_FINISH, LabeledInputType.SELECT, true, await getMetalFinishesClient()),
+            new FormColumn(ArJewelryMasterColumns.METAL_TEXTURE, LabeledInputType.SELECT, true, await getMetalTexturesFromClient()),
+            new FormColumn(ArJewelryMasterColumns.BAND_STYLE, LabeledInputType.SELECT, true, await getBandStyleFromClient()),
+            new FormColumn(ArJewelryMasterColumns.BAND_WIDTH, LabeledInputType.SELECT, true, await getBandWidthFromClient()),
+            new FormColumn(ArJewelryMasterColumns.SETTING, LabeledInputType.SELECT, true, await getSettingsFromClient()),
+            new FormColumn(ArJewelryMasterColumns.SIDE_STONES, LabeledInputType.SELECT, true, await getSideStonesFromClient())
         ];
     } catch (error) {
         throw new Error("Error Fetching objects from database. Please try again later")
@@ -70,32 +70,32 @@ const getEngagementRingRows = async (): Promise<FormColumn[]> => {
 const getWeddingRingRows = async (): Promise<FormColumn[]> => {
 
     return [
-        new FormColumn("Style Number Wedding Band", LabeledInputType.Number),
-        new FormColumn("Product", LabeledInputType.String),
-        new FormColumn("MSRP", LabeledInputType.Number),
-        new FormColumn("Cost", LabeledInputType.Number),
-        new FormColumn("ST Type", LabeledInputType.Select, await getStoneTypesFromClient()),
-        new FormColumn("ST CTW", LabeledInputType.Number),
-        new FormColumn("ST Cert Type", LabeledInputType.Select, await getCertTypesFromClient()),
-        new FormColumn("ST Cert Color", LabeledInputType.Select, await getColorGradeFromClient()),
-        new FormColumn("ST Cert Clarity", LabeledInputType.Select, await getCertClarityFromClient()),
-        new FormColumn("AR Style", LabeledInputType.Select, await getStylesFromClient()),
-        new FormColumn("Age", LabeledInputType.Select, [{description: age.ADULT}]),
-        new FormColumn("Gender", LabeledInputType.Select, [
+        new FormColumn(ArJewelryMasterColumns.STYLE_NUMBER, LabeledInputType.NUMBER, true),
+        new FormColumn(ArJewelryMasterColumns.PRODUCT_NAME, LabeledInputType.STRING, true),
+        new FormColumn(ArJewelryMasterColumns.MSRP, LabeledInputType.NUMBER, true),
+        new FormColumn(ArJewelryMasterColumns.COST, LabeledInputType.NUMBER, true),
+        new FormColumn(ArJewelryMasterColumns.ST_TYPE, LabeledInputType.SELECT, true, await getStoneTypesFromClient()),
+        new FormColumn(ArJewelryMasterColumns.ST_CTW, LabeledInputType.NUMBER, true),
+        new FormColumn(ArJewelryMasterColumns.ST_CERT_TYPE, LabeledInputType.SELECT, true, await getCertTypesFromClient()),
+        new FormColumn(ArJewelryMasterColumns.ST_CERT_COLOR, LabeledInputType.SELECT, true, await getColorGradeFromClient()),
+        new FormColumn(ArJewelryMasterColumns.ST_CERT_CLARITY, LabeledInputType.SELECT, true, await getCertClarityFromClient()),
+        new FormColumn(ArJewelryMasterColumns.AR_STYLE, LabeledInputType.SELECT, true, await getStylesFromClient()),
+        new FormColumn(ArJewelryMasterColumns.AGE, LabeledInputType.SELECT, true, [{description: age.ADULT}]),
+        new FormColumn(ArJewelryMasterColumns.GENDER, LabeledInputType.SELECT, true, [
             {description: gender.UNISEX},
             {description: gender.MALE},
             {description: gender.FEMALE}
         ]),
-        new FormColumn("Returnable", LabeledInputType.Select, yesNoOption),
-        new FormColumn("Engravable", LabeledInputType.Select, yesNoOption),
-        new FormColumn("Made to Order", LabeledInputType.Select, yesNoOption),
-        new FormColumn("Adjustable", LabeledInputType.Select, yesNoOption),
-        new FormColumn("Metal Type", LabeledInputType.Select, await getMetalTypesFromClient()),
-        new FormColumn("Metal Finish", LabeledInputType.Select, await getMetalFinishesClient()),
-        new FormColumn("Metal Texture", LabeledInputType.Select, await getMetalTexturesFromClient()),
-        new FormColumn("Band Style", LabeledInputType.Select, await getBandStyleFromClient()),
-        new FormColumn("Band Width", LabeledInputType.Select, await getBandWidthFromClient()),
-        new FormColumn("Setting", LabeledInputType.Select, await getSettingsFromClient()),
-        new FormColumn("Side Stones", LabeledInputType.Select, await getSideStonesFromClient())
+        new FormColumn(ArJewelryMasterColumns.RETURNABLE, LabeledInputType.SELECT, true, yesNoOption),
+        new FormColumn(ArJewelryMasterColumns.ENGRAVABLE, LabeledInputType.SELECT, true, yesNoOption),
+        new FormColumn(ArJewelryMasterColumns.MADE_TO_ORDER, LabeledInputType.SELECT, true, yesNoOption),
+        new FormColumn(ArJewelryMasterColumns.ADJUSTABLE, LabeledInputType.SELECT, true, yesNoOption),
+        new FormColumn(ArJewelryMasterColumns.METAL_TYPE, LabeledInputType.SELECT, true, await getMetalTypesFromClient()),
+        new FormColumn(ArJewelryMasterColumns.METAL_FINISH, LabeledInputType.SELECT, true, await getMetalFinishesClient()),
+        new FormColumn(ArJewelryMasterColumns.METAL_TEXTURE, LabeledInputType.SELECT, true, await getMetalTexturesFromClient()),
+        new FormColumn(ArJewelryMasterColumns.BAND_STYLE, LabeledInputType.SELECT, true, await getBandStyleFromClient()),
+        new FormColumn(ArJewelryMasterColumns.BAND_WIDTH, LabeledInputType.SELECT, true, await getBandWidthFromClient()),
+        new FormColumn(ArJewelryMasterColumns.SETTING, LabeledInputType.SELECT, true, await getSettingsFromClient()),
+        new FormColumn(ArJewelryMasterColumns.SIDE_STONES, LabeledInputType.SELECT, true, await getSideStonesFromClient())
     ];
 };

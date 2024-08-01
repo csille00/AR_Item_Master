@@ -59,6 +59,7 @@ export enum ArJewelryMasterColumns {
 
 export const MapFormDataToDatabaseColumns: { [key in ArJewelryMasterColumns]: keyof TablesInsert<'ar_jewelry_master'> } = {
     [ArJewelryMasterColumns.STYLE_NUMBER]: 'style_number',
+    [ArJewelryMasterColumns.TYPE]: 'prod_code',
     [ArJewelryMasterColumns.PRODUCT_NAME]: 'prod_name',
     [ArJewelryMasterColumns.MSRP]: 'msrp',
     [ArJewelryMasterColumns.COST]: 'cost',

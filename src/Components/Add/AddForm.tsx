@@ -10,7 +10,7 @@ interface SharedFormProps {
     fetchColumns: (type: string) => Promise<FormColumn[]>;
     fetchProductTypes: () => Promise<Option[] | undefined>;
     initialType: string;
-    submitForm: (formData: { [key: string]: string | number }, columns: FormColumn[]) => void;
+    submitForm: (formData: { [key: string]: string | number }, columns: FormColumn[]) => Promise<boolean>;
 }
 
 export const AddForm: React.FC<SharedFormProps> = ({
@@ -23,7 +23,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
     const [productTypes, setProductTypes] = useState<Option[]>([]);
     const [columns, setColumns] = useState<FormColumn[]>([]);
     const [type, setType] = useState<string>(initialType);
-    const [formData, setFormData] = useState<{ [key: string]: string }>({["Type"]: initialType});
+    const [formData, setFormData] = useState<{ [key: string]: string }>({[ArJewelryMasterColumns.TYPE]: initialType});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -55,7 +55,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
                 config.forEach(col => {
                     col.options?.unshift({description: "--"})
                 })
-                config.unshift(new FormColumn("Type", LabeledInputType.Select, productTypes));
+                config.unshift(new FormColumn("Type", LabeledInputType.SELECT, true, productTypes));
                 setColumns(config);
             } catch (error) {
                 console.error("Failed to fetch form config:", error);
@@ -87,9 +87,12 @@ export const AddForm: React.FC<SharedFormProps> = ({
     const handleSubmit = async (event: React.FormEvent | undefined) => {
         if (!event) return;
         event.preventDefault();
-        columns.push(new FormColumn("Type", LabeledInputType.Select, productTypes))
-        submitForm(formData, columns);
-        //TODO: go through and make sure that all of the required fields are filled in
+        columns.push(new FormColumn("Type", LabeledInputType.SELECT, true, productTypes))
+        formData[ArJewelryMasterColumns.TYPE] = type
+        const valid = await submitForm(formData, columns)
+        if(!valid){
+            return
+        }
         handleClear()
     };
 
@@ -117,6 +120,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
                                 type={column.type}
                                 placeholder={`Enter ${column.label.toLowerCase()}`}
                                 value={formData[column.label] || ''}
+                                required={column.required}
                                 options={column.options?.map(option => option.description) || []}
                                 onChange={(e) => handleChange(column.label, e)}
                             />

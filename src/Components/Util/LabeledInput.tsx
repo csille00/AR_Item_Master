@@ -6,26 +6,27 @@ interface LabeledInputProps {
     placeholder?: string | null
     style?: string | null;
     value: string;
+    required: boolean
     options?: string[];
     onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
 export enum LabeledInputType {
-    String = "text",
-    Number = "number",
-    DateTime = "datetime-local",
-    ProductId = "text",
-    Select = "select"  // Add a type for select
+    STRING = "text",
+    NUMBER = "number",
+    DATETIME = "datetime-local",
+    SELECT = "select"  // Add a type for select
 }
 
-const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = null, style = null, value, options, onChange }) => {
+const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = null, style = null, value, required, options, onChange }) => {
 
     const labeledInput = `py-2 flex justify-between items-center ${style ?? ''}`;
 
     return (
         <label className={labeledInput}>
             {label}
-            {type === LabeledInputType.Select && options ? (
+            {required && <span style={{ color: 'red' }}> *</span>}
+            {type === LabeledInputType.SELECT && options ? (
                 <select
                     className="p-2 rounded-lg border"
                     name="mySelect"
@@ -39,6 +40,7 @@ const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = 
                     ))}
                 </select>
             ) : (
+
                 <input
                     className="p-2 rounded-lg border"
                     name="myInput"
