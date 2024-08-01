@@ -14,7 +14,7 @@ const filter = () => {
     console.log("filter button")
 }
 
-const Table = <T, >({title, columns, data, style, children}: TableProps) => {
+const Table = ({title, columns, data, style, children}: TableProps) => {
     return (
         <div className={`m-2 ${style ? style : ''}`}>
             <div className="">
