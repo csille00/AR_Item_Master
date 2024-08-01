@@ -1,8 +1,7 @@
 import '../index.css'
-import { useState, useEffect, SetStateAction} from 'react'
+import React, { useState, useEffect, SetStateAction} from 'react'
 import {Auth} from '@supabase/auth-ui-react'
 import {ThemeSupa} from '@supabase/auth-ui-shared'
-import Jewelry from "./Jewelry.tsx";
 import {Session} from "@supabase/supabase-js";
 import useClient from "../hooks/useClient.tsx";
 import logoSrc from "../assets/Logo.png"

@@ -1,13 +1,9 @@
-import React, {useState} from "react";
-import Table, {TableProps} from "../Components/Util/Table.tsx";
-import AddForm from "./AddForm.tsx";
-import {LabeledInputType} from "./Util/LabeledInput.tsx";
+import React from "react";
+import Table from "../Components/Util/Table.tsx";
 import {StoneRow, StoneItem} from "./Util/StoneRow.tsx";
 
 
 const Stone: React.FC = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-
     const ar_stone_columns = [
         "SKU",
         "Stone Type",
@@ -77,52 +73,11 @@ const Stone: React.FC = () => {
         }
     ]
 
-    //
-    // const totalPages = Math.ceil(products.length / 10); // Assuming 10 products per page
-    // const onNextPage = () => {
-    //     setCurrentPage((prevPage) => prevPage + 1);
-    // };
-    //
-    // const onPrevPage = () => {
-    //     setCurrentPage((prevPage) => prevPage - 1);
-    // };
-
-    const handleAddProduct = (formData: { [key: string]: string }) => {
-        console.log("Form Data:", formData);
-        // Insert into your database here
-    };
-
-    const stoneColumns = [
-        {label: "Serial Number", type: LabeledInputType.Number},
-        {label: "SKU Number", type: LabeledInputType.String},
-        {label: "Create Date", type: LabeledInputType.DateTime},
-        {label: "Style Number", type: LabeledInputType.Number},
-        {label: "Title", type: LabeledInputType.String},
-        {label: "Category", type: LabeledInputType.String},
-        {label: "Product Type", type: LabeledInputType.String},
-        {label: "Prod Code", type: LabeledInputType.String},
-        {label: "Cost", type: LabeledInputType.Number},
-        {label: "Style", type: LabeledInputType.String},
-        {label: "Color", type: LabeledInputType.String}
-    ]
-
     return (
         <>
             <Table columns={ar_stone_columns} data={ar_stone_mock} title={"Stone Master"}>
                 {(item: StoneItem) => <StoneRow {...item} />}
             </Table>
-
-            {/*<ProductListPage*/}
-            {/*    products={products.slice((currentPage - 1) * 10, currentPage * 10)}*/}
-            {/*    currentPage={currentPage}*/}
-            {/*    totalPages={totalPages}*/}
-            {/*    onNextPage={onNextPage}*/}
-            {/*    onPrevPage={onPrevPage}*/}
-            {/*/>*/}
-
-            {/*<div className="w-1/2">*/}
-            {/*    <AddForm title={"New Jewelry Info"} addProduct={onNextPage} columns={stoneColumns}/>*/}
-            {/*</div>*/}
         </>
     )
 }
