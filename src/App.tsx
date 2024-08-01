@@ -1,5 +1,5 @@
 import './App.css'
-import Authentication from "./Components/auth.tsx";
+import Authentication from "./Components/Authentication.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Jewelry from "./Components/Jewelry.tsx";
@@ -12,14 +12,13 @@ import Admin from "./Components/Admin.tsx";
 
 function App() {
     const queryClient = new QueryClient();
-    const client = useClient()
 
     return (
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
                 <Authentication/>
                 <Routes>
-                    <Route path="/" element={<Layout client={{client}}/>}>
+                    <Route path="/" element={<Layout/>}>
                         <Route index element={<Jewelry/>}/>
                         <Route path="stone" element={<Stone/>}/>
                         <Route path="add" element={<AddForm/>}/>
