@@ -9,6 +9,7 @@ import Logout from "./Components/Logout.tsx";
 import useClient from "./hooks/useClient.tsx";
 import Admin from "./Components/Admin.tsx";
 import AddJewelryForm from "./Components/Add/AddJewelryForm.tsx";
+import AddStoneForm from "./Components/Add/AddStoneForm.tsx";
 
 function App() {
     const queryClient = new QueryClient();
@@ -22,7 +23,8 @@ function App() {
                     <Route path="/" element={<Layout client={{client}}/>}>
                         <Route index element={<Jewelry/>}/>
                         <Route path="stone" element={<Stone/>}/>
-                        <Route path="add" element={<AddJewelryForm/>}/>
+                        <Route path="addJewelry" element={<AddJewelryForm/>}/>
+                        <Route path="addStone" element={<AddStoneForm/>}/>
                         <Route path="logout" element={<Logout/>}/>
                         <Route path="admin" element={<Admin />} />
                         {/*<Route path="*" element={<NoPage />} />*/}

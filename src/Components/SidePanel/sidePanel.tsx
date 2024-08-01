@@ -42,8 +42,14 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
 
                 <Button
                     icon={add}
-                    text={"Add"}
-                    onClick={() => navigate('/add')}
+                    text={"Add Jewelry"}
+                    onClick={() => navigate('/addJewelry')}
+                />
+
+                <Button
+                    icon={add}
+                    text={"Add Stone"}
+                    onClick={() => navigate('/addStone')}
                 />
 
                 <Button
