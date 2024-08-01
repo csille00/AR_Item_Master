@@ -1,6 +1,5 @@
 import {getClient} from "../getClient.ts";
 import {Tables, TablesInsert} from "../../Definitions/definitions.ts";
-import {Option} from "../../Definitions/DropdownOption.ts";
 
 const client = getClient()
 
@@ -28,6 +27,5 @@ export async function getJewelryMasterPageFromClient(page: number, pageLength: n
     if (error) {
         throw error;
     }
-    console.log(data)
     return data;
 }

@@ -4,6 +4,7 @@ import {Tables} from "../Definitions/definitions.ts";
 import JewelryRow from "./Util/JewelryRow.tsx";
 import {getJewelryMasterPageFromClient} from "../model/queries/ArJewelryMasterDAO.ts";
 
+//TODO: implement the proper paging
 const Jewelry: React.FC = () => {
     const [jewelryData, setJewelryData] = useState<Tables<'ar_jewelry_master'>[]>();
     const [isLoading, setIsLoading] = useState(true);
