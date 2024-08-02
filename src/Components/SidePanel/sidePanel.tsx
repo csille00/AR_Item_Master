@@ -20,6 +20,7 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
     }
 
     const navigate = useNavigate();
+    const btnStyle = "bg-argray font-light text-lightgr hover:text-white text-xl mb-4 text-left"
 
     return (
         <div className="flex flex-col items-center bg-argray h-full shadow-md p-2">
@@ -31,30 +32,28 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
                     icon={sparkleIcon}
                     text={"Jewelry"}
                     onClick={() => navigate('/')}
+                    style={btnStyle}
                 />
 
                 <Button
                     icon={jewelIcon}
                     text={"Stones"}
                     onClick={() => navigate('/stone')}
+                    style={btnStyle}
                 />
 
                 <Button
                     icon={addIcon}
-                    text={"Add Jewelry"}
+                    text={"Add Product"}
                     onClick={() => navigate('/addJewelry')}
-                />
-
-                <Button
-                    icon={addIcon}
-                    text={"Add Stone"}
-                    onClick={() => navigate('/addStone')}
+                    style={btnStyle}
                 />
 
                 <Button
                     icon={adminIcon}
                     text={"Admin"}
                     onClick={() => navigate('/admin')}
+                    style={btnStyle}
                 />
             </div>
             <div className="mt-auto fixed bottom-0">
@@ -62,6 +61,7 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
                     icon={logoutIcon}
                     onClick={logOut}
                     text={"Log Out"}
+                    style={btnStyle}
                 />
             </div>
         </div>
