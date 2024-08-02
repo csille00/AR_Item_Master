@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
+import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
+import Button from "./Button.tsx";
 
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
+    columns: string[];
+    setColumns: (columns: string[]) => void;
 }
 
-export const FilterModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
-    const [filterOption, setFilterOption] = useState<string>('option1');
+export const FilterModal: React.FC<ModalProps> = ({isOpen, onClose, columns, setColumns}) => {
+    // const [filterOption, setFilterOption] = useState<string>('option1');
+    const allColumns = Object.values(ArJewelryMasterColumns);
+
+    const handleToggleColumn = (column: string) => {
+        if (columns.includes(column)) {
+            setColumns(columns.filter(c => c !== column));
+        } else {
+            setColumns([...columns, column]);
+        }
+    };
 
     if (!isOpen) return null;
 
@@ -21,17 +34,18 @@ export const FilterModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                 </div>
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Filter by option:
+                        Select Columns:
                     </label>
-                    <select
-                        value={filterOption}
-                        onChange={(e) => setFilterOption(e.target.value)}
-                        className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm"
-                    >
-                        <option value="option1">Option 1</option>
-                        <option value="option2">Option 2</option>
-                        <option value="option3">Option 3</option>
-                    </select>
+                    {allColumns.map((column, index) => (
+                        <div key={index}>
+                            <input
+                                type="checkbox"
+                                checked={columns.includes(column)}
+                                onChange={() => handleToggleColumn(column)}
+                            />
+                            <label className="ml-2">{column}</label>
+                        </div>
+                    ))}
                 </div>
                 {/*<div className="mb-4">*/}
                 {/*    <label className="inline-flex items-center">*/}
@@ -45,12 +59,10 @@ export const FilterModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                 {/*    </label>*/}
                 {/*</div>*/}
                 <div className="flex justify-end">
-                    <button
-                        onClick={onClose}
-                        className="bg-lightgr text-white px-4 py-2 rounded-md hover:bg-argray"
-                    >
-                        Apply
-                    </button>
+                    <Button text="Apply"
+                            onClick={onClose}
+                            style="bg-lightgr text-white px-4 py-2 rounded-md hover:bg-argray"
+                    />
                 </div>
             </div>
         </div>
