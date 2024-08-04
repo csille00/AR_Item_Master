@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import LabeledInput, {LabeledInputType} from "../Util/LabeledInput.tsx";
+import LabeledInput from "../Util/LabeledInput.tsx";
 import Button from "../Util/Button.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
