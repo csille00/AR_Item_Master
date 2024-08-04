@@ -4,12 +4,11 @@ import {LabeledInputType} from "../../Definitions/enum.ts";
 interface LabeledInputProps {
     label: string;
     type: LabeledInputType;
-    placeholder?: string | null
     style?: string | null;
     value: string;
     required: boolean
     options?: string[];
-    onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+    onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, label?: string) => void;
 }
 
 const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = null, style = null, value, required, options, onChange }) => {

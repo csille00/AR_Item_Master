@@ -10,7 +10,8 @@ export interface TableProps {
     columns: string[];
     data: Tables<'ar_jewelry_master'>[];
     style?: string | null;
-    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     children?: (item: Tables<'ar_jewelry_master'>, columns: string[]) => React.JSX.Element
 }
 
@@ -18,7 +19,7 @@ const download = () => {
     console.log("export button")
 }
 
-const Table = ({title, columns, data, style, setModalOpen, children}: TableProps) => {
+const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalOpen, children}: TableProps) => {
     const navigate = useNavigate();
 
     return (
@@ -51,7 +52,13 @@ const Table = ({title, columns, data, style, setModalOpen, children}: TableProps
                         <Button
                             icon={filterIcon}
                             text="Filter"
-                            onClick={() => setModalOpen(true)}
+                            onClick={() => setFilterModalOpen(true)}
+                            style="text-argray bg-white hover:text-argray border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
+                        />
+                        <Button
+                            icon={filterIcon}
+                            text="Change View"
+                            onClick={() => setColumnModalOpen(true)}
                             style="text-argray bg-white hover:text-argray border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
@@ -81,7 +88,6 @@ const Table = ({title, columns, data, style, setModalOpen, children}: TableProps
                     </table>
                 </div>
             </div>
-            {/*<FilterModal isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>*/}
         </>
     );
 };

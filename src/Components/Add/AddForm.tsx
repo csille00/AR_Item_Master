@@ -131,7 +131,6 @@ export const AddForm: React.FC<SharedFormProps> = ({
                                 <LabeledInput
                                     label={column.label}
                                     type={column.type}
-                                    placeholder={`Enter ${column.label.toLowerCase()}`}
                                     value={formData[column.label] || ''}
                                     required={column.required}
                                     options={column.options?.map(option => option.description) || []}
