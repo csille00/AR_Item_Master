@@ -3,8 +3,7 @@ import LabeledInput from "../Util/LabeledInput.tsx";
 import Button from "../Util/Button.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
-import Jewelry from "../Jewelry.tsx";
+import {ArJewelryMasterColumns, LabeledInputType} from "../../Definitions/enum.ts";
 import {useNavigate} from "react-router-dom";
 
 interface SharedFormProps {
