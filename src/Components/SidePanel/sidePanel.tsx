@@ -1,9 +1,8 @@
-import logout from "../../assets/LogOut.png"
-import jewel from "../../assets/Jewel.png"
-import diamond from "../../assets/DiamondRing.png"
-import add from "../../assets/Add.png"
-import settings from "../../assets/Settings.png"
-import logoSrc from "../../assets/Logo.png"
+import logoutIcon from "../../assets/logout.svg"
+import jewelIcon from "../../assets/jewel.svg"
+import sparkleIcon from "../../assets/sparkle.svg"
+import addIcon from "../../assets/add.svg"
+import adminIcon from "../../assets/admin.svg"
 import {SupabaseClient} from "@supabase/supabase-js";
 import Button from "../Util/Button.tsx";
 import {useNavigate} from "react-router-dom";
@@ -21,48 +20,48 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
     }
 
     const navigate = useNavigate();
+    const btnStyle = "bg-argray font-light text-lightgr hover:text-white text-xl mb-4 text-left"
 
     return (
         <div className="flex flex-col items-center bg-argray h-full shadow-md p-2">
-            <div className="mb-4 mt-4">
-                <img src={logoSrc} alt="Logo" className="w-full"/>
+            <div className="mb-10 mt-4">
+                <img src={'https://www.alexisrussell.com/cdn/shop/files/ar-logo-white-520_500x.png?v=1620051910'} alt="Logo" className="w-full"/>
             </div>
             <div className="mb-auto">
                 <Button
-                    icon={diamond}
+                    icon={sparkleIcon}
                     text={"Jewelry"}
                     onClick={() => navigate('/')}
+                    style={btnStyle}
                 />
 
                 <Button
-                    icon={jewel}
+                    icon={jewelIcon}
                     text={"Stones"}
                     onClick={() => navigate('/stone')}
+                    style={btnStyle}
                 />
 
                 <Button
-                    icon={add}
-                    text={"Add Jewelry"}
+                    icon={addIcon}
+                    text={"Add Product"}
                     onClick={() => navigate('/addJewelry')}
+                    style={btnStyle}
                 />
 
                 <Button
-                    icon={add}
-                    text={"Add Stone"}
-                    onClick={() => navigate('/addStone')}
-                />
-
-                <Button
-                    icon={settings}
+                    icon={adminIcon}
                     text={"Admin"}
                     onClick={() => navigate('/admin')}
+                    style={btnStyle}
                 />
             </div>
             <div className="mt-auto fixed bottom-0">
                 <Button
-                    icon={logout}
+                    icon={logoutIcon}
                     onClick={logOut}
                     text={"Log Out"}
+                    style={btnStyle}
                 />
             </div>
         </div>

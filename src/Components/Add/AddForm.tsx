@@ -3,7 +3,9 @@ import LabeledInput from "../Util/LabeledInput.tsx";
 import Button from "../Util/Button.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArJewelryMasterColumns, LabeledInputType} from "../../Definitions/enum.ts";
+import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
+import Jewelry from "../Jewelry.tsx";
+import {useNavigate} from "react-router-dom";
 
 interface SharedFormProps {
     title: string;
@@ -26,6 +28,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
     const [formData, setFormData] = useState<{ [key: string]: string }>({[ArJewelryMasterColumns.TYPE]: initialType});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getProductTypes = async () => {
@@ -90,7 +93,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
         columns.push(new FormColumn("Type", LabeledInputType.SELECT, true, productTypes))
         formData[ArJewelryMasterColumns.TYPE] = type
         const valid = await submitForm(formData, columns)
-        if(!valid){
+        if (!valid) {
             return
         }
         handleClear()
@@ -98,7 +101,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
 
     const handleClear = () => {
         const clearedData = Object.keys(formData).reduce((acc, key) => {
-            if(key !== ArJewelryMasterColumns.TYPE) {
+            if (key !== ArJewelryMasterColumns.TYPE) {
                 acc[key] = '';
             }
             return acc;
@@ -107,30 +110,44 @@ export const AddForm: React.FC<SharedFormProps> = ({
     };
 
     return (
-        <div className="m-10 bg-white rounded-lg shadow-md p-4">
-            <div className="flex justify-center mb-4 px-10">
-                <h1 className="text-4xl font-medium py-10">{title}</h1>
+        <div className="flex">
+            <div className="w-60" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+                <button onClick={() => navigate('/addJewelry')}
+                        className="bg-argray text-white hover:text-white rounded w-32 text-center mb-2">
+                    Jewelry
+                </button>
+                <button onClick={() => navigate('/addStone')}
+                        className="bg-superlightgr text-argray hover:text-argray border border-argray rounded w-32 text-center">
+                    Stone
+                </button>
             </div>
-            <div className="flex justify-center">
-                <form onSubmit={handleSubmit}>
-                    {columns.map((column, index) => (
-                        <div className="mb-4" key={index}>
-                            <LabeledInput
-                                label={column.label}
-                                type={column.type}
-                                placeholder={`Enter ${column.label.toLowerCase()}`}
-                                value={formData[column.label] || ''}
-                                required={column.required}
-                                options={column.options?.map(option => option.description) || []}
-                                onChange={(e) => handleChange(column.label, e)}
-                            />
-                        </div>
-                    ))}
-                    <div className="flex justify-end mt-4 space-x-4">
-                        <Button text="Clear" onClick={handleClear} style="bg-superlightgr rounded-lg"/>
-                        <Button text="Add Product" onClick={handleSubmit} style="bg-arbrown rounded-lg"/>
-                    </div>
-                </form>
+            <div className="bg-white rounded-lg shadow-md p-4 mt-6 mr-6">
+                <div className="flex justify-center mb-2 px-10">
+                    <h1 className="text-4xl font-medium py-8">{title}</h1>
+                </div>
+                <div className="flex justify-center">
+                    <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-2">
+                        {columns.map((column, index) => (
+                            <div className="mb-4" key={index}>
+                                <LabeledInput
+                                    label={column.label}
+                                    type={column.type}
+                                    placeholder={`Enter ${column.label.toLowerCase()}`}
+                                    value={formData[column.label] || ''}
+                                    required={column.required}
+                                    options={column.options?.map(option => option.description) || []}
+                                    onChange={(e) => handleChange(column.label, e)}
+                                />
+                            </div>
+                        ))}
+                    </form>
+                </div>
+                <div className="flex justify-center mt-4">
+                    <Button text="Clear" onClick={handleClear}
+                            style="bg-superlightgr rounded-lg text-argray hover:text-argray mx-2"/>
+                    <Button text="Add Product" onClick={handleSubmit}
+                            style="bg-argold rounded-lg text-white hover:text-white mx-2"/>
+                </div>
             </div>
         </div>
     );

@@ -1,12 +1,13 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import SidePanel from "./SidePanel/sidePanel.tsx";
-import { Outlet } from 'react-router-dom';
+import {Outlet} from 'react-router-dom';
+import {SupabaseClient} from "@supabase/supabase-js";
+import useClient from "../hooks/useClient.tsx";
+import Authentication from "./Authentication.tsx";
 
-class LayoutProps {
-    client: any;
-}
+const Layout = () => {
+    const client = useClient()
 
-const Layout: React.FC<LayoutProps> = ({ client }) => {
     return (
         <>
             <div className="bg-superlightgr">
@@ -15,13 +16,14 @@ const Layout: React.FC<LayoutProps> = ({ client }) => {
                         <SidePanel client={client}/>
                     </div>
                     <div className="col-span-5">
-                        <Outlet />
+                        <Outlet/>
                     </div>
                 </div>
             </div>
-            {/*<Footer />*/}
         </>
     );
+
+
 }
 
 export default Layout;
