@@ -31,6 +31,7 @@ export enum ProductTypes {
 }
 
 export enum ArJewelryMasterColumns {
+    SERIAL_NUMBER = "Serial Number",
     TYPE = "Type",
     SKU = "SKU-Number",
     STYLE_NUMBER = "Style Number",
@@ -85,8 +86,8 @@ export enum ArJewelryMasterColumns {
 }
 
 export const MapFormDataToDatabaseColumns: { [key in ArJewelryMasterColumns]: keyof TablesInsert<'ar_jewelry_master'> } = {
+    [ArJewelryMasterColumns.SERIAL_NUMBER]: 'serial_number',
     [ArJewelryMasterColumns.STYLE_NUMBER]: 'style_number',
-    [ArJewelryMasterColumns.SKU]: 'sku_number',
     [ArJewelryMasterColumns.TYPE]: 'prod_code',
     [ArJewelryMasterColumns.PRODUCT_NAME]: 'prod_name',
     [ArJewelryMasterColumns.MSRP]: 'msrp',
