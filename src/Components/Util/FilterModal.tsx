@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from "./Button.tsx";
-import { FilterOption } from "../../Definitions/FilterOption.ts";
-import { Option } from "../../Definitions/DropdownOption.ts";
-import { ArJewelryMasterColumns } from "../../Definitions/enum.ts";
+import {FilterOption} from "../../Definitions/FilterOption.ts";
+import {Option} from "../../Definitions/DropdownOption.ts";
+import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 
 interface ModalProps {
     isOpen: boolean;
@@ -10,10 +10,19 @@ interface ModalProps {
     filterOptions: FilterOption[];
     setFilterOptions: (options: FilterOption[]) => void;
     fetchProductTypes: () => Promise<Option[] | undefined>;
+    clearFilterOptions: () => void;
     onApplyFilters: () => void;
 }
 
-export const FilterModal: React.FC<ModalProps> = ({ isOpen, onClose, filterOptions, setFilterOptions, fetchProductTypes, onApplyFilters }) => {
+export const FilterModal: React.FC<ModalProps> = ({
+                                                      isOpen,
+                                                      onClose,
+                                                      filterOptions,
+                                                      setFilterOptions,
+                                                      fetchProductTypes,
+                                                      onApplyFilters,
+                                                      clearFilterOptions
+                                                  }) => {
     const [productTypeOptions, setProductTypeOptions] = useState<Option[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -23,7 +32,7 @@ export const FilterModal: React.FC<ModalProps> = ({ isOpen, onClose, filterOptio
         try {
             const data = await fetchProductTypes();
             if (data) {
-                data.unshift({ description: '--' });
+                data.unshift({description: '--'});
                 setProductTypeOptions(data);
             }
         } catch (error) {
@@ -44,9 +53,7 @@ export const FilterModal: React.FC<ModalProps> = ({ isOpen, onClose, filterOptio
     };
 
     const clearFilters = async () => {
-        console.log('Before Filter clear: ', filterOptions);
-        setFilterOptions([]);
-        console.log('After Filter clear: ', filterOptions);
+        clearFilterOptions()
         await getProductTypes();
         onClose();
     };
@@ -104,9 +111,9 @@ export const FilterModal: React.FC<ModalProps> = ({ isOpen, onClose, filterOptio
                 </div>
                 <div className="flex justify-between mb-4">
                     <Button text="Apply" onClick={handleApply}
-                            style="bg-lightgr text-white px-4 py-2 rounded-md hover:bg-argray" />
+                            style="bg-lightgr text-white px-4 py-2 rounded-md hover:bg-argray"/>
                     <Button text="Clear" onClick={clearFilters}
-                            style="bg-lightgr text-white px-4 py-2 rounded-md hover:bg-argray" />
+                            style="bg-lightgr text-white px-4 py-2 rounded-md hover:bg-argray"/>
                 </div>
             </div>
         </div>

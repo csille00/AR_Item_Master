@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
-import {Tables} from "../Definitions/definitions.ts";
+import {JewelryMasterQuery, Tables} from "../Definitions/definitions.ts";
 import JewelryRow from "./Util/JewelryRow.tsx";
 import {getJewelryMasterPageFromClient} from "../model/queries/ArJewelryMasterDAO.ts";
 import {ArJewelryMasterColumns} from "../Definitions/enum.ts";
@@ -13,7 +13,7 @@ import {FilterOption} from "../Definitions/FilterOption.ts";
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
     const [isColumnModalOpen, setColumnModalOpen] = useState<boolean>(false);
-    const [jewelryData, setJewelryData] = useState<Tables<'ar_jewelry_master'>[]>();
+    const [jewelryData, setJewelryData] = useState<JewelryMasterQuery>();
     const [filterOptions, setFilterOptions] = useState<FilterOption[]>([])
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -22,7 +22,7 @@ const Jewelry: React.FC = () => {
         ArJewelryMasterColumns.PRODUCT_NAME,
         ArJewelryMasterColumns.AR_STYLE,
         ArJewelryMasterColumns.MSRP,
-        ArJewelryMasterColumns.DATE_ADDED,
+        ArJewelryMasterColumns.DATE,
         ArJewelryMasterColumns.STATUS
     ]);
 
@@ -40,6 +40,10 @@ const Jewelry: React.FC = () => {
             setIsLoading(false);
         }
     };
+
+    const handleClearFilters = () => {
+        setFilterOptions([])
+    }
 
     useEffect(() => {
         fetchData().then()
@@ -71,6 +75,7 @@ const Jewelry: React.FC = () => {
                 filterOptions={filterOptions}
                 setFilterOptions={setFilterOptions}
                 onApplyFilters={fetchData}
+                clearFilterOptions={handleClearFilters}
             />
         </>
     );

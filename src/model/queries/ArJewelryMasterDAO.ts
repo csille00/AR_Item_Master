@@ -1,14 +1,14 @@
 import {getClient} from "../getClient.ts";
-import {Tables, TablesInsert} from "../../Definitions/definitions.ts";
+import {JewelryMasterQuery, TablesInsert} from "../../Definitions/definitions.ts";
 import {FilterOption} from "../../Definitions/FilterOption.ts";
-import {ArJewelryMasterColumns, MapFormDataToDatabaseColumns} from "../../Definitions/enum.ts";
+import {MapFormDataToDatabaseColumns} from "../../Definitions/enum.ts";
 
 const client = getClient()
 
 export async function insertIntoJewelryMaster(dataToInsert: TablesInsert<'ar_jewelry_master'>) {
     console.log("Data to Insert:", dataToInsert);
 
-    const { error } = await client
+    const {error} = await client
         .from("ar_jewelry_master")
         .insert([dataToInsert]);
 
@@ -17,28 +17,84 @@ export async function insertIntoJewelryMaster(dataToInsert: TablesInsert<'ar_jew
     }
 }
 
-export async function getJewelryMasterPageFromClient(page: number, filters: FilterOption[], pageLength: number = 100): Promise<Tables<'ar_jewelry_master'>[] | undefined> {
-    console.log('in dao: ', filters)
+export async function getJewelryMasterPageFromClient(
+    page: number,
+    filters: FilterOption[],
+    pageLength: number = 100
+): Promise<JewelryMasterQuery | undefined> {
+    console.log('in dao: ', filters);
     const start = (page - 1) * pageLength;
     const end = start + pageLength - 1;
 
-    let query = client
+    const query = client
         .from('ar_jewelry_master')
-        .select()
+        .select(`
+            serial_number,
+            sku_number,
+            style_number,
+            prod_name,
+            msrp,
+            cost,
+            st_height,
+            st_width,
+            st_ctw,
+            st_cost,
+            st_ctw_range,
+            st_table,
+            age,
+            gender,
+            returnable,
+            engravable,
+            made_to_order,
+            adjustable,
+            repair_upgrade,
+            configurator,
+            multi_texture,
+            multi_finish,
+            bundle,
+            status,
+            date,
+            id,
+            variant_id,
+            weight,
+            material_type(metal_type),
+            product_type(prod_code, product_type),
+            stone_type(stone_type),
+            st_source(source),
+            stone_color(color),
+            stone_shape(shape),
+            stone_cut(cut),
+            stone_orientation(orientation),
+            stone_origin(origin),
+            st_cert_type(cert_type),
+            st_cert_cut(cut),
+            metal_finish(finish),
+            metal_texture(texture),
+            band_style(style),
+            band_width(width),
+            jewelry_setting(setting),
+            side_stones(stone),
+            length(length),
+            chain_type(type),
+            pendant_type(type),
+            earring_type(type),
+            charm_type(type),
+            ar_style(style)
+    `)
         .range(start, end);
 
+    // Apply filters
     filters.forEach(filter => {
-        console.log('Filter option: ', filter.column)
-        const column = MapFormDataToDatabaseColumns[filter.column as ArJewelryMasterColumns];
+        const column = MapFormDataToDatabaseColumns[filter.column as keyof typeof MapFormDataToDatabaseColumns];
         if (column) {
-            query = query.eq(column, filter.value);
+            query.eq(column, filter.value);
         }
     });
 
-    const { data, error } = await query;
+    const {data, error} = await query
 
     if (error) {
         throw error;
     }
-    return data;
+    return data as JewelryMasterQuery;
 }

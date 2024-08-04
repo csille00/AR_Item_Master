@@ -89,6 +89,7 @@ export const MapFormDataToDatabaseColumns: { [key in ArJewelryMasterColumns]: ke
     [ArJewelryMasterColumns.SERIAL_NUMBER]: 'serial_number',
     [ArJewelryMasterColumns.STYLE_NUMBER]: 'style_number',
     [ArJewelryMasterColumns.TYPE]: 'prod_code',
+    [ArJewelryMasterColumns.SKU]: 'sku_number',
     [ArJewelryMasterColumns.PRODUCT_NAME]: 'prod_name',
     [ArJewelryMasterColumns.MSRP]: 'msrp',
     [ArJewelryMasterColumns.COST]: 'cost',

@@ -1,5 +1,5 @@
 import React from "react";
-import {Tables} from "../../Definitions/definitions.ts";
+import {JewelryMasterQuery, Tables} from "../../Definitions/definitions.ts";
 import {useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
@@ -8,7 +8,7 @@ import downloadIcon from "../../assets/download.svg"
 export interface TableProps {
     title: string;
     columns: string[];
-    data: Tables<'ar_jewelry_master'>[];
+    data: JewelryMasterQuery;
     style?: string | null;
     setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -81,7 +81,7 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                         <tbody>
                         {data.map((item, index) => (
                             <tr key={index}>
-                                {children ? children(item, columns) : null}
+                                {children ? children(item as unknown as Tables<'ar_jewelry_master'>, columns) : null}
                             </tr>
                         ))}
                         </tbody>
