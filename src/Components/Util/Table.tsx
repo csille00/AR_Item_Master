@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
+import tableIcon from "../../assets/table.svg"
 
 export interface TableProps {
     title: string;
@@ -56,7 +57,7 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                             style="text-argray bg-white hover:text-argray border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
-                            icon={filterIcon}
+                            icon={tableIcon}
                             text="Change View"
                             onClick={() => setColumnModalOpen(true)}
                             style="text-argray bg-white hover:text-argray border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
