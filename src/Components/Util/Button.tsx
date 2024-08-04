@@ -27,7 +27,7 @@ const Button: React.FC<ButtonProps> = ({icon = null, text, onClick, style = ""})
                     <img src={icon}/>
                 </span>
             )}
-            <span className="p-2 hover:font-bold">
+            <span className="p-2">
                 {text}
             </span>
         </a>

@@ -9,6 +9,7 @@ export default {
             lightgr: '#BABCBE',
             white: '#ffffff',
             argold: '#A6947A',
+            darkgold: '#7f6e55',
             superlightgr: '#F0F1F3'
         },
     },
