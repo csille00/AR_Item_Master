@@ -1,9 +1,8 @@
 import {getFormConfig} from "../../Definitions/formConfig.ts";
 import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
-import {MapFormDataToDatabaseColumns, ProductTypes, Status} from "../../Definitions/enum.ts";
+import {LabeledInputType, MapFormDataToDatabaseColumns, ProductTypes, Status} from "../../Definitions/enum.ts";
 import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
-import {LabeledInputType} from "../Util/LabeledInput.tsx";
 import {TablesInsert} from "../../Definitions/definitions.ts";
 import {insertIntoJewelryMaster} from "../../model/queries/ArJewelryMasterDAO.ts";
 
