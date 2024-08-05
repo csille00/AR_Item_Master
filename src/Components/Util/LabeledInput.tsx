@@ -1,23 +1,26 @@
 import React from "react";
 import {LabeledInputType} from "../../Definitions/enum.ts";
+import {Option} from "../../Definitions/DropdownOption.ts";
 
 interface LabeledInputProps {
     label: string;
     type: LabeledInputType;
     style?: string | null;
+    boxStyle?: string | null;
     value: string;
     required: boolean
-    options?: string[];
+    options?: Option[];
     onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, label?: string) => void;
 }
 
-const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = null, style = null, value, required, options, onChange }) => {
+const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = null, style = null, boxStyle = null, value, required, options, onChange }) => {
 
-    const labeledInput = `py-2 flex justify-between items-center ${style ?? ''}`;
+    const labeledInput = `py-2 ${style ?? ''}`;
+    const inputBox = `${boxStyle ?? ''}`;
 
     return (
-        <div className="flex justify-start items-center">
-            <label className={labeledInput}>
+        <div  className={labeledInput}>
+            <label>
                 <div className="inline mx-4">
                     {label}
                     {required && <span style={{color: 'red'}}> *</span>}
@@ -25,21 +28,21 @@ const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = 
             </label>
             {type === LabeledInputType.SELECT && options ? (
                 <select
-                    className="p-2 rounded-lg border"
+                    className={inputBox}
                     name="mySelect"
                     value={value}
                     onChange={onChange}
                 >
                     {options.map((option, index) => (
-                        <option key={index} value={option}>
-                            {option}
+                        <option key={index} value={option.id}>
+                            {option.description}
                         </option>
                     ))}
                 </select>
             ) : (
 
                 <input
-                    className="p-2 rounded-lg border w-20"
+                    className={inputBox}
                     name="myInput"
                     type={type}
                     // placeholder={placeholder ?? ""}
