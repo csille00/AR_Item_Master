@@ -48,7 +48,7 @@ export enum ProductTypeIds {
 export enum ArJewelryMasterColumns {
     SERIAL_NUMBER = "Serial Number",
     TYPE = "Type",
-    SKU = "SKU-Number",
+    SKU = "SKU",
     STYLE_NUMBER = "Style Number",
     PRODUCT_NAME = "Product Name",
     MSRP = "MSRP",

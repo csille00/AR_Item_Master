@@ -19,7 +19,8 @@ const getNestedValue = (item: any, column: ArJewelryMasterColumns) => {
             ar_style: 'style',
         };
 
-        const nestedKey = nestedPropertyMap[column as keyof typeof nestedPropertyMap];
+        const normalizedColumn = column.trim().toLowerCase().replace(/ /g, '_');
+        const nestedKey = nestedPropertyMap[normalizedColumn as keyof typeof nestedPropertyMap];
         return nestedKey ? value[nestedKey] : JSON.stringify(value);
     }
 
