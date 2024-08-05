@@ -53,10 +53,6 @@ export const AddForm: React.FC<SharedFormProps> = ({
             setIsLoading(true);
             try {
                 const config = await fetchColumns(type);
-                //set none value at the top of each select option
-                config.forEach(col => {
-                    col.options?.unshift({description: "--"})
-                })
                 setColumns(config);
             } catch (error) {
                 console.error("Failed to fetch form config:", error);

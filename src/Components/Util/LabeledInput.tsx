@@ -33,6 +33,7 @@ const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = 
                     value={value}
                     onChange={onChange}
                 >
+                    <option disabled={required} value="">--</option>
                     {options.map((option, index) => (
                         <option key={index} value={option.id}>
                             {option.description}
