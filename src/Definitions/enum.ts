@@ -30,10 +30,25 @@ export enum ProductTypes {
     OTH = "Other"
 }
 
+export enum ProductTypeIds {
+    ENG = "ENG",
+    WED = "WED",
+    FJR = "FJR",
+    NCK = "NCK",
+    EAR = "EAR",
+    BRA = "BRA",
+    CHM = "CHM",
+    ACC = "ACC",
+    GFC = "GFC",
+    FEE = "FEE",
+    CON = "CON",
+    OTH = "OTH"
+}
+
 export enum ArJewelryMasterColumns {
     SERIAL_NUMBER = "Serial Number",
     TYPE = "Type",
-    SKU = "SKU-Number",
+    SKU = "SKU",
     STYLE_NUMBER = "Style Number",
     PRODUCT_NAME = "Product Name",
     MSRP = "MSRP",

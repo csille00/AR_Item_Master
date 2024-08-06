@@ -1,5 +1,5 @@
 import {FormColumn} from "./FormColumn.ts"
-import {age, ArJewelryMasterColumns, gender, LabeledInputType, ProductTypes} from "./enum.ts";
+import {age, ArJewelryMasterColumns, gender, LabeledInputType, ProductTypeIds, ProductTypes} from "./enum.ts";
 import {Option} from "./DropdownOption.ts";
 import {getStoneTypesFromClient} from "../model/queries/StoneTypeDAO.ts";
 import {getCertTypesFromClient} from "../model/queries/STCertTypeDAO.ts";
@@ -49,10 +49,11 @@ const stoneTypeRows: FormColumn[] = [
 
 
 const baseRows: FormColumn[] = [
+    new FormColumn(ArJewelryMasterColumns.PRODUCT_NAME, LabeledInputType.STRING, true),
     new FormColumn(ArJewelryMasterColumns.STYLE_NUMBER, LabeledInputType.NUMBER, true),
     new FormColumn(ArJewelryMasterColumns.MSRP, LabeledInputType.NUMBER, true),
     new FormColumn(ArJewelryMasterColumns.COST, LabeledInputType.NUMBER, true),
-    new FormColumn(ArJewelryMasterColumns.ST_TYPE, LabeledInputType.SELECT, true, await getStoneTypesFromClient()),
+    new FormColumn(ArJewelryMasterColumns.ST_TYPE, LabeledInputType.SELECT, false, await getStoneTypesFromClient()),
     ...stoneTypeRows,
     new FormColumn(ArJewelryMasterColumns.AR_STYLE, LabeledInputType.SELECT, true, await getStylesFromClient()),
     new FormColumn(ArJewelryMasterColumns.AGE, LabeledInputType.SELECT, true, [{description: age.ADULT}]),
@@ -68,25 +69,25 @@ const baseRows: FormColumn[] = [
 
 export const getFormConfig = async (type: string): Promise<FormColumn[]> => {
     switch (type) {
-        case ProductTypes.ENG:
+        case ProductTypeIds.ENG:
             return getEngagementRingRows()
-        case ProductTypes.WED:
+        case ProductTypeIds.WED:
             return getWeddingBandRows()
-        case ProductTypes.FJR:
+        case ProductTypeIds.FJR:
             return getRingRows()
-        case ProductTypes.NCK:
+        case ProductTypeIds.NCK:
             return getNecklaceRows()
-        case ProductTypes.EAR:
+        case ProductTypeIds.EAR:
             return getEarringRows()
-        case ProductTypes.BRA:
+        case ProductTypeIds.BRA:
             return getBraceletAnkletRows()
-        case ProductTypes.CHM:
+        case ProductTypeIds.CHM:
             return getCharmRows()
-        case ProductTypes.ACC:
-        case ProductTypes.GFC:
-        case ProductTypes.FEE:
-        case ProductTypes.CON:
-        case ProductTypes.OTH:
+        case ProductTypeIds.ACC:
+        case ProductTypeIds.GFC:
+        case ProductTypeIds.FEE:
+        case ProductTypeIds.CON:
+        case ProductTypeIds.OTH:
             return baseRows
         default: return []
     }

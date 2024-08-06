@@ -53,11 +53,6 @@ export const AddForm: React.FC<SharedFormProps> = ({
             setIsLoading(true);
             try {
                 const config = await fetchColumns(type);
-                //set none value at the top of each select option
-                config.forEach(col => {
-                    col.options?.unshift({description: "--"})
-                })
-                config.unshift(new FormColumn("Type", LabeledInputType.SELECT, true, productTypes));
                 setColumns(config);
             } catch (error) {
                 console.error("Failed to fetch form config:", error);
@@ -109,10 +104,10 @@ export const AddForm: React.FC<SharedFormProps> = ({
     };
 
     return (
-        <div className="flex">
-            <div className="w-60" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+        <>
+            <div className="mt-4">
                 <button onClick={() => navigate('/addJewelry')}
-                        className="bg-argray text-white hover:text-white rounded w-32 text-center mb-2">
+                        className="bg-argray text-white hover:text-white rounded w-32 text-center mb-2 m-4">
                     Jewelry
                 </button>
                 <button onClick={() => navigate('/addStone')}
@@ -120,12 +115,22 @@ export const AddForm: React.FC<SharedFormProps> = ({
                     Stone
                 </button>
             </div>
-            <div className="bg-white rounded-lg shadow-md p-4 mt-6 mr-6">
-                <div className="flex justify-center mb-2 px-10">
-                    <h1 className="text-4xl font-medium py-8">{title}</h1>
+            <div className="bg-white rounded-lg shadow-md p-4 mx-10 my-4">
+                <div className="flex justify-center px-10">
+                    <h1 className="text-4xl font-medium py-4">{title}</h1>
                 </div>
-                <div className="flex justify-center">
-                    <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-2">
+                <div>
+                    <LabeledInput
+                        label={ArJewelryMasterColumns.TYPE}
+                        type={LabeledInputType.SELECT}
+                        required={true}
+                        onChange={(e) => handleChange(ArJewelryMasterColumns.TYPE, e)}
+                        value={formData[ArJewelryMasterColumns.TYPE]}
+                        options={productTypes}
+                        style="mb-4"
+                        boxStyle="p-2 rounded-lg border w-44"
+                    />
+                    <form onSubmit={handleSubmit} className="grid grid-cols-4">
                         {columns.map((column, index) => (
                             <div className="mb-4" key={index}>
                                 <LabeledInput
@@ -133,8 +138,10 @@ export const AddForm: React.FC<SharedFormProps> = ({
                                     type={column.type}
                                     value={formData[column.label] || ''}
                                     required={column.required}
-                                    options={column.options?.map(option => option.description) || []}
+                                    options={column.options}
                                     onChange={(e) => handleChange(column.label, e)}
+                                    style="flex justify-between items-center"
+                                    boxStyle="p-2 rounded-lg border w-36"
                                 />
                             </div>
                         ))}
@@ -147,7 +154,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
                             style="bg-argold rounded-lg text-white hover:text-white mx-2"/>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

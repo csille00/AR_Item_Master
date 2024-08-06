@@ -9,7 +9,15 @@ const getNestedValue = (item: any, column: ArJewelryMasterColumns) => {
         const nestedPropertyMap: Record<string, string> = {
             material_type: 'metal_type',
             product_type: 'product_type',
+            stone_type: 'stone_type',
+            st_source: 'source',
+            stone_color: 'stone_color',
+            stone_shape: 'stone_shape',
+            stone_cut: 'cut',
+            stone_orientation: 'orientation',
+            stone_origin: 'origin',
             st_cert_type: 'cert_type',
+            st_cert_cut: 'cut',
             metal_finish: 'finish',
             metal_texture: 'texture',
             band_style: 'style',
@@ -17,9 +25,15 @@ const getNestedValue = (item: any, column: ArJewelryMasterColumns) => {
             jewelry_setting: 'setting',
             side_stones: 'stone',
             ar_style: 'style',
+            length: 'length',
+            chain_type: 'type',
+            pendant_type: 'type',
+            earring_type: 'type',
+            charm_type: 'type',
         };
 
-        const nestedKey = nestedPropertyMap[column as keyof typeof nestedPropertyMap];
+        const normalizedColumn = column.trim().toLowerCase().replace(/ /g, '_');
+        const nestedKey = nestedPropertyMap[normalizedColumn as keyof typeof nestedPropertyMap];
         return nestedKey ? value[nestedKey] : JSON.stringify(value);
     }
 

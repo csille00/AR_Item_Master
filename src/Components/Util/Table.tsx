@@ -5,6 +5,7 @@ import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
 import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
+import tableIcon from "../../assets/table.svg"
 
 export interface TableProps {
     title: string;
@@ -75,7 +76,7 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                     <h1 className="text-argray text-left my-8 text-4xl justify-start">{title}</h1>
                     <div className="flex justify-end items-center">
                         <button
-                            className="bg-argold hover:font-bold rounded-lg h-12 mx-1.5 flex items-center"
+                            className="bg-argold hover:font-bold hover:bg-darkgold hover:border-darkgold rounded-lg h-12 mx-1.5 flex items-center"
                             onClick={() => navigate('/addJewelry')}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                                  stroke="#FFFFFF" className="size-5 mx-1">
@@ -87,19 +88,19 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                             icon={filterIcon}
                             text="Filter"
                             onClick={() => setFilterModalOpen(true)}
-                            style="text-argray bg-white hover:text-argray border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
+                            style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
-                            icon={filterIcon}
+                            icon={tableIcon}
                             text="Change View"
                             onClick={() => setColumnModalOpen(true)}
-                            style="text-argray bg-white hover:text-argray border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
+                            style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
                             icon={downloadIcon}
                             text="Download"
                             onClick={download}
-                            style="text-argray bg-white hover:text-argray border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
+                            style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                        />
                     </div>
                 </div>

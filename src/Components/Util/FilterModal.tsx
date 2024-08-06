@@ -69,15 +69,12 @@ export const FilterModal: React.FC<ModalProps> = ({
         <div className="fixed inset-0 flex items-center justify-center bg-argray bg-opacity-50">
             <div className="bg-white p-4 rounded-md w-full max-w-md">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Column Filter</h2>
+                    <h2 className="text-xl font-semibold">Filter</h2>
                     <button onClick={onClose} className="text-argray bg-white text-xl">
                         &times;
                     </button>
                 </div>
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Select Filter Options:
-                    </label>
                     <div className="flex justify-start items-center">
                         <label className="py-2 flex justify-between items-center">
                             <div className="inline mx-4">
@@ -99,9 +96,9 @@ export const FilterModal: React.FC<ModalProps> = ({
                         </select>
                     </div>
                 </div>
-                <div className="flex justify-between mb-4">
+                <div className="flex justify-between m-4 pt-2">
                     <Button text="Apply" onClick={handleApply}
-                            style="bg-lightgr text-white px-4 py-2 rounded-md hover:bg-argray"/>
+                            style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white"/>
                 </div>
             </div>
         </div>
