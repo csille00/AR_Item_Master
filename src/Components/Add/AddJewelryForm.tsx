@@ -1,6 +1,10 @@
 import {getFormConfig} from "../../Definitions/formConfig.ts";
 import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
-import {LabeledInputType, MapFormDataToDatabaseColumns, ProductTypes, Status} from "../../Definitions/enum.ts";
+import {
+    LabeledInputType,
+    MapFormDataToDatabaseColumns, ProductTypeIds,
+    Status
+} from "../../Definitions/enum.ts";
 import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {TablesInsert} from "../../Definitions/definitions.ts";
@@ -18,18 +22,14 @@ const AddJewelryForm = () => {
         }
 
         let data: TablesInsert<'ar_jewelry_master'> = {};
-
+        console.log('Form data: \n', formData)
         // Iterate through formData keys to build the data object
         for (const key of Object.keys(formData)) {
             let dataToAssign: string | number | null = formData[key];
             const column = columns.find(it => it.label === key);
 
-            if (column?.type === LabeledInputType.SELECT) {
-                const selectedOption = column.options?.find(opt => opt.description == formData[key]);
-                if (selectedOption?.id) {
-                    dataToAssign = selectedOption.id;
-                }
-            } else if (column?.type == LabeledInputType.NUMBER){
+            //if the column type is number, cast data to number to avoid errors
+            if (column?.type == LabeledInputType.NUMBER){
                 dataToAssign = Number(dataToAssign)
             }
 
@@ -60,7 +60,7 @@ const AddJewelryForm = () => {
             title="Add Jewelry"
             fetchColumns={(type: string) => getFormConfig(type)}
             fetchProductTypes={getProductTypesFromClient}
-            initialType={ProductTypes.ENG}
+            initialType={ProductTypeIds.ENG}
             submitForm={addJewelry}
         />
     )

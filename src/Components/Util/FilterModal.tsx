@@ -1,12 +1,79 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import Button from "./Button.tsx";
+import {FilterOption} from "../../Definitions/FilterOption.ts";
+import {Option} from "../../Definitions/DropdownOption.ts";
+import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
+    filterOptions: FilterOption[];
+    setFilterOptions: (options: FilterOption[]) => void;
+    fetchProductTypes: () => Promise<Option[] | undefined>;
+    clearFilterOptions: () => void;
+    onApplyFilters: () => void;
 }
 
-export const FilterModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
-    const [filterOption, setFilterOption] = useState<string>('option1');
+export const FilterModal: React.FC<ModalProps> = ({
+                                                      isOpen,
+                                                      onClose,
+                                                      filterOptions,
+                                                      setFilterOptions,
+                                                      fetchProductTypes,
+                                                      onApplyFilters,
+                                                      clearFilterOptions
+                                                  }) => {
+    const [productTypeOptions, setProductTypeOptions] = useState<Option[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const getProductTypes = async () => {
+        setIsLoading(true);
+        try {
+            const data = await fetchProductTypes();
+            if (data) {
+                data.unshift({description: '--'});
+                setProductTypeOptions(data);
+            }
+        } catch (error) {
+            console.error("Failed to fetch product types:", error);
+            setError("Failed to fetch product types: " + (error as Error).message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        getProductTypes().then();
+    }, []);
+
+    const handleApply = () => {
+        onApplyFilters();
+        onClose();
+    };
+
+    const clearFilters = async () => {
+        clearFilterOptions()
+        await getProductTypes();
+        onClose();
+    };
+
+    const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        console.log('handle change: ', label, ', ', event.target.value);
+        if (label === ArJewelryMasterColumns.TYPE) {
+            const option = new FilterOption(ArJewelryMasterColumns.TYPE, event.target.value);
+            setFilterOptions([option])
+        }
+        console.log('filter options after change: ', filterOptions)
+    };
+
+    if (isLoading) {
+        return <p>Loading...</p>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
 
     if (!isOpen) return null;
 
@@ -14,47 +81,38 @@ export const FilterModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         <div className="fixed inset-0 flex items-center justify-center bg-argray bg-opacity-50">
             <div className="bg-white p-4 rounded-md w-full max-w-md">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Table Filter</h2>
+                    <h2 className="text-xl font-semibold">Filter</h2>
                     <button onClick={onClose} className="text-argray bg-white text-xl">
                         &times;
                     </button>
                 </div>
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Filter by option:
-                    </label>
-                    <select
-                        value={filterOption}
-                        onChange={(e) => setFilterOption(e.target.value)}
-                        className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm"
-                    >
-                        <option value="option1">Option 1</option>
-                        <option value="option2">Option 2</option>
-                        <option value="option3">Option 3</option>
-                    </select>
+                    <div className="flex justify-start items-center">
+                        <label className="py-2 flex justify-between items-center">
+                            <div className="inline mx-4">
+                                {ArJewelryMasterColumns.TYPE}
+                            </div>
+                        </label>
+                        <select
+                            className="p-2 rounded-lg border"
+                            name="mySelect"
+                            onChange={(e) => handleChange(ArJewelryMasterColumns.TYPE, e)}
+                        >
+                            {productTypeOptions.map((option, index) => (
+                                <option key={index} value={option.id}>
+                                    {option.description}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
-                {/*<div className="mb-4">*/}
-                {/*    <label className="inline-flex items-center">*/}
-                {/*        <input*/}
-                {/*            type="checkbox"*/}
-                {/*            className="form-checkbox h-4 w-4"*/}
-                {/*            checked={includeOutdated}*/}
-                {/*            onChange={() => setIncludeOutdated(!includeOutdated)}*/}
-                {/*        />*/}
-                {/*        <span className="ml-2 text-sm text-gray-700">Include outdated</span>*/}
-                {/*    </label>*/}
-                {/*</div>*/}
-                <div className="flex justify-end">
-                    <button
-                        onClick={onClose}
-                        className="bg-lightgr text-white px-4 py-2 rounded-md hover:bg-argray"
-                    >
-                        Apply
-                    </button>
+                <div className="flex justify-between m-4 pt-2">
+                    <Button text="Apply" onClick={handleApply}
+                            style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white"/>
+                    <Button text="Clear" onClick={clearFilters}
+                            style="text-sm border border-lightgr text-argray py-1 rounded-md hover:bg-lightgr hover:text-white"/>
                 </div>
             </div>
         </div>
     );
 };
-
-// export default FilterModal;

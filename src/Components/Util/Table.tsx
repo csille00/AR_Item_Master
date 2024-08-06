@@ -1,26 +1,27 @@
-import React, {useState} from "react";
-import {Tables} from "../../Definitions/definitions.ts";
+import React from "react";
+import {JewelryMasterQuery, Tables} from "../../Definitions/definitions.ts";
 import {useNavigate} from "react-router-dom";
-import {FilterModal} from "./FilterModal.tsx";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
+import tableIcon from "../../assets/table.svg"
 
 export interface TableProps {
     title: string;
     columns: string[];
-    data: Tables<'ar_jewelry_master'>[];
+    data: JewelryMasterQuery;
     style?: string | null;
-    children?: (item: Tables<'ar_jewelry_master'>) => React.JSX.Element
+    setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    children?: (item: Tables<'ar_jewelry_master'>, columns: string[]) => React.JSX.Element
 }
 
 const download = () => {
     console.log("export button")
 }
 
-const Table = ({title, columns, data, style, children}: TableProps) => {
+const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalOpen, children}: TableProps) => {
     const navigate = useNavigate();
-    const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
     return (
         <>
@@ -41,7 +42,7 @@ const Table = ({title, columns, data, style, children}: TableProps) => {
                     <h1 className="text-argray text-left my-8 text-4xl justify-start">{title}</h1>
                     <div className="flex justify-end items-center">
                         <button
-                            className="bg-argold hover:font-bold rounded-lg h-12 mx-1.5 flex items-center"
+                            className="bg-argold hover:font-bold hover:bg-darkgold hover:border-darkgold rounded-lg h-12 mx-1.5 flex items-center"
                             onClick={() => navigate('/addJewelry')}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                                  stroke="#FFFFFF" className="size-5 mx-1">
@@ -52,14 +53,20 @@ const Table = ({title, columns, data, style, children}: TableProps) => {
                         <Button
                             icon={filterIcon}
                             text="Filter"
-                            onClick={() => setModalOpen(true)}
-                            style="text-argray bg-white hover:text-argray border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
+                            onClick={() => setFilterModalOpen(true)}
+                            style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
+                        />
+                        <Button
+                            icon={tableIcon}
+                            text="Change View"
+                            onClick={() => setColumnModalOpen(true)}
+                            style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
                             icon={downloadIcon}
                             text="Download"
                             onClick={download}
-                            style="text-argray bg-white hover:text-argray border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
+                            style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                        />
                     </div>
                 </div>
@@ -75,14 +82,13 @@ const Table = ({title, columns, data, style, children}: TableProps) => {
                         <tbody>
                         {data.map((item, index) => (
                             <tr key={index}>
-                                {children ? children(item) : null}
+                                {children ? children(item as unknown as Tables<'ar_jewelry_master'>, columns) : null}
                             </tr>
                         ))}
                         </tbody>
                     </table>
                 </div>
             </div>
-            <FilterModal isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>
         </>
     );
 };
