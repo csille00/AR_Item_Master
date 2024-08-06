@@ -79,4 +79,4 @@ const Jewelry: React.FC = () => {
     );
 }
 
-export default Jewelry
+export default Jewelry;
