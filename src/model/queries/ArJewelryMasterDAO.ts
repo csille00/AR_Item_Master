@@ -1,7 +1,8 @@
 import {getClient} from "../getClient.ts";
-import {JewelryMasterQuery, TablesInsert} from "../../Definitions/definitions.ts";
+import {JewelryMasterQuery} from "../../Definitions/definitions.ts";
 import {FilterOption} from "../../Definitions/FilterOption.ts";
-import {MapFormDataToDatabaseColumns} from "../../Definitions/enum.ts";
+import {MapFormDataToJewelryMasterColumns} from "../../Definitions/enum.ts";
+import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
 
 const client = getClient()
 
@@ -83,7 +84,7 @@ export async function getJewelryMasterPageFromClient(
     // Apply filters
     if(!filters.some(filter => filter.value == 'ALL')) {
         filters.forEach(filter => {
-            const column = MapFormDataToDatabaseColumns[filter.column as keyof typeof MapFormDataToDatabaseColumns];
+            const column = MapFormDataToJewelryMasterColumns[filter.column as keyof typeof MapFormDataToJewelryMasterColumns];
             if (column) {
                 query.eq(column, filter.value);
             }

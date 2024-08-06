@@ -1,9 +1,9 @@
-import {ArJewelryMasterColumns, MapFormDataToDatabaseColumns} from "../../Definitions/enum.ts";
-import {Tables} from "../../Definitions/definitions.ts";
+import {ArJewelryMasterColumns, MapFormDataToJewelryMasterColumns} from "../../Definitions/enum.ts";
 import React from "react";
+import {Tables} from "../../Definitions/generatedDefinitions.ts";
 
 const getNestedValue = (item: any, column: ArJewelryMasterColumns) => {
-    const value = item[MapFormDataToDatabaseColumns[column]];
+    const value = item[MapFormDataToJewelryMasterColumns[column]];
 
     if (typeof value === 'object' && value !== null) {
         const nestedPropertyMap: Record<string, string> = {

@@ -1,14 +1,14 @@
-import {getFormConfig} from "../../Definitions/formConfig.ts";
+import {getFormConfig} from "../../Definitions/FormConfig/jewelryFormConfig.ts";
 import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
 import {
     LabeledInputType,
-    MapFormDataToDatabaseColumns, ProductTypeIds,
+    MapFormDataToJewelryMasterColumns, ProductTypeIds,
     Status
 } from "../../Definitions/enum.ts";
 import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
-import {TablesInsert} from "../../Definitions/definitions.ts";
 import {insertIntoJewelryMaster} from "../../model/queries/ArJewelryMasterDAO.ts";
+import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
 
 const AddJewelryForm = () => {
 
@@ -36,7 +36,7 @@ const AddJewelryForm = () => {
             if (formData[key] === '--') dataToAssign = null;
 
             // Map form data to the corresponding database columns
-            const dbColumnKey = MapFormDataToDatabaseColumns[key as keyof typeof MapFormDataToDatabaseColumns];
+            const dbColumnKey = MapFormDataToJewelryMasterColumns[key as keyof typeof MapFormDataToJewelryMasterColumns];
             if (dbColumnKey) {
                 (data as any)[dbColumnKey] = dataToAssign;
             }

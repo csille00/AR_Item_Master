@@ -11,6 +11,7 @@ export async function getStoneTypesFromClient(): Promise<Option[] | undefined> {
         throw error;
     }
     if (data) {
-        return data.map(item => item.stone_type);
-    }
+        const result: Option[] = []
+        data.forEach(item => result.push({id: item.stone_type, description: item.stone_type}))
+        return result    }
 }

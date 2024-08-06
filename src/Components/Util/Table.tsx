@@ -1,16 +1,17 @@
+import {JewelryMasterQuery, StoneMasterQuery} from "../../Definitions/definitions.ts";
 import React, {useState} from "react";
-import {JewelryMasterQuery, Tables} from "../../Definitions/definitions.ts";
 import {useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
-import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 import tableIcon from "../../assets/table.svg"
+import {Tables} from "../../Definitions/generatedDefinitions.ts";
+import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 
 export interface TableProps {
     title: string;
     columns: string[];
-    data: JewelryMasterQuery;
+    data: JewelryMasterQuery | StoneMasterQuery;
     style?: string | null;
     setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
