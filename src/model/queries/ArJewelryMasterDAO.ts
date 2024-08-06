@@ -6,8 +6,6 @@ import {MapFormDataToDatabaseColumns} from "../../Definitions/enum.ts";
 const client = getClient()
 
 export async function insertIntoJewelryMaster(dataToInsert: TablesInsert<'ar_jewelry_master'>) {
-    console.log("Data to Insert:", dataToInsert);
-
     const {error} = await client
         .from("ar_jewelry_master")
         .insert([dataToInsert]);
@@ -22,7 +20,6 @@ export async function getJewelryMasterPageFromClient(
     filters: FilterOption[],
     pageLength: number = 100
 ): Promise<JewelryMasterQuery | undefined> {
-    console.log('in dao: ', filters);
     const start = (page - 1) * pageLength;
     const end = start + pageLength - 1;
 
@@ -84,12 +81,14 @@ export async function getJewelryMasterPageFromClient(
         .range(start, end);
 
     // Apply filters
-    filters.forEach(filter => {
-        const column = MapFormDataToDatabaseColumns[filter.column as keyof typeof MapFormDataToDatabaseColumns];
-        if (column) {
-            query.eq(column, filter.value);
-        }
-    });
+    if(!filters.some(filter => filter.value == 'ALL')) {
+        filters.forEach(filter => {
+            const column = MapFormDataToDatabaseColumns[filter.column as keyof typeof MapFormDataToDatabaseColumns];
+            if (column) {
+                query.eq(column, filter.value);
+            }
+        });
+    }
 
     const {data, error} = await query
 

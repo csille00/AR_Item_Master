@@ -1,20 +1,19 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../Components/Util/Table.tsx";
-import {JewelryMasterQuery, Tables} from "../Definitions/definitions.ts";
+import { JewelryMasterQuery } from "../Definitions/definitions.ts";
 import JewelryRow from "./Util/JewelryRow.tsx";
-import {getJewelryMasterPageFromClient} from "../model/queries/ArJewelryMasterDAO.ts";
-import {ArJewelryMasterColumns} from "../Definitions/enum.ts";
-import {ChangeViewModal} from "./Util/ChangeViewModal.tsx";
-import {FilterModal} from "./Util/FilterModal.tsx";
-import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
-import {FilterOption} from "../Definitions/FilterOption.ts";
+import { getJewelryMasterPageFromClient } from "../model/queries/ArJewelryMasterDAO.ts";
+import { ArJewelryMasterColumns } from "../Definitions/enum.ts";
+import { ChangeViewModal } from "./Util/ChangeViewModal.tsx";
+import { FilterModal } from "./Util/FilterModal.tsx";
+import { getProductTypesFromClient } from "../model/queries/ProductTypeDAO.ts";
+import { FilterOption } from "../Definitions/FilterOption.ts";
 
-//TODO: implement the proper paging
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
     const [isColumnModalOpen, setColumnModalOpen] = useState<boolean>(false);
     const [jewelryData, setJewelryData] = useState<JewelryMasterQuery>();
-    const [filterOptions, setFilterOptions] = useState<FilterOption[]>([])
+    const [filterOptions, setFilterOptions] = useState<FilterOption[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [columns, setColumns] = useState<string[]>([
@@ -60,7 +59,7 @@ const Jewelry: React.FC = () => {
     return (
         <>
             <Table columns={columns} data={jewelryData} title="Jewelry Master" setColumnModalOpen={setColumnModalOpen} setFilterModalOpen={setFilterModalOpen}>
-                {(item, columns) => <JewelryRow item={item} columns={columns}/>}
+                {(item, columns) => <JewelryRow item={item} columns={columns} />}
             </Table>
             <ChangeViewModal
                 isOpen={isColumnModalOpen}
@@ -72,7 +71,6 @@ const Jewelry: React.FC = () => {
                 isOpen={isFilterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
                 fetchProductTypes={getProductTypesFromClient}
-                filterOptions={filterOptions}
                 setFilterOptions={setFilterOptions}
                 onApplyFilters={fetchData}
                 clearFilterOptions={handleClearFilters}
@@ -81,4 +79,4 @@ const Jewelry: React.FC = () => {
     );
 }
 
-export default Jewelry
+export default Jewelry;

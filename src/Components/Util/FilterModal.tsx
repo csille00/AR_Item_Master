@@ -7,7 +7,6 @@ import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
-    filterOptions: FilterOption[];
     setFilterOptions: (options: FilterOption[]) => void;
     fetchProductTypes: () => Promise<Option[] | undefined>;
     clearFilterOptions: () => void;
@@ -17,11 +16,9 @@ interface ModalProps {
 export const FilterModal: React.FC<ModalProps> = ({
                                                       isOpen,
                                                       onClose,
-                                                      filterOptions,
                                                       setFilterOptions,
                                                       fetchProductTypes,
                                                       onApplyFilters,
-                                                      clearFilterOptions
                                                   }) => {
     const [productTypeOptions, setProductTypeOptions] = useState<Option[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +29,6 @@ export const FilterModal: React.FC<ModalProps> = ({
         try {
             const data = await fetchProductTypes();
             if (data) {
-                data.unshift({description: '--'});
                 setProductTypeOptions(data);
             }
         } catch (error) {
@@ -52,19 +48,11 @@ export const FilterModal: React.FC<ModalProps> = ({
         onClose();
     };
 
-    const clearFilters = async () => {
-        clearFilterOptions()
-        await getProductTypes();
-        onClose();
-    };
-
     const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        console.log('handle change: ', label, ', ', event.target.value);
         if (label === ArJewelryMasterColumns.TYPE) {
             const option = new FilterOption(ArJewelryMasterColumns.TYPE, event.target.value);
             setFilterOptions([option])
         }
-        console.log('filter options after change: ', filterOptions)
     };
 
     if (isLoading) {
@@ -95,9 +83,11 @@ export const FilterModal: React.FC<ModalProps> = ({
                         </label>
                         <select
                             className="p-2 rounded-lg border"
-                            name="mySelect"
+                            name="selectType"
                             onChange={(e) => handleChange(ArJewelryMasterColumns.TYPE, e)}
                         >
+                            <option key={'disabled'} disabled={true} value='' selected={true}>--</option>
+                            <option key={'ALL'} value='ALL'>All</option>
                             {productTypeOptions.map((option, index) => (
                                 <option key={index} value={option.id}>
                                     {option.description}
@@ -109,8 +99,6 @@ export const FilterModal: React.FC<ModalProps> = ({
                 <div className="flex justify-between m-4 pt-2">
                     <Button text="Apply" onClick={handleApply}
                             style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white"/>
-                    <Button text="Clear" onClick={clearFilters}
-                            style="text-sm border border-lightgr text-argray py-1 rounded-md hover:bg-lightgr hover:text-white"/>
                 </div>
             </div>
         </div>

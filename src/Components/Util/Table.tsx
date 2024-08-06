@@ -1,9 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import {JewelryMasterQuery, Tables} from "../../Definitions/definitions.ts";
 import {useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
+import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 import tableIcon from "../../assets/table.svg"
 
 export interface TableProps {
@@ -22,6 +23,39 @@ const download = () => {
 
 const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalOpen, children}: TableProps) => {
     const navigate = useNavigate();
+    const [sortColumn, setSortColumn] = useState<string | null>(null);
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+    const handleSort = (column: string) => {
+        //for now, only support the sorting of the data column.
+        // It is set up to support the other ones, I just dont know how to properly sort them right now (8/05/24)
+        if(!(column == ArJewelryMasterColumns.DATE)) return
+        if (sortColumn === column) {
+            // Toggle sort direction
+            setSortDirection(prevDirection => prevDirection === 'asc' ? 'desc' : 'asc');
+        } else {
+            // Set new column and default to ascending
+            setSortColumn(column);
+            setSortDirection('asc');
+        }
+    };
+
+    const sortedData = React.useMemo(() => {
+        if (!sortColumn) return data;
+
+        return [...data].sort((a, b) => {
+            const aValue = a['date'];
+            const bValue = b['date'];
+
+            if (typeof aValue === 'number' && typeof bValue === 'number') {
+                return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+            } else {
+                const aStr = String(aValue);
+                const bStr = String(bValue);
+                return sortDirection === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
+            }
+        });
+    }, [data, sortColumn, sortDirection])
 
     return (
         <>
@@ -75,12 +109,15 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                         <thead className="">
                         <tr>
                             {columns.map((column, index) => (
-                                <th key={index} className="p-4">{column} </th>
+                                <th key={index} className="p-4 cursor-pointer" onClick={() => handleSort(column)}>
+                                    {column}
+                                    {sortColumn === column && (sortDirection === 'asc' ? ' ↑' : ' ↓')}
+                                </th>
                             ))}
                         </tr>
                         </thead>
                         <tbody>
-                        {data.map((item, index) => (
+                        {sortedData.map((item, index) => (
                             <tr key={index}>
                                 {children ? children(item as unknown as Tables<'ar_jewelry_master'>, columns) : null}
                             </tr>
