@@ -59,7 +59,6 @@ export const AddForm: React.FC<SharedFormProps> = ({
                 })
                 setColumns(config);
             } catch (error) {
-                console.error("Failed to fetch form config:", error);
                 setError("Failed to fetch form config: " + (error as Error).message);
             } finally {
                 setIsLoading(false);
@@ -88,7 +87,6 @@ export const AddForm: React.FC<SharedFormProps> = ({
     const handleSubmit = async (event: React.FormEvent | undefined) => {
         if (!event) return;
         event.preventDefault();
-        columns.push(new FormColumn("Type", LabeledInputType.SELECT, true, productTypes))
         formData[ArJewelryMasterColumns.TYPE] = type
         const valid = await submitForm(formData, columns)
         if (!valid) {
