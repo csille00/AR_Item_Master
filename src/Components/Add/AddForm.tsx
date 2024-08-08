@@ -3,7 +3,7 @@ import LabeledInput from "../Util/LabeledInput.tsx";
 import Button from "../Util/Button.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArJewelryMasterColumns, LabeledInputType} from "../../Definitions/enum.ts";
+import {LabeledInputType} from "../../Definitions/enum.ts";
 import {useNavigate} from "react-router-dom";
 
 interface SharedFormProps {
@@ -11,6 +11,7 @@ interface SharedFormProps {
     fetchColumns: (type: string) => Promise<FormColumn[]>;
     fetchProductTypes: () => Promise<Option[] | undefined>;
     initialType: string;
+    typeValue: string
     submitForm: (formData: { [key: string]: string | number }, columns: FormColumn[]) => Promise<boolean>;
 }
 
@@ -19,12 +20,13 @@ export const AddForm: React.FC<SharedFormProps> = ({
                                                        fetchColumns,
                                                        fetchProductTypes,
                                                        initialType,
+                                                       typeValue,
                                                        submitForm,
                                                    }) => {
     const [productTypes, setProductTypes] = useState<Option[]>([]);
     const [columns, setColumns] = useState<FormColumn[]>([]);
     const [type, setType] = useState<string>(initialType);
-    const [formData, setFormData] = useState<{ [key: string]: string }>({[ArJewelryMasterColumns.TYPE]: initialType});
+    const [formData, setFormData] = useState<{ [key: string]: string }>({[typeValue]: initialType});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -73,7 +75,9 @@ export const AddForm: React.FC<SharedFormProps> = ({
     }
 
     const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        if (label === 'Type') setType(event.target.value);
+        if (label === typeValue) {
+            setType(event.target.value);
+        }
         setFormData({
             ...formData,
             [label]: event.target.value
@@ -83,7 +87,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
     const handleSubmit = async (event: React.FormEvent | undefined) => {
         if (!event) return;
         event.preventDefault();
-        formData[ArJewelryMasterColumns.TYPE] = type
+        formData[typeValue] = type
         const valid = await submitForm(formData, columns)
         if (!valid) {
             return
@@ -93,7 +97,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
 
     const handleClear = () => {
         const clearedData = Object.keys(formData).reduce((acc, key) => {
-            if (key !== ArJewelryMasterColumns.TYPE) {
+            if (key !== typeValue) {
                 acc[key] = '';
             }
             return acc;
@@ -119,11 +123,11 @@ export const AddForm: React.FC<SharedFormProps> = ({
                 </div>
                 <div>
                     <LabeledInput
-                        label={ArJewelryMasterColumns.TYPE}
+                        label={typeValue}
                         type={LabeledInputType.SELECT}
                         required={true}
-                        onChange={(e) => handleChange(ArJewelryMasterColumns.TYPE, e)}
-                        value={formData[ArJewelryMasterColumns.TYPE]}
+                        onChange={(e) => handleChange(typeValue, e)}
+                        value={formData[typeValue]}
                         options={productTypes}
                         style="mb-4"
                         boxStyle="p-2 rounded-lg border w-44"

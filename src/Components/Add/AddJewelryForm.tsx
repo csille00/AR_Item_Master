@@ -1,6 +1,7 @@
 import {getFormConfig} from "../../Definitions/FormConfig/jewelryFormConfig.ts";
 import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
 import {
+    ArJewelryMasterColumns,
     LabeledInputType,
     MapFormDataToJewelryMasterColumns, ProductTypeIds,
     Status
@@ -61,6 +62,7 @@ const AddJewelryForm = () => {
             fetchColumns={(type: string) => getFormConfig(type)}
             fetchProductTypes={getProductTypesFromClient}
             initialType={ProductTypeIds.ENG}
+            typeValue={ArJewelryMasterColumns.TYPE}
             submitForm={addJewelry}
         />
     )

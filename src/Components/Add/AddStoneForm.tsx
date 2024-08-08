@@ -3,6 +3,7 @@ import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {getStoneProductTypesFromClient} from "../../model/queries/StoneProductTypeDAO.ts";
 import {getStoneFormConfig} from "../../Definitions/FormConfig/stoneFormConfig.ts";
 import {
+    ArStoneMasterColumns,
     LabeledInputType,
     MapFormDataToStoneMasterColumns,
     StoneProductTypes
@@ -59,6 +60,7 @@ const AddStoneForm = () => {
             fetchColumns={(type: string) => getStoneFormConfig(type)}
             fetchProductTypes={getStoneProductTypesFromClient}
             initialType={StoneProductTypes.ELS}
+            typeValue={ArStoneMasterColumns.TYPE}
             submitForm={addStone}
         />
     )
