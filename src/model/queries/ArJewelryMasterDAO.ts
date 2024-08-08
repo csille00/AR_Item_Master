@@ -1,8 +1,8 @@
 import {getClient} from "../getClient.ts";
-import {JewelryMasterQuery} from "../../Definitions/definitions.ts";
 import {FilterOption} from "../../Definitions/FilterOption.ts";
 import {MapFormDataToJewelryMasterColumns} from "../../Definitions/enum.ts";
 import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
+import {QueryData} from "@supabase/supabase-js";
 
 const client = getClient()
 
@@ -16,17 +16,9 @@ export async function insertIntoJewelryMaster(dataToInsert: TablesInsert<'ar_jew
     }
 }
 
-export async function getJewelryMasterPageFromClient(
-    page: number,
-    filters: FilterOption[],
-    pageLength: number = 100
-): Promise<JewelryMasterQuery | undefined> {
-    const start = (page - 1) * pageLength;
-    const end = start + pageLength - 1;
-
-    const query = client
-        .from('ar_jewelry_master')
-        .select(`
+const jewelryMasterQuery = client
+    .from('ar_jewelry_master')
+    .select(`
             serial_number,
             sku_number,
             style_number,

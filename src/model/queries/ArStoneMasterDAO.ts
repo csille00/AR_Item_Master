@@ -1,8 +1,8 @@
 import {getClient} from "../getClient.ts";
-import { StoneMasterQuery} from "../../Definitions/definitions.ts";
 import {FilterOption} from "../../Definitions/FilterOption.ts";
-import {MapFormDataToJewelryMasterColumns} from "../../Definitions/enum.ts";
+import {MapFormDataToStoneMasterColumns} from "../../Definitions/enum.ts";
 import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
+import {QueryData} from "@supabase/supabase-js";
 
 const client = getClient()
 
@@ -17,13 +17,10 @@ export async function insertIntoStoneMaster(dataToInsert: TablesInsert<'ar_stone
     }
 }
 
-export async function getStoneMasterItemsFromClient(
-    filters: FilterOption[],
-): Promise<StoneMasterQuery | undefined> {
 
-    const query = client
-        .from('ar_stone_master')
-        .select(`
+const stoneMasterQuery = client
+    .from('ar_stone_master')
+    .select(`
             serial_number,
             sku_number,
             style_number,
@@ -58,15 +55,23 @@ export async function getStoneMasterItemsFromClient(
             st_clarity_grade(grade)
     `)
 
+export type StoneMasterQuery = QueryData<typeof stoneMasterQuery>;
+
+
+export async function getStoneMasterItemsFromClient(
+    filters: FilterOption[],
+): Promise<StoneMasterQuery | undefined> {
+
     // Apply filters
     filters.forEach(filter => {
-        const column= MapFormDataToJewelryMasterColumns[filter.column as keyof typeof MapFormDataToJewelryMasterColumns];
+        const column= MapFormDataToStoneMasterColumns[filter.column as keyof typeof MapFormDataToStoneMasterColumns];
         if (column) {
-            query.eq(column, filter.value);
+            stoneMasterQuery.eq(column, filter.value);
         }
     });
 
-    const {data, error} = await query
+    const {data, error} = await stoneMasterQuery
+    console.log('data in dao: ', data)
 
     if (error) {
         throw error;
