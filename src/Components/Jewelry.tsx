@@ -65,6 +65,7 @@ const Jewelry: React.FC = () => {
                 isOpen={isColumnModalOpen}
                 onClose={() => setColumnModalOpen(false)}
                 columns={columns}
+                allColumns={Object.values(ArJewelryMasterColumns)}
                 setColumns={setColumns}
             />
             <FilterModal

@@ -48,14 +48,14 @@ const jewelryMasterQuery = client
             variant_id,
             weight,
             material_type(metal_type),
-            product_type(prod_code, product_type),
-            stone_type(stone_type),
+            product_type(product_type),
+            st_type(st_type),
             st_source(source),
-            stone_color(color),
-            stone_shape(shape),
-            stone_cut(cut),
-            stone_orientation(orientation),
-            stone_origin(origin),
+            st_color(color),
+            st_shape(shape),
+            st_cut(cut),
+            st_orientation(orientation),
+            st_origin(origin),
             st_cert_type(cert_type),
             st_cert_cut(cut),
             metal_finish(finish),
@@ -71,19 +71,31 @@ const jewelryMasterQuery = client
             charm_type(type),
             ar_style(style)
     `)
-        .range(start, end);
+
+export type JewelryMasterQuery = QueryData<typeof jewelryMasterQuery>;
+
+
+export async function getJewelryMasterPageFromClient(
+    page: number,
+    filters: FilterOption[],
+    pageLength: number = 100
+): Promise<JewelryMasterQuery | undefined> {
+    const start = (page - 1) * pageLength;
+    const end = start + pageLength - 1;
+
+    jewelryMasterQuery.range(start, end)
 
     // Apply filters
     if(!filters.some(filter => filter.value == 'ALL')) {
         filters.forEach(filter => {
             const column = MapFormDataToJewelryMasterColumns[filter.column as keyof typeof MapFormDataToJewelryMasterColumns];
             if (column) {
-                query.eq(column, filter.value);
+                jewelryMasterQuery.eq(column, filter.value);
             }
         });
     }
 
-    const {data, error} = await query
+    const {data, error} = await jewelryMasterQuery
 
     if (error) {
         throw error;

@@ -5,7 +5,7 @@ const client = getClient()
 
 export async function getStoneProductTypesFromClient(): Promise<Option[] | undefined> {
     const {data, error} = await client
-        .from("stone_product_type")
+        .from("st_product_type")
         .select('prod_code,type');
     if (error) {
         throw error;

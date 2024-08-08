@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
-import {StoneMasterQuery} from "../Definitions/definitions.ts";
 import {FilterOption} from "../Definitions/FilterOption.ts";
 import {ArStoneMasterColumns} from "../Definitions/enum.ts";
-import JewelryRow from "./Util/JewelryRow.tsx";
 import {ChangeViewModal} from "./Util/ChangeViewModal.tsx";
 import {FilterModal} from "./Util/FilterModal.tsx";
-import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
-import {getStoneMasterItemsFromClient} from "../model/queries/ArStoneMasterDAO.ts";
+import {getStoneMasterItemsFromClient, StoneMasterQuery} from "../model/queries/ArStoneMasterDAO.ts";
+import {StoneRow} from "./Util/StoneRow.tsx";
+import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
 
 
 const Stone: React.FC = () => {
@@ -57,20 +56,20 @@ const Stone: React.FC = () => {
 
     return (
         <>
-            <Table columns={columns} data={stoneDate} title="Jewelry Master" setColumnModalOpen={setColumnModalOpen} setFilterModalOpen={setFilterModalOpen}>
-                {(item, columns) => <JewelryRow item={item} columns={columns}/>}
+            <Table columns={columns} data={stoneDate} title="Stone Master" setColumnModalOpen={setColumnModalOpen} setFilterModalOpen={setFilterModalOpen}>
+                {(item, columns) => <StoneRow item={item} columns={columns}/>}
             </Table>
             <ChangeViewModal
                 isOpen={isColumnModalOpen}
                 onClose={() => setColumnModalOpen(false)}
                 columns={columns}
+                allColumns={Object.values(ArStoneMasterColumns)}
                 setColumns={setColumns}
             />
             <FilterModal
                 isOpen={isFilterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
-                fetchProductTypes={getProductTypesFromClient}
-                filterOptions={filterOptions}
+                fetchProductTypes={getStoneProductTypesFromClient}
                 setFilterOptions={setFilterOptions}
                 onApplyFilters={fetchData}
                 clearFilterOptions={handleClearFilters}

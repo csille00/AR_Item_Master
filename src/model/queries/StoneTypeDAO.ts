@@ -5,13 +5,13 @@ const client = getClient()
 
 export async function getStoneTypesFromClient(): Promise<Option[] | undefined> {
     const {data, error} = await client
-        .from("stone_type")
-        .select('stone_type');
+        .from("st_type")
+        .select('st_type');
     if (error) {
         throw error;
     }
     if (data) {
         const result: Option[] = []
-        data.forEach(item => result.push({id: item.stone_type, description: item.stone_type}))
+        data.forEach(item => result.push({id: item.st_type, description: item.st_type}))
         return result    }
 }

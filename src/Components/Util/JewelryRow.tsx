@@ -9,7 +9,7 @@ const getNestedValue = (item: any, column: ArJewelryMasterColumns) => {
         const nestedPropertyMap: Record<string, string> = {
             material_type: 'metal_type',
             product_type: 'product_type',
-            stone_type: 'stone_type',
+            st_type: 'st_type',
             st_source: 'source',
             stone_color: 'stone_color',
             stone_shape: 'stone_shape',
@@ -40,7 +40,7 @@ const getNestedValue = (item: any, column: ArJewelryMasterColumns) => {
     return value;
 };
 
-const JewelryRow = ({ item, columns }: { item: Tables<'ar_jewelry_master'>, columns: string[] }): React.ReactNode => {
+const JewelryRow = ({item, columns}: { item: Tables<'ar_jewelry_master'>, columns: string[] }): React.ReactNode => {
     return (
         <>
             {columns.map((column, index) => {

@@ -1,17 +1,15 @@
 import React from 'react';
-import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 import Button from "./Button.tsx";
 
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
     columns: string[];
+    allColumns: string[]
     setColumns: (columns: string[]) => void;
 }
 
-export const ChangeViewModal: React.FC<ModalProps> = ({isOpen, onClose, columns, setColumns}) => {
-    // const [filterOption, setFilterOption] = useState<string>('option1');
-    const allColumns = Object.values(ArJewelryMasterColumns);
+export const ChangeViewModal: React.FC<ModalProps> = ({isOpen, onClose, columns, setColumns, allColumns}) => {
 
     const handleToggleColumn = (column: string) => {
         if (columns.includes(column)) {

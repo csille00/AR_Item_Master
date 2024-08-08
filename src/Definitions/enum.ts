@@ -57,7 +57,7 @@ export enum StoneProductTypes {
 
 export enum ArJewelryMasterColumns {
     SERIAL_NUMBER = "Serial Number",
-    TYPE = "Type",
+    TYPE = "Product Type",
     SKU = "SKU",
     STYLE_NUMBER = "Style Number",
     PRODUCT_NAME = "Product Name",
@@ -113,7 +113,7 @@ export enum ArJewelryMasterColumns {
 export const MapFormDataToJewelryMasterColumns: { [key in ArJewelryMasterColumns]: keyof TablesInsert<'ar_jewelry_master'> } = {
     [ArJewelryMasterColumns.SERIAL_NUMBER]: 'serial_number',
     [ArJewelryMasterColumns.STYLE_NUMBER]: 'style_number',
-    [ArJewelryMasterColumns.TYPE]: 'prod_code',
+    [ArJewelryMasterColumns.TYPE]: 'product_type',
     [ArJewelryMasterColumns.SKU]: 'sku_number',
     [ArJewelryMasterColumns.PRODUCT_NAME]: 'prod_name',
     [ArJewelryMasterColumns.MSRP]: 'msrp',
@@ -168,7 +168,7 @@ export const MapFormDataToJewelryMasterColumns: { [key in ArJewelryMasterColumns
 export enum ArStoneMasterColumns {
     SERIAL_NUMBER = "Serial Number",
     SKU = "SKU-Number",
-    TYPE = "Type",
+    TYPE = "ST Product Type",
     STYLE_NUMBER = "Style Number",
     PRODUCT_NAME = "Product Name",
     MSRP = "MSRP",
@@ -206,7 +206,7 @@ export const MapFormDataToStoneMasterColumns: { [key in ArStoneMasterColumns]: k
     [ArStoneMasterColumns.SKU]: 'sku_number',
     [ArStoneMasterColumns.STYLE_NUMBER]: 'style_number',
     [ArStoneMasterColumns.PRODUCT_NAME]: 'prod_name',
-    [ArStoneMasterColumns.TYPE]: 'prod_code',
+    [ArStoneMasterColumns.TYPE]: 'st_product_type',
     [ArStoneMasterColumns.MSRP]: 'msrp',
     [ArStoneMasterColumns.COST]: 'cost',
     [ArStoneMasterColumns.ST_TYPE]: 'st_type',
@@ -221,17 +221,17 @@ export const MapFormDataToStoneMasterColumns: { [key in ArStoneMasterColumns]: k
     [ArStoneMasterColumns.ST_CTW]: 'st_ctw',
     [ArStoneMasterColumns.ST_COST]: 'st_cost',
     [ArStoneMasterColumns.ST_CERT_TYPE]: 'st_cert_type',
-    [ArStoneMasterColumns.ST_CERT_NUMBER]: 'st_cert_num', //TODO: Fix this
-    [ArStoneMasterColumns.ST_CERT_CUT]: 'st_cert_cut', //TODO: Fix this
+    [ArStoneMasterColumns.ST_CERT_NUMBER]: 'st_cert_num',
+    [ArStoneMasterColumns.ST_CERT_CUT]: 'st_cert_cut',
     [ArStoneMasterColumns.ST_CERT_COLOR]: 'st_cert_color',
     [ArStoneMasterColumns.ST_CERT_CLARITY]: 'st_cert_clarity',
     [ArStoneMasterColumns.ST_CTW_RANGE]: 'st_ctw_range',
     [ArStoneMasterColumns.ST_TABLE]: 'st_table',
     [ArStoneMasterColumns.MEMO]: 'memo',
-    [ArStoneMasterColumns.STONE_NUMBER]: 'stone_number',
+    [ArStoneMasterColumns.STONE_NUMBER]: 'st_number',
     [ArStoneMasterColumns.DATE]: 'date',
     [ArStoneMasterColumns.CAT_STATUS]: 'cat_status',
-    [ArStoneMasterColumns.STONE_SKU]: 'stone_sku',
+    [ArStoneMasterColumns.STONE_SKU]: 'st_sku',
     [ArStoneMasterColumns.REFINED_STATUS]: 'refined_status',
     [ArStoneMasterColumns.QUANTITY]: 'quantity',
     [ArStoneMasterColumns.DATE_QUANTITY_ADDED]: 'date_quantity_added',
