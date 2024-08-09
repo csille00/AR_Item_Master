@@ -6,7 +6,7 @@ import {
     ArStoneMasterColumns,
     LabeledInputType,
     MapFormDataToStoneMasterColumns,
-    StoneProductTypes
+    StoneProductTypeIds,
 } from "../../Definitions/enum.ts";
 import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
 import {insertIntoStoneMaster} from "../../model/queries/ArStoneMasterDAO.ts";
@@ -59,7 +59,7 @@ const AddStoneForm = () => {
             title="Add Stone"
             fetchColumns={(type: string) => getStoneFormConfig(type)}
             fetchProductTypes={getStoneProductTypesFromClient}
-            initialType={StoneProductTypes.ELS}
+            initialType={StoneProductTypeIds.ELS}
             typeValue={ArStoneMasterColumns.TYPE}
             submitForm={addStone}
         />
