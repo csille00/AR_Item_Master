@@ -5,7 +5,7 @@ const client = getClient()
 
 export async function getCharmTypeFromClient(): Promise<Option[] | undefined> {
     const {data, error} = await client
-        .from("stone_color")
+        .from("st_color")
         .select('id,color');
     if (error) {
         throw error;

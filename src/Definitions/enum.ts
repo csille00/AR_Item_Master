@@ -1,4 +1,4 @@
-import {TablesInsert} from "./definitions.ts";
+import {TablesInsert} from "./generatedDefinitions.ts";
 
 export enum age {
     ADULT = "Adult"
@@ -45,9 +45,19 @@ export enum ProductTypeIds {
     OTH = "OTH"
 }
 
+export enum StoneProductTypeIds {
+    ELS = "ELS",
+    OLS = "OLS"
+}
+
+export enum StoneProductTypes {
+    ELS = "Engagement Loose Stones",
+    OLS = "Other Loose Stones"
+}
+
 export enum ArJewelryMasterColumns {
     SERIAL_NUMBER = "Serial Number",
-    TYPE = "Type",
+    TYPE = "Product Type",
     SKU = "SKU",
     STYLE_NUMBER = "Style Number",
     PRODUCT_NAME = "Product Name",
@@ -100,10 +110,10 @@ export enum ArJewelryMasterColumns {
     WEIGHT = "Weight",
 }
 
-export const MapFormDataToDatabaseColumns: { [key in ArJewelryMasterColumns]: keyof TablesInsert<'ar_jewelry_master'> } = {
+export const MapFormDataToJewelryMasterColumns: { [key in ArJewelryMasterColumns]: keyof TablesInsert<'ar_jewelry_master'> } = {
     [ArJewelryMasterColumns.SERIAL_NUMBER]: 'serial_number',
     [ArJewelryMasterColumns.STYLE_NUMBER]: 'style_number',
-    [ArJewelryMasterColumns.TYPE]: 'prod_code',
+    [ArJewelryMasterColumns.TYPE]: 'product_type',
     [ArJewelryMasterColumns.SKU]: 'sku_number',
     [ArJewelryMasterColumns.PRODUCT_NAME]: 'prod_name',
     [ArJewelryMasterColumns.MSRP]: 'msrp',
@@ -153,6 +163,78 @@ export const MapFormDataToDatabaseColumns: { [key in ArJewelryMasterColumns]: ke
     [ArJewelryMasterColumns.ID]: 'id',
     [ArJewelryMasterColumns.VARIANT_ID]: 'variant_id',
     [ArJewelryMasterColumns.WEIGHT]: 'weight',
+};
+
+export enum ArStoneMasterColumns {
+    SERIAL_NUMBER = "Serial Number",
+    SKU = "SKU-Number",
+    TYPE = "ST Product Type",
+    STYLE_NUMBER = "Style Number",
+    PRODUCT_NAME = "Product Name",
+    MSRP = "MSRP",
+    COST = "Cost",
+    ST_TYPE = "ST Type",
+    ST_SOURCE = "ST Source",
+    ST_COLOR = "ST Color",
+    ST_SHAPE = "ST Shape",
+    ST_CUT = "ST Cut",
+    ST_HEIGHT = "ST Height",
+    ST_WIDTH = "ST Width",
+    ST_ORIENTATION = "ST Orientation",
+    ST_ORIGIN = "ST Origin",
+    ST_CTW = "ST CTW",
+    ST_COST = "ST Cost",
+    ST_CERT_TYPE = "ST Cert Type",
+    ST_CERT_NUMBER = "ST Cert #",
+    ST_CERT_CUT = "ST Cert Cut",
+    ST_CERT_COLOR = "ST Cert Color",
+    ST_CERT_CLARITY = "ST Cert Clarity",
+    ST_CTW_RANGE = "ST CTW Range",
+    ST_TABLE = "ST Table",
+    MEMO = "Memo",
+    STONE_NUMBER = "Stone Number",
+    DATE = "Date",
+    CAT_STATUS = "Cat Status",
+    STONE_SKU = "Stone SKU",
+    REFINED_STATUS = "Refined Status",
+    QUANTITY = "Quantity",
+    DATE_QUANTITY_ADDED = "Date Quantity Added"
+}
+
+export const MapFormDataToStoneMasterColumns: { [key in ArStoneMasterColumns]: keyof TablesInsert<'ar_stone_master'> } = {
+    [ArStoneMasterColumns.SERIAL_NUMBER]: 'serial_number',
+    [ArStoneMasterColumns.SKU]: 'sku_number',
+    [ArStoneMasterColumns.STYLE_NUMBER]: 'style_number',
+    [ArStoneMasterColumns.PRODUCT_NAME]: 'prod_name',
+    [ArStoneMasterColumns.TYPE]: 'st_product_type',
+    [ArStoneMasterColumns.MSRP]: 'msrp',
+    [ArStoneMasterColumns.COST]: 'cost',
+    [ArStoneMasterColumns.ST_TYPE]: 'st_type',
+    [ArStoneMasterColumns.ST_SOURCE]: 'st_source',
+    [ArStoneMasterColumns.ST_COLOR]: 'st_color',
+    [ArStoneMasterColumns.ST_SHAPE]: 'st_shape',
+    [ArStoneMasterColumns.ST_CUT]: 'st_cut',
+    [ArStoneMasterColumns.ST_HEIGHT]: 'st_height',
+    [ArStoneMasterColumns.ST_WIDTH]: 'st_width',
+    [ArStoneMasterColumns.ST_ORIENTATION]: 'st_orientation',
+    [ArStoneMasterColumns.ST_ORIGIN]: 'st_origin',
+    [ArStoneMasterColumns.ST_CTW]: 'st_ctw',
+    [ArStoneMasterColumns.ST_COST]: 'st_cost',
+    [ArStoneMasterColumns.ST_CERT_TYPE]: 'st_cert_type',
+    [ArStoneMasterColumns.ST_CERT_NUMBER]: 'st_cert_num',
+    [ArStoneMasterColumns.ST_CERT_CUT]: 'st_cert_cut',
+    [ArStoneMasterColumns.ST_CERT_COLOR]: 'st_cert_color',
+    [ArStoneMasterColumns.ST_CERT_CLARITY]: 'st_cert_clarity',
+    [ArStoneMasterColumns.ST_CTW_RANGE]: 'st_ctw_range',
+    [ArStoneMasterColumns.ST_TABLE]: 'st_table',
+    [ArStoneMasterColumns.MEMO]: 'memo',
+    [ArStoneMasterColumns.STONE_NUMBER]: 'st_number',
+    [ArStoneMasterColumns.DATE]: 'date',
+    [ArStoneMasterColumns.CAT_STATUS]: 'cat_status',
+    [ArStoneMasterColumns.STONE_SKU]: 'st_sku',
+    [ArStoneMasterColumns.REFINED_STATUS]: 'refined_status',
+    [ArStoneMasterColumns.QUANTITY]: 'quantity',
+    [ArStoneMasterColumns.DATE_QUANTITY_ADDED]: 'date_quantity_added',
 };
 
 export enum LabeledInputType {

@@ -1,15 +1,15 @@
-import {ArJewelryMasterColumns, MapFormDataToDatabaseColumns} from "../../Definitions/enum.ts";
-import {Tables} from "../../Definitions/definitions.ts";
+import {ArJewelryMasterColumns, MapFormDataToJewelryMasterColumns} from "../../Definitions/enum.ts";
 import React from "react";
+import {Tables} from "../../Definitions/generatedDefinitions.ts";
 
 const getNestedValue = (item: any, column: ArJewelryMasterColumns) => {
-    const value = item[MapFormDataToDatabaseColumns[column]];
+    const value = item[MapFormDataToJewelryMasterColumns[column]];
 
     if (typeof value === 'object' && value !== null) {
         const nestedPropertyMap: Record<string, string> = {
             material_type: 'metal_type',
             product_type: 'product_type',
-            stone_type: 'stone_type',
+            st_type: 'st_type',
             st_source: 'source',
             stone_color: 'stone_color',
             stone_shape: 'stone_shape',
@@ -40,7 +40,7 @@ const getNestedValue = (item: any, column: ArJewelryMasterColumns) => {
     return value;
 };
 
-const JewelryRow = ({ item, columns }: { item: Tables<'ar_jewelry_master'>, columns: string[] }): React.ReactNode => {
+const JewelryRow = ({item, columns}: { item: Tables<'ar_jewelry_master'>, columns: string[] }): React.ReactNode => {
     return (
         <>
             {columns.map((column, index) => {

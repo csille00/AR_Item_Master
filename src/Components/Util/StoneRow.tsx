@@ -1,45 +1,49 @@
 import React from "react";
+import {Tables} from "../../Definitions/generatedDefinitions.ts";
+import {
+    ArStoneMasterColumns,
+    MapFormDataToStoneMasterColumns
+} from "../../Definitions/enum.ts";
 
-export interface StoneItem {
-    serialNo: number | null;
-    skuNumber: string | null;
-    date: string | null;
-    styleNumber: string | null;
-    stoneType: string | null;
-    productType: string | null;
-    prodCode: string | null;
-    matCode: string | null;
-    matColor: string | null;
-    msrp: number | null;
-    cost: number | null;
-    color: string | null;
-    shape: string | null;
-    cut: string | null;
-    dimensions: string | null;
-    caratWeight: number | null;
-    caratRange: string | null;
-    certType: string | null;
-    certNumber: string | null;
-    certCut: string | null;
-    certColor: string | null;
-    certClarity: string | null;
-    stoneNumber: string | null;
-    catStatus: string | null;
-    stoneSku: string | null;
-    refinedShape: string | null;
-}
+const getNestedValue = (item: any, column: ArStoneMasterColumns) => {
+    const value = item[MapFormDataToStoneMasterColumns[column]];
+    if (typeof value === 'object' && value !== null) {
+        const nestedPropertyMap: Record<string, string> = {
+            st_product_type: 'type',
+            st_type: 'st_type',
+            st_source: 'source',
+            st_color: 'color',
+            st_shape: 'shape',
+            st_cut: 'cut',
+            st_orientation: 'orientation',
+            st_origin: 'origin',
+            st_cert_type: 'cert_type',
+            st_cert_cut: 'cut',
+            st_cert_clarity: 'clarity'
+        };
 
-export const StoneRow = (item: StoneItem): React.ReactNode => (
-    <>
-        <td className="p-4">{item.skuNumber}</td>
-        <td className="p-4">{item.stoneType}</td>
-        <td className="p-4">{item.productType}</td>
-        <td className="p-4">{item.styleNumber}</td>
-        <td className="p-4">{item.shape}</td>
-        <td className="p-4">{item.cut}</td>
-        <td className="p-4">{item.caratWeight}</td>
-    </>
-);
+        const normalizedColumn = column.trim().toLowerCase().replace(/ /g, '_');
+        const nestedKey = nestedPropertyMap[normalizedColumn as keyof typeof nestedPropertyMap];
+        return nestedKey ? value[nestedKey] : JSON.stringify(value);
+    }
 
+    return value;
+};
+
+
+export const StoneRow = ({item, columns}: { item: Tables<'ar_stone_master'>, columns: string[] }): React.ReactNode => {
+    return (
+        <>
+            {columns.map((column, index) => {
+                const value = getNestedValue(item, column as ArStoneMasterColumns);
+                return (
+                    <td key={index} className="p-4">
+                        {String(value)}
+                    </td>
+                );
+            })}
+        </>
+    );
+};
 
 // export default StoneRow;
