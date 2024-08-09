@@ -7,9 +7,10 @@ interface ModalProps {
     columns: string[];
     allColumns: string[]
     setColumns: (columns: string[]) => void;
+    initialColumns: string[]
 }
 
-export const ChangeViewModal: React.FC<ModalProps> = ({isOpen, onClose, columns, setColumns, allColumns}) => {
+export const ChangeViewModal: React.FC<ModalProps> = ({isOpen, onClose, columns, setColumns, initialColumns, allColumns}) => {
 
     const handleToggleColumn = (column: string) => {
         if (columns.includes(column)) {
@@ -27,6 +28,9 @@ export const ChangeViewModal: React.FC<ModalProps> = ({isOpen, onClose, columns,
         setColumns([]);
     };
 
+    const handleReset = () => {
+        setColumns(initialColumns)
+    }
 
     if (!isOpen) return null;
 
@@ -56,7 +60,7 @@ export const ChangeViewModal: React.FC<ModalProps> = ({isOpen, onClose, columns,
                 <div className="flex justify-between mb-4 mt-4">
                     <Button text="Select All" onClick={handleSelectAll} style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white" />
                     <Button text="Deselect All" onClick={handleDeselectAll} style="bg-lightgr text-sm text-white py-1 rounded-md hover:bg-argray hover:text-white" />
-                    <Button text="Reset Default" onClick={handleDeselectAll} style="text-sm border border-lightgr text-argray py-1 rounded-md hover:bg-lightgr hover:text-white" />
+                    <Button text="Reset Default" onClick={handleReset} style="text-sm border border-lightgr text-argray py-1 rounded-md hover:bg-lightgr hover:text-white" />
                 </div>
             </div>
         </div>

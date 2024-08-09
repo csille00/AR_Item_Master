@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "../Components/Util/Table.tsx";
-import { JewelryMasterQuery } from "../Definitions/definitions.ts";
 import JewelryRow from "./Util/JewelryRow.tsx";
-import { getJewelryMasterPageFromClient } from "../model/queries/ArJewelryMasterDAO.ts";
+import {getJewelryMasterPageFromClient, JewelryMasterQuery} from "../model/queries/ArJewelryMasterDAO.ts";
 import { ArJewelryMasterColumns } from "../Definitions/enum.ts";
 import { ChangeViewModal } from "./Util/ChangeViewModal.tsx";
 import { FilterModal } from "./Util/FilterModal.tsx";
@@ -16,14 +15,15 @@ const Jewelry: React.FC = () => {
     const [filterOptions, setFilterOptions] = useState<FilterOption[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [columns, setColumns] = useState<string[]>([
+    const initialColumnsState = [
         ArJewelryMasterColumns.SKU,
         ArJewelryMasterColumns.PRODUCT_NAME,
         ArJewelryMasterColumns.AR_STYLE,
         ArJewelryMasterColumns.MSRP,
         ArJewelryMasterColumns.DATE,
         ArJewelryMasterColumns.STATUS
-    ]);
+    ]
+    const [columns, setColumns] = useState<string[]>(initialColumnsState);
 
     const fetchData = async (filters: FilterOption[] = []) => {
         console.log('fetchData: ', filters)
@@ -65,6 +65,7 @@ const Jewelry: React.FC = () => {
                 isOpen={isColumnModalOpen}
                 onClose={() => setColumnModalOpen(false)}
                 columns={columns}
+                initialColumns={initialColumnsState}
                 allColumns={Object.values(ArJewelryMasterColumns)}
                 setColumns={setColumns}
             />
