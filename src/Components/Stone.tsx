@@ -16,12 +16,13 @@ const Stone: React.FC = () => {
     const [filterOptions, setFilterOptions] = useState<FilterOption[]>([])
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [columns, setColumns] = useState<string[]>([
+    const initialColumnState = [
         ArStoneMasterColumns.SKU,
         ArStoneMasterColumns.PRODUCT_NAME,
         ArStoneMasterColumns.MSRP,
         ArStoneMasterColumns.DATE,
-    ]);
+    ]
+    const [columns, setColumns] = useState<string[]>(initialColumnState);
 
     const fetchData = async (filters: FilterOption[] = []) => {
         console.log('fetchData: ', filters)
@@ -63,6 +64,7 @@ const Stone: React.FC = () => {
                 isOpen={isColumnModalOpen}
                 onClose={() => setColumnModalOpen(false)}
                 columns={columns}
+                initialColumns={initialColumnState}
                 allColumns={Object.values(ArStoneMasterColumns)}
                 setColumns={setColumns}
             />
