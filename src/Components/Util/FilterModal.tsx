@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react';
 import Button from "./Button.tsx";
 import {FilterOption} from "../../Definitions/FilterOption.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
+    type: string
     setFilterOptions: (options: FilterOption[]) => void;
     fetchProductTypes: () => Promise<Option[] | undefined>;
     clearFilterOptions: () => void;
@@ -16,6 +16,7 @@ interface ModalProps {
 export const FilterModal: React.FC<ModalProps> = ({
                                                       isOpen,
                                                       onClose,
+                                                      type,
                                                       setFilterOptions,
                                                       fetchProductTypes,
                                                       onApplyFilters,
@@ -49,8 +50,8 @@ export const FilterModal: React.FC<ModalProps> = ({
     };
 
     const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        if (label === ArJewelryMasterColumns.TYPE) {
-            const option = new FilterOption(ArJewelryMasterColumns.TYPE, event.target.value);
+        if (label === type) {
+            const option = new FilterOption(type, event.target.value);
             setFilterOptions([option])
         }
     };
@@ -78,13 +79,13 @@ export const FilterModal: React.FC<ModalProps> = ({
                     <div className="flex justify-start items-center">
                         <label className="py-2 flex justify-between items-center">
                             <div className="inline mx-4">
-                                {ArJewelryMasterColumns.TYPE}
+                                {type}
                             </div>
                         </label>
                         <select
                             className="p-2 rounded-lg border"
                             name="selectType"
-                            onChange={(e) => handleChange(ArJewelryMasterColumns.TYPE, e)}
+                            onChange={(e) => handleChange(type, e)}
                         >
                             <option key={'disabled'} disabled={true} value='' selected={true}>--</option>
                             <option key={'ALL'} value='ALL'>All</option>

@@ -72,6 +72,7 @@ const Jewelry: React.FC = () => {
                 isOpen={isFilterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
                 fetchProductTypes={getProductTypesFromClient}
+                type={ArJewelryMasterColumns.TYPE}
                 setFilterOptions={setFilterOptions}
                 onApplyFilters={fetchData}
                 clearFilterOptions={handleClearFilters}
