@@ -69,6 +69,7 @@ const Stone: React.FC = () => {
             <FilterModal
                 isOpen={isFilterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
+                type={ArStoneMasterColumns.TYPE}
                 fetchProductTypes={getStoneProductTypesFromClient}
                 setFilterOptions={setFilterOptions}
                 onApplyFilters={fetchData}

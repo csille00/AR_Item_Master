@@ -16,11 +16,10 @@ export async function insertIntoStoneMaster(dataToInsert: TablesInsert<'ar_stone
         throw error;
     }
 }
-
-
-const stoneMasterQuery = client
-    .from('ar_stone_master')
-    .select(`
+const createStoneMasterQuery = () => {
+    return client
+        .from('ar_stone_master')
+        .select(`
             serial_number,
             sku_number,
             style_number,
@@ -53,22 +52,24 @@ const stoneMasterQuery = client
             st_cert_cut(cut),
             st_color_grade(grade),
             st_clarity_grade(grade)
-    `)
+        `);
+}
 
-export type StoneMasterQuery = QueryData<typeof stoneMasterQuery>;
-
+export type StoneMasterQuery = QueryData<ReturnType<typeof createStoneMasterQuery>>;
 
 export async function getStoneMasterItemsFromClient(
     filters: FilterOption[],
 ): Promise<StoneMasterQuery | undefined> {
-
     // Apply filters
-    filters.forEach(filter => {
-        const column= MapFormDataToStoneMasterColumns[filter.column as keyof typeof MapFormDataToStoneMasterColumns];
-        if (column) {
-            stoneMasterQuery.eq(column, filter.value);
-        }
-    });
+    const stoneMasterQuery = createStoneMasterQuery()
+    if(!filters.some(filter => filter.value == 'ALL')) {
+        filters.forEach(filter => {
+            const column = MapFormDataToStoneMasterColumns[filter.column as keyof typeof MapFormDataToStoneMasterColumns];
+            if (column) {
+                stoneMasterQuery.eq(column, filter.value);
+            }
+        });
+    }
 
     const {data, error} = await stoneMasterQuery
     console.log('data in dao: ', data)

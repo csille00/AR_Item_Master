@@ -16,9 +16,10 @@ export async function insertIntoJewelryMaster(dataToInsert: TablesInsert<'ar_jew
     }
 }
 
-const jewelryMasterQuery = client
-    .from('ar_jewelry_master')
-    .select(`
+const createJewelryMasterQuery = () => {
+    return client
+        .from('ar_jewelry_master')
+        .select(`
             serial_number,
             sku_number,
             style_number,
@@ -71,9 +72,9 @@ const jewelryMasterQuery = client
             charm_type(type),
             ar_style(style)
     `)
+}
 
-export type JewelryMasterQuery = QueryData<typeof jewelryMasterQuery>;
-
+export type JewelryMasterQuery = QueryData<ReturnType<typeof createJewelryMasterQuery>>;
 
 export async function getJewelryMasterPageFromClient(
     page: number,
@@ -82,6 +83,8 @@ export async function getJewelryMasterPageFromClient(
 ): Promise<JewelryMasterQuery | undefined> {
     const start = (page - 1) * pageLength;
     const end = start + pageLength - 1;
+
+    const jewelryMasterQuery = createJewelryMasterQuery()
 
     jewelryMasterQuery.range(start, end)
 
