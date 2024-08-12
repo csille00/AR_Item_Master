@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
 import JewelryRow from "./Util/JewelryRow.tsx";
-import {getJewelryMasterPageFromClient, JewelryMasterQuery} from "../model/queries/ArJewelryMasterDAO.ts";
-import { ArJewelryMasterColumns } from "../Definitions/enum.ts";
-import { ChangeViewModal } from "./Util/ChangeViewModal.tsx";
-import { FilterModal } from "./Util/FilterModal.tsx";
-import { getProductTypesFromClient } from "../model/queries/ProductTypeDAO.ts";
-import { FilterOption } from "../Definitions/FilterOption.ts";
+import {
+    getJewelryDataAsCSV,
+    getJewelryMasterPageFromClient,
+    JewelryMasterQuery
+} from "../model/queries/ArJewelryMasterDAO.ts";
+import {ArJewelryMasterColumns} from "../Definitions/enum.ts";
+import {ChangeViewModal} from "./Util/ChangeViewModal.tsx";
+import {FilterModal} from "./Util/FilterModal.tsx";
+import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
+import {FilterOption} from "../Definitions/FilterOption.ts";
 
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
@@ -58,8 +62,15 @@ const Jewelry: React.FC = () => {
 
     return (
         <>
-            <Table columns={columns} data={jewelryData} title="Jewelry Master" setColumnModalOpen={setColumnModalOpen} setFilterModalOpen={setFilterModalOpen}>
-                {(item, columns) => <JewelryRow item={item} columns={columns} />}
+            <Table columns={columns}
+                   data={jewelryData}
+                   title="Jewelry Master"
+                   setColumnModalOpen={setColumnModalOpen}
+                   setFilterModalOpen={setFilterModalOpen}
+                   fetchDataAsCSV={getJewelryDataAsCSV}
+                   filename={'ar_jewelry_master.csv'}
+            >
+                {(item, columns) => <JewelryRow item={item} columns={columns}/>}
             </Table>
             <ChangeViewModal
                 isOpen={isColumnModalOpen}

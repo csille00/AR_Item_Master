@@ -105,3 +105,14 @@ export async function getJewelryMasterPageFromClient(
     }
     return data as JewelryMasterQuery;
 }
+
+export async function getJewelryDataAsCSV(){
+    const { data, error } = await client
+        .from('ar_jewelry_master')
+        .select()
+        .csv()
+    if(error){
+        throw error
+    }
+    return data
+}

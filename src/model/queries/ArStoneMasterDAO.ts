@@ -79,3 +79,14 @@ export async function getStoneMasterItemsFromClient(
     }
     return data as StoneMasterQuery;
 }
+
+export async function getStoneDataAsCSV(){
+    const { data, error } = await client
+        .from('ar_stone_master')
+        .select()
+        .csv()
+    if(error){
+        throw error
+    }
+    return data
+}

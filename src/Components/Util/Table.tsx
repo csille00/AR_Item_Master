@@ -16,14 +16,13 @@ export interface TableProps {
     style?: string | null;
     setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    children?: (item: any, columns: string[]) => React.JSX.Element
+    fetchDataAsCSV?: () => Promise<string>;
+    children?: (item: any, columns: string[]) => React.JSX.Element;
+    filename?: string
 }
 
-const download = () => {
-    console.log("export button")
-}
 
-const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalOpen, children}: TableProps) => {
+const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalOpen, fetchDataAsCSV, children, filename}: TableProps) => {
     const navigate = useNavigate();
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -58,6 +57,20 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
             }
         });
     }, [data, sortColumn, sortDirection])
+
+    const download = async () => {
+        if(!fetchDataAsCSV) return
+        const data = await fetchDataAsCSV()
+        const blob = new Blob([data], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        // Create a link element
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename ?? "data.csv";
+
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
 
     return (
         <>

@@ -4,7 +4,7 @@ import {FilterOption} from "../Definitions/FilterOption.ts";
 import {ArStoneMasterColumns} from "../Definitions/enum.ts";
 import {ChangeViewModal} from "./Util/ChangeViewModal.tsx";
 import {FilterModal} from "./Util/FilterModal.tsx";
-import {getStoneMasterItemsFromClient, StoneMasterQuery} from "../model/queries/ArStoneMasterDAO.ts";
+import {getStoneDataAsCSV, getStoneMasterItemsFromClient, StoneMasterQuery} from "../model/queries/ArStoneMasterDAO.ts";
 import {StoneRow} from "./Util/StoneRow.tsx";
 import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
 
@@ -57,7 +57,14 @@ const Stone: React.FC = () => {
 
     return (
         <>
-            <Table columns={columns} data={stoneDate} title="Stone Master" setColumnModalOpen={setColumnModalOpen} setFilterModalOpen={setFilterModalOpen}>
+            <Table columns={columns}
+                   data={stoneDate}
+                   title="Stone Master"
+                   setColumnModalOpen={setColumnModalOpen}
+                   setFilterModalOpen={setFilterModalOpen}
+                   fetchDataAsCSV={getStoneDataAsCSV}
+                   filename={"ar_stone_master.csv"}
+            >
                 {(item, columns) => <StoneRow item={item} columns={columns}/>}
             </Table>
             <ChangeViewModal
