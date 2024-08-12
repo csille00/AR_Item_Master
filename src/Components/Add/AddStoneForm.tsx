@@ -20,6 +20,14 @@ const AddStoneForm = () => {
                 alert(`${column.label} is required.`);
                 return false;
             }
+
+            if(
+                column.type == LabeledInputType.NUMBER
+                && column.constraint
+                && (Number(formData[column.label]) < column.constraint.low || Number(formData[column.label]) > column.constraint.high)
+            ){
+                alert(`${column.label} must be between ${column.constraint.low} and ${column.constraint.high}.`);
+            }
         }
 
         let data: TablesInsert<'ar_stone_master'> = {};

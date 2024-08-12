@@ -13,12 +13,21 @@ import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
 
 const AddJewelryForm = () => {
 
-    const addJewelry = async (formData: { [key: string]: string | number }, columns: FormColumn[]): Promise<boolean> => {
+    const addJewelry = async (formData: {
+        [key: string]: string | number
+    }, columns: FormColumn[]): Promise<boolean> => {
         // Ensure all required fields are filled out
         for (const column of columns) {
             if (column.required && (formData[column.label] === undefined || formData[column.label] === '')) {
                 alert(`${column.label} is required.`);
                 return false;
+            }
+            if (
+                column.type == LabeledInputType.NUMBER
+                && column.constraint
+                && (Number(formData[column.label]) < column.constraint.low || Number(formData[column.label]) > column.constraint.high)
+            ) {
+                alert(`${column.label} must be between ${column.constraint.low} and ${column.constraint.high}.`);
             }
         }
 
@@ -30,7 +39,7 @@ const AddJewelryForm = () => {
             const column = columns.find(it => it.label === key);
 
             //if the column type is number, cast data to number to avoid errors
-            if (column?.type == LabeledInputType.NUMBER){
+            if (column?.type == LabeledInputType.NUMBER) {
                 dataToAssign = Number(dataToAssign)
             }
 
