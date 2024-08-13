@@ -94,6 +94,18 @@ export const AddForm: React.FC<SharedFormProps> = ({
             return
         }
         handleClear()
+
+        toast.success('Success!', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
     };
 
     const handleClear = () => {
@@ -157,6 +169,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
                             style="bg-argold rounded-lg text-white hover:text-white mx-2"/>
                 </div>
             </div>
+            <ToastContainer/>
         </>
     );
 };
