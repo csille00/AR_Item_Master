@@ -12,7 +12,6 @@ import {FilterModal} from "./Util/FilterModal.tsx";
 import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
 import {FilterOption} from "../Definitions/FilterOption.ts";
 import {ArLoader} from "./Util/Loading.tsx";
-import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {Error} from "./Util/Error.tsx";
 
@@ -47,10 +46,6 @@ const Jewelry: React.FC = () => {
             setIsLoading(false);
         }
     };
-
-    const handleClearFilters = () => {
-        setFilterOptions([])
-    }
 
     useEffect(() => {
         fetchData().then()
