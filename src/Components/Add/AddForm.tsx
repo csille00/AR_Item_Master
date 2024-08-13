@@ -5,6 +5,7 @@ import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
 import {LabeledInputType} from "../../Definitions/enum.ts";
 import {useNavigate} from "react-router-dom";
+import {ArLoader} from "../Util/Loading.tsx";
 
 interface SharedFormProps {
     title: string;
@@ -67,7 +68,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
     }, [type, productTypes, fetchColumns]);
 
     if (isLoading) {
-        return <p>Loading...</p>;
+        return <ArLoader/>
     }
 
     if (error) {

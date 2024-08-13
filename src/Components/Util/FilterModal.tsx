@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Button from "./Button.tsx";
 import {FilterOption} from "../../Definitions/FilterOption.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
+import {ArLoader} from "./Loading.tsx";
 
 interface ModalProps {
     isOpen: boolean;
@@ -57,7 +58,7 @@ export const FilterModal: React.FC<ModalProps> = ({
     };
 
     if (isLoading) {
-        return <p>Loading...</p>;
+        return <ArLoader/>;
     }
 
     if (error) {

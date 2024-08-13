@@ -7,6 +7,7 @@ import {FilterModal} from "./Util/FilterModal.tsx";
 import {getStoneDataAsCSV, getStoneMasterItemsFromClient, StoneMasterQuery} from "../model/queries/ArStoneMasterDAO.ts";
 import {StoneRow} from "./Util/StoneRow.tsx";
 import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
+import {ArLoader} from "./Util/Loading.tsx";
 
 
 const Stone: React.FC = () => {
@@ -48,7 +49,7 @@ const Stone: React.FC = () => {
     }, []);
 
     if (isLoading) {
-        return <p>Loading...</p>;
+        return <ArLoader/>;
     }
 
     if (error || !stoneDate) {
