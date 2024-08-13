@@ -21,11 +21,11 @@ const AddStoneForm = () => {
                 return false;
             }
 
-            if(
+            if (
                 column.type == LabeledInputType.NUMBER
                 && column.constraint
                 && (Number(formData[column.label]) < column.constraint.low || Number(formData[column.label]) > column.constraint.high)
-            ){
+            ) {
                 alert(`${column.label} must be between ${column.constraint.low} and ${column.constraint.high}.`);
             }
         }
@@ -37,7 +37,7 @@ const AddStoneForm = () => {
             const column = columns.find(it => it.label === key);
 
             //if the column type is number, cast data to number to avoid errors
-            if (column?.type == LabeledInputType.NUMBER){
+            if (column?.type == LabeledInputType.NUMBER) {
                 dataToAssign = Number(dataToAssign)
             }
 
@@ -63,14 +63,17 @@ const AddStoneForm = () => {
     };
 
     return (
-        <AddForm
-            title="Add Stone"
-            fetchColumns={(type: string) => getStoneFormConfig(type)}
-            fetchProductTypes={getStoneProductTypesFromClient}
-            initialType={StoneProductTypeIds.ELS}
-            typeValue={ArStoneMasterColumns.TYPE}
-            submitForm={addStone}
-        />
+        <>
+            <AddForm
+                title="Add Stone"
+                fetchColumns={(type: string) => getStoneFormConfig(type)}
+                fetchProductTypes={getStoneProductTypesFromClient}
+                initialType={StoneProductTypeIds.ELS}
+                typeValue={ArStoneMasterColumns.TYPE}
+                submitForm={addStone}
+            />
+        </>
+
     )
 }
 

@@ -1,4 +1,4 @@
-import React, {SVGProps} from "react";
+import React from "react";
 
 interface ButtonProps {
     icon?: string | null;

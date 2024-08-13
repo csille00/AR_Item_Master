@@ -120,7 +120,7 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                     </div>
                 </div>
                 {/*Added inline styling because tailwind height has limitations*/}
-                <div className="flex justify-center pb-6 px-4 overflow-y-scroll" style={{height: '34rem'}}>
+                <div className="flex justify-center pb-6 px-4 overflow-y-scroll h-auto" style={{maxHeight: '34rem'}}>
                     <table className="w-full text-left text-argray">
                         <thead className="sticky top-0 bg-white">
                         <tr>

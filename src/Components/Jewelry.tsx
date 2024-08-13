@@ -12,6 +12,8 @@ import {FilterModal} from "./Util/FilterModal.tsx";
 import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
 import {FilterOption} from "../Definitions/FilterOption.ts";
 import {ArLoader} from "./Util/Loading.tsx";
+import 'react-toastify/dist/ReactToastify.css';
+import {Error} from "./Util/Error.tsx";
 
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
@@ -45,20 +47,21 @@ const Jewelry: React.FC = () => {
         }
     };
 
-    const handleClearFilters = () => {
-        setFilterOptions([])
-    }
-
     useEffect(() => {
         fetchData().then()
     }, []);
 
-    if (isLoading) {
-        return <ArLoader/>;
-    }
+    // const handleClearFilters = () => {
+    //     setFilterOptions([])
+    //     fetchData([]).then()
+    // }
 
     if (error || !jewelryData) {
-        return <div>{error}</div>;
+        return <Error message={error ?? ""}/>
+    }
+
+    if (isLoading) {
+        return <ArLoader/>;
     }
 
     return (
@@ -88,7 +91,6 @@ const Jewelry: React.FC = () => {
                 type={ArJewelryMasterColumns.TYPE}
                 setFilterOptions={setFilterOptions}
                 onApplyFilters={fetchData}
-                clearFilterOptions={handleClearFilters}
             />
         </>
     );

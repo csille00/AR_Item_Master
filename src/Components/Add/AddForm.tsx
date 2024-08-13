@@ -6,6 +6,8 @@ import {Option} from "../../Definitions/DropdownOption.ts";
 import {LabeledInputType} from "../../Definitions/enum.ts";
 import {useNavigate} from "react-router-dom";
 import {ArLoader} from "../Util/Loading.tsx";
+import {Bounce, toast, ToastContainer} from "react-toastify";
+import {Error} from "../Util/Error.tsx";
 
 interface SharedFormProps {
     title: string;
@@ -72,7 +74,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
     }
 
     if (error) {
-        return <div>{error}</div>;
+        return <Error message={error}/>
     }
 
     const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -94,6 +96,18 @@ export const AddForm: React.FC<SharedFormProps> = ({
             return
         }
         handleClear()
+
+        toast.success('Success!', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
     };
 
     const handleClear = () => {
@@ -157,6 +171,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
                             style="bg-argold rounded-lg text-white hover:text-white mx-2"/>
                 </div>
             </div>
+            <ToastContainer/>
         </>
     );
 };
