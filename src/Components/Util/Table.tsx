@@ -1,26 +1,76 @@
 import React, {useState} from "react";
-import {Tables} from "../../Definitions/definitions.ts";
 import {useNavigate} from "react-router-dom";
-import {FilterModal} from "./FilterModal.tsx";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
+import tableIcon from "../../assets/table.svg"
+import {Tables} from "../../Definitions/generatedDefinitions.ts";
+import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
+import {JewelryMasterQuery} from "../../model/queries/ArJewelryMasterDAO.ts";
+import {StoneMasterQuery} from "../../model/queries/ArStoneMasterDAO.ts";
 
 export interface TableProps {
     title: string;
     columns: string[];
-    data: Tables<'ar_jewelry_master'>[];
+    data: JewelryMasterQuery | StoneMasterQuery;
     style?: string | null;
-    children?: (item: Tables<'ar_jewelry_master'>) => React.JSX.Element
+    setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    fetchDataAsCSV?: () => Promise<string>;
+    children?: (item: any, columns: string[]) => React.JSX.Element;
+    filename?: string
 }
 
-const download = () => {
-    console.log("export button")
-}
 
-const Table = ({title, columns, data, style, children}: TableProps) => {
+const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalOpen, fetchDataAsCSV, children, filename}: TableProps) => {
     const navigate = useNavigate();
-    const [isModalOpen, setModalOpen] = useState<boolean>(false);
+    const [sortColumn, setSortColumn] = useState<string | null>(null);
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+    const handleSort = (column: string) => {
+        //for now, only support the sorting of the data column.
+        // It is set up to support the other ones, I just dont know how to properly sort them right now (8/05/24)
+        if(!(column == ArJewelryMasterColumns.DATE)) return
+        if (sortColumn === column) {
+            // Toggle sort direction
+            setSortDirection(prevDirection => prevDirection === 'asc' ? 'desc' : 'asc');
+        } else {
+            // Set new column and default to ascending
+            setSortColumn(column);
+            setSortDirection('asc');
+        }
+    };
+
+    const sortedData = React.useMemo(() => {
+        if (!sortColumn) return data;
+
+        return [...data].sort((a, b) => {
+            const aValue = a['date'];
+            const bValue = b['date'];
+
+            if (typeof aValue === 'number' && typeof bValue === 'number') {
+                return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+            } else {
+                const aStr = String(aValue);
+                const bStr = String(bValue);
+                return sortDirection === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
+            }
+        });
+    }, [data, sortColumn, sortDirection])
+
+    const download = async () => {
+        if(!fetchDataAsCSV) return
+        const data = await fetchDataAsCSV()
+        const blob = new Blob([data], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        // Create a link element
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename ?? "data.csv";
+
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
 
     return (
         <>
@@ -41,7 +91,7 @@ const Table = ({title, columns, data, style, children}: TableProps) => {
                     <h1 className="text-argray text-left my-8 text-4xl justify-start">{title}</h1>
                     <div className="flex justify-end items-center">
                         <button
-                            className="bg-argold hover:font-bold rounded-lg h-12 mx-1.5 flex items-center"
+                            className="bg-argold hover:font-bold hover:bg-darkgold hover:border-darkgold rounded-lg h-12 mx-1.5 flex items-center"
                             onClick={() => navigate('/addJewelry')}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                                  stroke="#FFFFFF" className="size-5 mx-1">
@@ -52,14 +102,20 @@ const Table = ({title, columns, data, style, children}: TableProps) => {
                         <Button
                             icon={filterIcon}
                             text="Filter"
-                            onClick={() => setModalOpen(true)}
-                            style="text-argray bg-white hover:text-argray border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
+                            onClick={() => setFilterModalOpen(true)}
+                            style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
+                        />
+                        <Button
+                            icon={tableIcon}
+                            text="Change View"
+                            onClick={() => setColumnModalOpen(true)}
+                            style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
                             icon={downloadIcon}
                             text="Download"
                             onClick={download}
-                            style="text-argray bg-white hover:text-argray border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
+                            style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                        />
                     </div>
                 </div>
@@ -68,21 +124,23 @@ const Table = ({title, columns, data, style, children}: TableProps) => {
                         <thead className="">
                         <tr>
                             {columns.map((column, index) => (
-                                <th key={index} className="p-4">{column} </th>
+                                <th key={index} className="p-4 cursor-pointer" onClick={() => handleSort(column)}>
+                                    {column}
+                                    {sortColumn === column && (sortDirection === 'asc' ? ' ↑' : ' ↓')}
+                                </th>
                             ))}
                         </tr>
                         </thead>
                         <tbody>
-                        {data.map((item, index) => (
+                        {sortedData.map((item, index) => (
                             <tr key={index}>
-                                {children ? children(item) : null}
+                                {children ? children(item as unknown as Tables<'ar_jewelry_master'>, columns) : null}
                             </tr>
                         ))}
                         </tbody>
                     </table>
                 </div>
             </div>
-            <FilterModal isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>
         </>
     );
 };

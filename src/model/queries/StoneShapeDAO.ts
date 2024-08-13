@@ -5,7 +5,7 @@ const client = getClient()
 
 export async function getStoneShapeFromClient(): Promise<Option[] | undefined> {
     const {data, error} = await client
-        .from("stone_shape")
+        .from("st_shape")
         .select('id,shape');
     if (error) {
         throw error;

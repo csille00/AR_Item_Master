@@ -3,14 +3,16 @@ import LabeledInput from "../Util/LabeledInput.tsx";
 import Button from "../Util/Button.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArJewelryMasterColumns, LabeledInputType} from "../../Definitions/enum.ts";
+import {LabeledInputType} from "../../Definitions/enum.ts";
 import {useNavigate} from "react-router-dom";
+import {ArLoader} from "../Util/Loading.tsx";
 
 interface SharedFormProps {
     title: string;
     fetchColumns: (type: string) => Promise<FormColumn[]>;
     fetchProductTypes: () => Promise<Option[] | undefined>;
     initialType: string;
+    typeValue: string
     submitForm: (formData: { [key: string]: string | number }, columns: FormColumn[]) => Promise<boolean>;
 }
 
@@ -19,12 +21,13 @@ export const AddForm: React.FC<SharedFormProps> = ({
                                                        fetchColumns,
                                                        fetchProductTypes,
                                                        initialType,
+                                                       typeValue,
                                                        submitForm,
                                                    }) => {
     const [productTypes, setProductTypes] = useState<Option[]>([]);
     const [columns, setColumns] = useState<FormColumn[]>([]);
     const [type, setType] = useState<string>(initialType);
-    const [formData, setFormData] = useState<{ [key: string]: string }>({[ArJewelryMasterColumns.TYPE]: initialType});
+    const [formData, setFormData] = useState<{ [key: string]: string }>({[typeValue]: initialType});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -53,14 +56,8 @@ export const AddForm: React.FC<SharedFormProps> = ({
             setIsLoading(true);
             try {
                 const config = await fetchColumns(type);
-                //set none value at the top of each select option
-                config.forEach(col => {
-                    col.options?.unshift({description: "--"})
-                })
-                config.unshift(new FormColumn("Type", LabeledInputType.SELECT, true, productTypes));
                 setColumns(config);
             } catch (error) {
-                console.error("Failed to fetch form config:", error);
                 setError("Failed to fetch form config: " + (error as Error).message);
             } finally {
                 setIsLoading(false);
@@ -71,7 +68,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
     }, [type, productTypes, fetchColumns]);
 
     if (isLoading) {
-        return <p>Loading...</p>;
+        return <ArLoader/>
     }
 
     if (error) {
@@ -79,7 +76,9 @@ export const AddForm: React.FC<SharedFormProps> = ({
     }
 
     const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        if (label === 'Type') setType(event.target.value);
+        if (label === typeValue) {
+            setType(event.target.value);
+        }
         setFormData({
             ...formData,
             [label]: event.target.value
@@ -89,8 +88,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
     const handleSubmit = async (event: React.FormEvent | undefined) => {
         if (!event) return;
         event.preventDefault();
-        columns.push(new FormColumn("Type", LabeledInputType.SELECT, true, productTypes))
-        formData[ArJewelryMasterColumns.TYPE] = type
+        formData[typeValue] = type
         const valid = await submitForm(formData, columns)
         if (!valid) {
             return
@@ -100,7 +98,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
 
     const handleClear = () => {
         const clearedData = Object.keys(formData).reduce((acc, key) => {
-            if (key !== ArJewelryMasterColumns.TYPE) {
+            if (key !== typeValue) {
                 acc[key] = '';
             }
             return acc;
@@ -109,10 +107,10 @@ export const AddForm: React.FC<SharedFormProps> = ({
     };
 
     return (
-        <div className="flex">
-            <div className="w-60" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+        <>
+            <div className="mt-4">
                 <button onClick={() => navigate('/addJewelry')}
-                        className="bg-argray text-white hover:text-white rounded w-32 text-center mb-2">
+                        className="bg-argray text-white hover:text-white rounded w-32 text-center mb-2 m-4">
                     Jewelry
                 </button>
                 <button onClick={() => navigate('/addStone')}
@@ -120,22 +118,33 @@ export const AddForm: React.FC<SharedFormProps> = ({
                     Stone
                 </button>
             </div>
-            <div className="bg-white rounded-lg shadow-md p-4 mt-6 mr-6">
-                <div className="flex justify-center mb-2 px-10">
-                    <h1 className="text-4xl font-medium py-8">{title}</h1>
+            <div className="bg-white rounded-lg shadow-md p-4 mx-10 my-4">
+                <div className="flex justify-center px-10">
+                    <h1 className="text-4xl font-medium py-4">{title}</h1>
                 </div>
-                <div className="flex justify-center">
-                    <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-2">
+                <div>
+                    <LabeledInput
+                        label={typeValue}
+                        type={LabeledInputType.SELECT}
+                        required={true}
+                        onChange={(e) => handleChange(typeValue, e)}
+                        value={formData[typeValue]}
+                        options={productTypes}
+                        style="mb-4"
+                        boxStyle="p-2 rounded-lg border w-44"
+                    />
+                    <form onSubmit={handleSubmit} className="grid grid-cols-4">
                         {columns.map((column, index) => (
                             <div className="mb-4" key={index}>
                                 <LabeledInput
                                     label={column.label}
                                     type={column.type}
-                                    placeholder={`Enter ${column.label.toLowerCase()}`}
                                     value={formData[column.label] || ''}
                                     required={column.required}
-                                    options={column.options?.map(option => option.description) || []}
+                                    options={column.options}
                                     onChange={(e) => handleChange(column.label, e)}
+                                    style="flex justify-between items-center"
+                                    boxStyle="p-2 rounded-lg border w-36"
                                 />
                             </div>
                         ))}
@@ -148,7 +157,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
                             style="bg-argold rounded-lg text-white hover:text-white mx-2"/>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

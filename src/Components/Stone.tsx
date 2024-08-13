@@ -1,85 +1,93 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
-import {StoneRow, StoneItem} from "./Util/StoneRow.tsx";
+import {FilterOption} from "../Definitions/FilterOption.ts";
+import {ArStoneMasterColumns} from "../Definitions/enum.ts";
+import {ChangeViewModal} from "./Util/ChangeViewModal.tsx";
+import {FilterModal} from "./Util/FilterModal.tsx";
+import {getStoneDataAsCSV, getStoneMasterItemsFromClient, StoneMasterQuery} from "../model/queries/ArStoneMasterDAO.ts";
+import {StoneRow} from "./Util/StoneRow.tsx";
+import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
+import {ArLoader} from "./Util/Loading.tsx";
 
 
 const Stone: React.FC = () => {
-    const ar_stone_columns = [
-        "SKU",
-        "Stone Type",
-        "Product Type",
-        "Style Number",
-        "Shape",
-        "Cut",
-        "Carat"
+    const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
+    const [isColumnModalOpen, setColumnModalOpen] = useState<boolean>(false);
+    const [stoneDate, setStoneData] = useState<StoneMasterQuery>();
+    const [filterOptions, setFilterOptions] = useState<FilterOption[]>([])
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const initialColumnState = [
+        ArStoneMasterColumns.SKU,
+        ArStoneMasterColumns.PRODUCT_NAME,
+        ArStoneMasterColumns.MSRP,
+        ArStoneMasterColumns.DATE,
     ]
+    const [columns, setColumns] = useState<string[]>(initialColumnState);
 
-    const ar_stone_mock: StoneItem[] = [
-        {
-            "serialNo": 1,
-            "skuNumber": "SKU001",
-            "date": "2024-07-18",
-            "styleNumber": "ST001",
-            "stoneType": "Diamond",
-            "productType": "Ring",
-            "prodCode": "PR001",
-            "matCode": "MC001",
-            "matColor": "Gold",
-            "msrp": 500,
-            "cost": 250,
-            "color": "Clear",
-            "shape": "Round",
-            "cut": "Brilliant",
-            "dimensions": "4.5mm",
-            "caratWeight": 0.5,
-            "caratRange": "0.4-0.6",
-            "certType": "GIA",
-            "certNumber": "1234567890",
-            "certCut": "Excellent",
-            "certColor": "D",
-            "certClarity": "VS1",
-            "stoneNumber": "S001",
-            "catStatus": "Available",
-            "stoneSku": "STN001",
-            "refinedShape": "Round"
-        },
-        {
-            "serialNo": 2,
-            "skuNumber": "SKU002",
-            "date": "2024-07-17",
-            "styleNumber": "ST002",
-            "stoneType": "Emerald",
-            "productType": "Necklace",
-            "prodCode": "PR002",
-            "matCode": "MC002",
-            "matColor": "Silver",
-            "msrp": 800,
-            "cost": 400,
-            "color": "Green",
-            "shape": "Oval",
-            "cut": "Faceted",
-            "dimensions": "6.2x4.8mm",
-            "caratWeight": 1.2,
-            "caratRange": "1.0-1.5",
-            "certType": "IGI",
-            "certNumber": "0987654321",
-            "certCut": "Very Good",
-            "certColor": "F",
-            "certClarity": "SI1",
-            "stoneNumber": "S002",
-            "catStatus": "Available",
-            "stoneSku": "STN002",
-            "refinedShape": "Oval"
+    const fetchData = async (filters: FilterOption[] = []) => {
+        console.log('fetchData: ', filters)
+        setIsLoading(true);
+        try {
+            const data = await getStoneMasterItemsFromClient(filterOptions); // Pass filters to the fetch function
+            if (data) {
+                setStoneData(data);
+            }
+        } catch (error) {
+            setError('Error fetching items from the database: ' + (error as Error).message);
+        } finally {
+            setIsLoading(false);
         }
-    ]
+    };
+
+    const handleClearFilters = () => {
+        setFilterOptions([])
+    }
+
+    useEffect(() => {
+        fetchData().then()
+    }, []);
+
+    if (isLoading) {
+        return <ArLoader/>;
+    }
+
+    if (error || !stoneDate) {
+        return <div>{error}</div>;
+    }
 
     return (
         <>
-            <Table columns={ar_stone_columns} data={ar_stone_mock} title={"Stone Master"}>
-                {(item: StoneItem) => <StoneRow {...item} />}
+            <Table columns={columns}
+                   data={stoneDate}
+                   title="Stone Master"
+                   setColumnModalOpen={setColumnModalOpen}
+                   setFilterModalOpen={setFilterModalOpen}
+                   fetchDataAsCSV={getStoneDataAsCSV}
+                   filename={"ar_stone_master.csv"}
+            >
+                {(item, columns) => <StoneRow item={item} columns={columns}/>}
             </Table>
+            <ChangeViewModal
+                isOpen={isColumnModalOpen}
+                onClose={() => setColumnModalOpen(false)}
+                columns={columns}
+                initialColumns={initialColumnState}
+                allColumns={Object.values(ArStoneMasterColumns)}
+                setColumns={setColumns}
+            />
+            <FilterModal
+                isOpen={isFilterModalOpen}
+                onClose={() => setFilterModalOpen(false)}
+                type={ArStoneMasterColumns.TYPE}
+                fetchProductTypes={getStoneProductTypesFromClient}
+                setFilterOptions={setFilterOptions}
+                onApplyFilters={fetchData}
+                clearFilterOptions={handleClearFilters}
+            />
         </>
-    )
+    );
 }
+
 
 export default Stone

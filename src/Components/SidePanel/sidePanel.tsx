@@ -20,7 +20,7 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
     }
 
     const navigate = useNavigate();
-    const btnStyle = "bg-argray font-light text-lightgr hover:text-white text-xl mb-4 text-left"
+    const btnStyle = "bg-argray font-light text-lightgr hover:text-white text-xl mb-4 text-left hover:font-bold"
 
     return (
         <div className="flex flex-col items-center bg-argray h-full shadow-md p-2">
