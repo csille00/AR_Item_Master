@@ -62,7 +62,7 @@ const baseRows: FormColumn[] = [
     new FormColumn(ArJewelryMasterColumns.ENGRAVABLE, LabeledInputType.SELECT, true, yesNoOption),
     new FormColumn(ArJewelryMasterColumns.MADE_TO_ORDER, LabeledInputType.SELECT, true, yesNoOption),
     new FormColumn(ArJewelryMasterColumns.ADJUSTABLE, LabeledInputType.SELECT, true, yesNoOption),
-    new FormColumn(ArJewelryMasterColumns.METAL_TYPE, LabeledInputType.SELECT, true, await getMetalTypesFromClient()),
+    new FormColumn(ArJewelryMasterColumns.MATERIAL_TYPE, LabeledInputType.SELECT, true, await getMetalTypesFromClient()),
     new FormColumn(ArJewelryMasterColumns.METAL_FINISH, LabeledInputType.SELECT, true, await getMetalFinishesClient()),
     new FormColumn(ArJewelryMasterColumns.METAL_TEXTURE, LabeledInputType.SELECT, true, await getMetalTexturesFromClient()),
 ]
@@ -123,7 +123,7 @@ const getEngagementRingRows = async (): Promise<FormColumn[]> => {
             new FormColumn(ArJewelryMasterColumns.ENGRAVABLE, LabeledInputType.SELECT, true, yesNoOption),
             new FormColumn(ArJewelryMasterColumns.MADE_TO_ORDER, LabeledInputType.SELECT, true, yesNoOption),
             new FormColumn(ArJewelryMasterColumns.ADJUSTABLE, LabeledInputType.SELECT, true, yesNoOption),
-            new FormColumn(ArJewelryMasterColumns.METAL_TYPE, LabeledInputType.SELECT, true, await getMetalTypesFromClient()),
+            new FormColumn(ArJewelryMasterColumns.MATERIAL_TYPE, LabeledInputType.SELECT, true, await getMetalTypesFromClient()),
             new FormColumn(ArJewelryMasterColumns.METAL_FINISH, LabeledInputType.SELECT, true, await getMetalFinishesClient()),
             new FormColumn(ArJewelryMasterColumns.METAL_TEXTURE, LabeledInputType.SELECT, true, await getMetalTexturesFromClient()),
             new FormColumn(ArJewelryMasterColumns.BAND_STYLE, LabeledInputType.SELECT, true, await getBandStyleFromClient()),

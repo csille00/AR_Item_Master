@@ -56,8 +56,8 @@ const Jewelry: React.FC = () => {
     //     fetchData([]).then()
     // }
 
-    if (error || !jewelryData) {
-        return <Error message={error ?? ""}/>
+    if (error) {
+        return <Error message={error}/>
     }
 
     if (isLoading) {

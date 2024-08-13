@@ -6,35 +6,15 @@ const getNestedValue = (item: any, column: ArJewelryMasterColumns) => {
     const value = item[MapFormDataToJewelryMasterColumns[column]];
 
     if (typeof value === 'object' && value !== null) {
-        const nestedPropertyMap: Record<string, string> = {
-            material_type: 'metal_type',
-            product_type: 'product_type',
-            st_type: 'st_type',
-            st_source: 'source',
-            stone_color: 'stone_color',
-            stone_shape: 'stone_shape',
-            stone_cut: 'cut',
-            stone_orientation: 'orientation',
-            stone_origin: 'origin',
-            st_cert_type: 'cert_type',
-            st_cert_cut: 'cut',
-            metal_finish: 'finish',
-            metal_texture: 'texture',
-            band_style: 'style',
-            band_width: 'width',
-            jewelry_setting: 'setting',
-            side_stones: 'stone',
-            ar_style: 'style',
-            length: 'length',
-            chain_type: 'type',
-            pendant_type: 'type',
-            earring_type: 'type',
-            charm_type: 'type',
-        };
+        const nestedPropertyMap: Map<string, string> = new Map<string, string>();
+        nestedPropertyMap.set('st_cut', 'cut')
+        nestedPropertyMap.set('st_type', 'st_type')
+        nestedPropertyMap.set('material_type', 'metal_type')
+        nestedPropertyMap.set('product_type', 'product_type')
 
         const normalizedColumn = column.trim().toLowerCase().replace(/ /g, '_');
-        const nestedKey = nestedPropertyMap[normalizedColumn as keyof typeof nestedPropertyMap];
-        return nestedKey ? value[nestedKey] : JSON.stringify(value);
+        const containsKey = nestedPropertyMap.has(normalizedColumn)///nestedPropertyMap[normalizedColumn as keyof typeof nestedPropertyMap];
+        return containsKey ? value[nestedPropertyMap.get(normalizedColumn) ?? ""] : value['description'];
     }
 
     return value;

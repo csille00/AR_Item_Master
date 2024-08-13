@@ -6,13 +6,13 @@ const client = getClient()
 export async function getBandWidthFromClient(): Promise<Option[] | undefined> {
     const {data, error} = await client
         .from("band_width")
-        .select('id,width');
+        .select('id,description');
     if (error) {
         throw error;
     }
     if (data) {
         const result: Option[] = []
-        data.forEach(item => result.push({id: item.id, description: item.width}))
+        data.forEach(item => result.push({id: item.id, description: item.description}))
         return result
     }
 }

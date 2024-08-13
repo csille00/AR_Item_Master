@@ -6,13 +6,13 @@ const client = getClient()
 export async function getStoneShapeFromClient(): Promise<Option[] | undefined> {
     const {data, error} = await client
         .from("st_shape")
-        .select('id,shape');
+        .select('id,description');
     if (error) {
         throw error;
     }
     if (data) {
         const result: Option[] = []
-        data.forEach(item => result.push({id: item.id, description: item.shape}))
+        data.forEach(item => result.push({id: item.id, description: item.description}))
         return result
     }
 }
