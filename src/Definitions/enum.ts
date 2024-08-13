@@ -15,21 +15,6 @@ export enum gender {
     FEMALE = "women"
 }
 
-export enum ProductTypes {
-    ENG = "Engagement Rings",
-    WED = "Wedding Bands",
-    FJR = "Rings",
-    NCK = "Necklaces",
-    EAR = "Earrings",
-    BRA = "Bracelets / Anklets",
-    CHM = "Charms",
-    ACC = "Accessories",
-    GFC = "Gift Cards",
-    FEE = "Service Fees",
-    CON = "Consultations",
-    OTH = "Other"
-}
-
 export enum ProductTypeIds {
     ENG = "ENG",
     WED = "WED",
@@ -48,11 +33,6 @@ export enum ProductTypeIds {
 export enum StoneProductTypeIds {
     ELS = "ELS",
     OLS = "OLS"
-}
-
-export enum StoneProductTypes {
-    ELS = "Engagement Loose Stones",
-    OLS = "Other Loose Stones"
 }
 
 export enum ArJewelryMasterColumns {
@@ -242,4 +222,36 @@ export enum LabeledInputType {
     NUMBER = "number",
     DATETIME = "datetime-local",
     SELECT = "select"  // Add a type for select
+}
+
+//must be able to be converted into actual database table name with a .toLower().replace(" ", "_")
+export enum AdminTables {
+    AR_STYLE = "Ar Style",
+    BAND_STYLE = "Band Style",
+    BAND_WIDTH = "Band Width",
+    CHAIN_TYPE = "Chain Type",
+    CHARM_TYPE = "Charm Type",
+    CTW_RANGE = "CTW Range",
+    EARRING_TYPE = "Earring Type",
+    JEWELRY_SETTING = "Jewelry Setting",
+    LENGTH = "Length",
+    MATERIAL_TYPE = "Material Type",
+    METAL_FINISH = "Metal Finish",
+    METAL_TEXTURE = "Metal Texture",
+    PENDANT_TYPE = "Pendant Type",
+    PRODUCT_TYPE = "Product Type",
+    SIDE_STONES = "Side Stones",
+    ST_CERT_CUT = "Stone Cert Cut",
+    ST_CERT_TYPE = "Stone Cert Type",
+    ST_CLARITY_GRADE = "Stone Clarity Grade",
+    ST_COLOR = "Stone Color",
+    ST_COLOR_GRADE = "Stone Color Grade",
+    ST_CUT = "Stone Cut",
+    ST_ORIENTATION = "Stone Orientation",
+    ST_ORIGIN = "Stone Origin",
+    ST_PRICE_RANGE = "Stone Price Range",
+    ST_PRODUCT_TYPE = "Stone Product Type",
+    ST_SHAPE = "Stone Shape",
+    ST_SOURCE = "Stone Source",
+    ST_TYPE = "Stone Type",
 }

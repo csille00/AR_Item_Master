@@ -35,5 +35,3 @@ export const StoneRow = ({item, columns}: { item: Tables<'ar_stone_master'>, col
         </>
     );
 };
-
-// export default StoneRow;
