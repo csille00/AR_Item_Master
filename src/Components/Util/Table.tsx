@@ -119,9 +119,10 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                        />
                     </div>
                 </div>
-                <div className="flex justify-center pb-6 px-4">
+                {/*Added inline styling because tailwind height has limitations*/}
+                <div className="flex justify-center pb-6 px-4 overflow-y-scroll" style={{height: '34rem'}}>
                     <table className="w-full text-left text-argray">
-                        <thead className="">
+                        <thead className="sticky top-0 bg-white">
                         <tr>
                             {columns.map((column, index) => (
                                 <th key={index} className="p-4 cursor-pointer" onClick={() => handleSort(column)}>
