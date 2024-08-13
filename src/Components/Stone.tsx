@@ -41,9 +41,9 @@ const Stone: React.FC = () => {
         }
     };
 
-    const handleClearFilters = () => {
-        setFilterOptions([])
-    }
+    // const handleClearFilters = () => {
+    //     setFilterOptions([])
+    // }
 
     useEffect(() => {
         fetchData().then()
@@ -84,7 +84,6 @@ const Stone: React.FC = () => {
                 fetchProductTypes={getStoneProductTypesFromClient}
                 setFilterOptions={setFilterOptions}
                 onApplyFilters={fetchData}
-                clearFilterOptions={handleClearFilters}
             />
         </>
     );

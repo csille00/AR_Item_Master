@@ -11,7 +11,6 @@ interface ModalProps {
     type: string
     setFilterOptions: (options: FilterOption[]) => void;
     fetchProductTypes: () => Promise<Option[] | undefined>;
-    clearFilterOptions: () => void;
     onApplyFilters: () => void;
 }
 
@@ -21,7 +20,6 @@ export const FilterModal: React.FC<ModalProps> = ({
                                                       type,
                                                       setFilterOptions,
                                                       fetchProductTypes,
-                                                      clearFilterOptions,
                                                       onApplyFilters,
                                                   }) => {
     const [productTypeOptions, setProductTypeOptions] = useState<Option[]>([]);

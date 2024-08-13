@@ -51,10 +51,10 @@ const Jewelry: React.FC = () => {
         fetchData().then()
     }, []);
 
-    const handleClearFilters = () => {
-        setFilterOptions([])
-        fetchData([]).then()
-    }
+    // const handleClearFilters = () => {
+    //     setFilterOptions([])
+    //     fetchData([]).then()
+    // }
 
     if (error || !jewelryData) {
         return <Error message={error ?? ""}/>
@@ -91,7 +91,6 @@ const Jewelry: React.FC = () => {
                 type={ArJewelryMasterColumns.TYPE}
                 setFilterOptions={setFilterOptions}
                 onApplyFilters={fetchData}
-                clearFilterOptions={handleClearFilters}
             />
         </>
     );
