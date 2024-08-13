@@ -8,6 +8,7 @@ import {getStoneDataAsCSV, getStoneMasterItemsFromClient, StoneMasterQuery} from
 import {StoneRow} from "./Util/StoneRow.tsx";
 import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
 import {ArLoader} from "./Util/Loading.tsx";
+import {Error} from "./Util/Error.tsx";
 
 
 const Stone: React.FC = () => {
@@ -53,7 +54,7 @@ const Stone: React.FC = () => {
     }
 
     if (error || !stoneDate) {
-        return <div>{error}</div>;
+        return <Error message={error ?? ""}/>
     }
 
     return (

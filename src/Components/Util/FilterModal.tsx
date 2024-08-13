@@ -3,6 +3,7 @@ import Button from "./Button.tsx";
 import {FilterOption} from "../../Definitions/FilterOption.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
 import {ArLoader} from "./Loading.tsx";
+import {Error} from "./Error.tsx";
 
 interface ModalProps {
     isOpen: boolean;
@@ -20,6 +21,7 @@ export const FilterModal: React.FC<ModalProps> = ({
                                                       type,
                                                       setFilterOptions,
                                                       fetchProductTypes,
+                                                      clearFilterOptions,
                                                       onApplyFilters,
                                                   }) => {
     const [productTypeOptions, setProductTypeOptions] = useState<Option[]>([]);
@@ -62,7 +64,7 @@ export const FilterModal: React.FC<ModalProps> = ({
     }
 
     if (error) {
-        return <div>{error}</div>;
+        return <Error message={error}/>
     }
 
     if (!isOpen) return null;

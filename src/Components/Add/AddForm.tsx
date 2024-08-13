@@ -6,6 +6,8 @@ import {Option} from "../../Definitions/DropdownOption.ts";
 import {LabeledInputType} from "../../Definitions/enum.ts";
 import {useNavigate} from "react-router-dom";
 import {ArLoader} from "../Util/Loading.tsx";
+import {Bounce, toast, ToastContainer} from "react-toastify";
+import {Error} from "../Util/Error.tsx";
 
 interface SharedFormProps {
     title: string;
@@ -72,7 +74,7 @@ export const AddForm: React.FC<SharedFormProps> = ({
     }
 
     if (error) {
-        return <div>{error}</div>;
+        return <Error message={error}/>
     }
 
     const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
