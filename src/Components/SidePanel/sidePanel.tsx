@@ -1,6 +1,5 @@
 import {SupabaseClient} from "@supabase/supabase-js";
-import Button from "../Util/Button.tsx";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import React from "react";
 
 interface SidePanelProps {
