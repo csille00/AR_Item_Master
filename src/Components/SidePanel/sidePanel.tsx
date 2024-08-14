@@ -29,8 +29,6 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
             {svg2 && (
                 <path strokeLinecap="round" strokeLinejoin="round" d={svg2}/>
             )}
-
-
         </svg>
     );
 
