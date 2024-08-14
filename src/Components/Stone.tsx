@@ -2,8 +2,8 @@ import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
 import {FilterOption} from "../Definitions/FilterOption.ts";
 import {ArStoneMasterColumns} from "../Definitions/enum.ts";
-import {ChangeViewModal} from "./Util/ChangeViewModal.tsx";
-import {FilterModal} from "./Util/FilterModal.tsx";
+import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
+import {FilterModal} from "./Modal/FilterModal.tsx";
 import {getStoneDataAsCSV, getStoneMasterItemsFromClient, StoneMasterQuery} from "../model/queries/ArStoneMasterDAO.ts";
 import {StoneRow} from "./Util/StoneRow.tsx";
 import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
@@ -14,7 +14,7 @@ import {Error} from "./Util/Error.tsx";
 const Stone: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
     const [isColumnModalOpen, setColumnModalOpen] = useState<boolean>(false);
-    const [stoneDate, setStoneData] = useState<StoneMasterQuery>();
+    const [stoneData, setStoneData] = useState<StoneMasterQuery>();
     const [filterOptions, setFilterOptions] = useState<FilterOption[]>([])
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -53,14 +53,14 @@ const Stone: React.FC = () => {
         return <ArLoader/>;
     }
 
-    if (error || !stoneDate) {
+    if (error || !stoneData) {
         return <Error message={error ?? ""}/>
     }
 
     return (
         <>
             <Table columns={columns}
-                   data={stoneDate}
+                   data={stoneData}
                    title="Stone Master"
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}

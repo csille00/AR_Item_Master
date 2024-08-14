@@ -40,18 +40,19 @@ const createStoneMasterQuery = () => {
             st_sku,
             refined_status,
             quantity,
-            st_product_type(type),
+            date_quantity_added,
+            st_product_type(description),
             st_type(st_type),
-            st_source(source),
-            st_color(color),
-            st_shape(shape),
+            st_source(description),
+            st_color(description),
+            st_shape(description),
             st_cut(cut),
-            st_orientation(orientation),
-            st_origin(origin),
-            st_cert_type(cert_type),
-            st_cert_cut(cut),
-            st_color_grade(grade),
-            st_clarity_grade(grade)
+            st_orientation(description),
+            st_origin(description),
+            st_cert_type(description),
+            st_cert_cut(description),
+            st_cert_color(description),
+            st_cert_clarity(description)
         `);
 }
 

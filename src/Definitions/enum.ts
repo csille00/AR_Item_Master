@@ -15,21 +15,6 @@ export enum gender {
     FEMALE = "women"
 }
 
-export enum ProductTypes {
-    ENG = "Engagement Rings",
-    WED = "Wedding Bands",
-    FJR = "Rings",
-    NCK = "Necklaces",
-    EAR = "Earrings",
-    BRA = "Bracelets / Anklets",
-    CHM = "Charms",
-    ACC = "Accessories",
-    GFC = "Gift Cards",
-    FEE = "Service Fees",
-    CON = "Consultations",
-    OTH = "Other"
-}
-
 export enum ProductTypeIds {
     ENG = "ENG",
     WED = "WED",
@@ -48,11 +33,6 @@ export enum ProductTypeIds {
 export enum StoneProductTypeIds {
     ELS = "ELS",
     OLS = "OLS"
-}
-
-export enum StoneProductTypes {
-    ELS = "Engagement Loose Stones",
-    OLS = "Other Loose Stones"
 }
 
 export enum ArJewelryMasterColumns {
@@ -86,12 +66,12 @@ export enum ArJewelryMasterColumns {
     ENGRAVABLE = "Engravable",
     MADE_TO_ORDER = "Made to Order",
     ADJUSTABLE = "Adjustable",
-    METAL_TYPE = "Metal Type",
+    MATERIAL_TYPE = "Material Type",
     METAL_FINISH = "Metal Finish",
     METAL_TEXTURE = "Metal Texture",
     BAND_STYLE = "Band Style",
     BAND_WIDTH = "Band Width",
-    SETTING = "Setting",
+    SETTING = "Jewelry Setting",
     SIDE_STONES = "Side Stones",
     LENGTH = "Length",
     CHAIN_TYPE = "Chain Type",
@@ -130,8 +110,8 @@ export const MapFormDataToJewelryMasterColumns: { [key in ArJewelryMasterColumns
     [ArJewelryMasterColumns.ST_CTW]: 'st_ctw',
     [ArJewelryMasterColumns.ST_COST_CT]: 'st_cost',
     [ArJewelryMasterColumns.ST_CERT_TYPE]: 'st_cert_type',
-    [ArJewelryMasterColumns.ST_CERT_NUMBER]: 'st_cert_type', //TODO: Fix this
-    [ArJewelryMasterColumns.ST_CERT_CUT]: 'st_cert_cut', //TODO: Fix this
+    [ArJewelryMasterColumns.ST_CERT_NUMBER]: 'st_cert_type',
+    [ArJewelryMasterColumns.ST_CERT_CUT]: 'st_cert_cut',
     [ArJewelryMasterColumns.ST_CERT_COLOR]: 'st_cert_color',
     [ArJewelryMasterColumns.ST_CERT_CLARITY]: 'st_cert_clarity',
     [ArJewelryMasterColumns.AR_STYLE]: 'ar_style',
@@ -141,12 +121,12 @@ export const MapFormDataToJewelryMasterColumns: { [key in ArJewelryMasterColumns
     [ArJewelryMasterColumns.ENGRAVABLE]: 'engravable',
     [ArJewelryMasterColumns.MADE_TO_ORDER]: 'made_to_order',
     [ArJewelryMasterColumns.ADJUSTABLE]: 'adjustable',
-    [ArJewelryMasterColumns.METAL_TYPE]: 'material_type_id',
+    [ArJewelryMasterColumns.MATERIAL_TYPE]: 'material_type',
     [ArJewelryMasterColumns.METAL_FINISH]: 'metal_finish',
     [ArJewelryMasterColumns.METAL_TEXTURE]: 'metal_texture',
     [ArJewelryMasterColumns.BAND_STYLE]: 'band_style',
     [ArJewelryMasterColumns.BAND_WIDTH]: 'band_width',
-    [ArJewelryMasterColumns.SETTING]: 'setting',
+    [ArJewelryMasterColumns.SETTING]: 'jewelry_setting',
     [ArJewelryMasterColumns.SIDE_STONES]: 'side_stones',
     [ArJewelryMasterColumns.LENGTH]: 'length',
     [ArJewelryMasterColumns.CHAIN_TYPE]: 'chain_type',
@@ -242,4 +222,36 @@ export enum LabeledInputType {
     NUMBER = "number",
     DATETIME = "datetime-local",
     SELECT = "select"  // Add a type for select
+}
+
+//must be able to be converted into actual database table name with a .toLower().replace(" ", "_")
+export enum AdminTables {
+    AR_STYLE = "Ar Style",
+    BAND_STYLE = "Band Style",
+    BAND_WIDTH = "Band Width",
+    CHAIN_TYPE = "Chain Type",
+    CHARM_TYPE = "Charm Type",
+    CTW_RANGE = "CTW Range",
+    EARRING_TYPE = "Earring Type",
+    JEWELRY_SETTING = "Jewelry Setting",
+    LENGTH = "Length",
+    MATERIAL_TYPE = "Material Type",
+    METAL_FINISH = "Metal Finish",
+    METAL_TEXTURE = "Metal Texture",
+    PENDANT_TYPE = "Pendant Type",
+    PRODUCT_TYPE = "Product Type",
+    SIDE_STONES = "Side Stones",
+    ST_CERT_CUT = "St Cert Cut",
+    ST_CERT_TYPE = "St Cert Type",
+    ST_CLARITY_GRADE = "St Clarity Grade",
+    ST_COLOR = "St Color",
+    ST_COLOR_GRADE = "St Color Grade",
+    ST_CUT = "St Cut",
+    ST_ORIENTATION = "St Orientation",
+    ST_ORIGIN = "St Origin",
+    ST_PRICE_RANGE = "St Price Range",
+    ST_PRODUCT_TYPE = "St Product Type",
+    ST_SHAPE = "St Shape",
+    ST_SOURCE = "St Source",
+    ST_TYPE = "St Type",
 }

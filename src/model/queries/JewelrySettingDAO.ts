@@ -6,13 +6,13 @@ const client = getClient()
 export async function getSettingsFromClient(): Promise<Option[] | undefined> {
     const {data, error} = await client
         .from("jewelry_setting")
-        .select('id,setting');
+        .select('id,description');
     if (error) {
         throw error;
     }
     if (data) {
         const result: Option[] = []
-        data.forEach(item => result.push({id: item.id, description: item.setting}))
+        data.forEach(item => result.push({id: item.id, description: item.description}))
         return result
     }
 }

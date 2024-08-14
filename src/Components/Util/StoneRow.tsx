@@ -8,23 +8,13 @@ import {
 const getNestedValue = (item: any, column: ArStoneMasterColumns) => {
     const value = item[MapFormDataToStoneMasterColumns[column]];
     if (typeof value === 'object' && value !== null) {
-        const nestedPropertyMap: Record<string, string> = {
-            st_product_type: 'type',
-            st_type: 'st_type',
-            st_source: 'source',
-            st_color: 'color',
-            st_shape: 'shape',
-            st_cut: 'cut',
-            st_orientation: 'orientation',
-            st_origin: 'origin',
-            st_cert_type: 'cert_type',
-            st_cert_cut: 'cut',
-            st_cert_clarity: 'clarity'
-        };
+        const nestedPropertyMap: Map<string, string> = new Map<string, string>();
+        nestedPropertyMap.set('st_cut', 'cut')
+        nestedPropertyMap.set('st_type', 'st_type')
 
         const normalizedColumn = column.trim().toLowerCase().replace(/ /g, '_');
-        const nestedKey = nestedPropertyMap[normalizedColumn as keyof typeof nestedPropertyMap];
-        return nestedKey ? value[nestedKey] : JSON.stringify(value);
+        const containsKey = nestedPropertyMap.has(normalizedColumn)///nestedPropertyMap[normalizedColumn as keyof typeof nestedPropertyMap];
+        return containsKey ? value[nestedPropertyMap.get(normalizedColumn) ?? ""] : value['description'];
     }
 
     return value;
@@ -45,5 +35,3 @@ export const StoneRow = ({item, columns}: { item: Tables<'ar_stone_master'>, col
         </>
     );
 };
-
-// export default StoneRow;

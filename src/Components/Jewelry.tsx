@@ -7,13 +7,13 @@ import {
     JewelryMasterQuery
 } from "../model/queries/ArJewelryMasterDAO.ts";
 import {ArJewelryMasterColumns} from "../Definitions/enum.ts";
-import {ChangeViewModal} from "./Util/ChangeViewModal.tsx";
-import {FilterModal} from "./Util/FilterModal.tsx";
 import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
 import {FilterOption} from "../Definitions/FilterOption.ts";
 import {ArLoader} from "./Util/Loading.tsx";
 import 'react-toastify/dist/ReactToastify.css';
 import {Error} from "./Util/Error.tsx";
+import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
+import {FilterModal} from "./Modal/FilterModal.tsx";
 
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
@@ -56,8 +56,8 @@ const Jewelry: React.FC = () => {
     //     fetchData([]).then()
     // }
 
-    if (error || !jewelryData) {
-        return <Error message={error ?? ""}/>
+    if (error) {
+        return <Error message={error}/>
     }
 
     if (isLoading) {

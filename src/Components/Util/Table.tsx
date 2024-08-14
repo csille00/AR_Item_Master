@@ -4,15 +4,12 @@ import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
 import tableIcon from "../../assets/table.svg"
-import {Tables} from "../../Definitions/generatedDefinitions.ts";
 import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
-import {JewelryMasterQuery} from "../../model/queries/ArJewelryMasterDAO.ts";
-import {StoneMasterQuery} from "../../model/queries/ArStoneMasterDAO.ts";
 
 export interface TableProps {
     title: string;
     columns: string[];
-    data: JewelryMasterQuery | StoneMasterQuery;
+    data: any;
     style?: string | null;
     setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -133,9 +130,9 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                         </tr>
                         </thead>
                         <tbody>
-                        {sortedData.map((item, index) => (
+                        {sortedData.map((item: any, index: React.Key | null | undefined) => (
                             <tr key={index}>
-                                {children ? children(item as unknown as Tables<'ar_jewelry_master'>, columns) : null}
+                                {children ? children(item, columns) : null}
                             </tr>
                         ))}
                         </tbody>

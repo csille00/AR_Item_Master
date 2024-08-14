@@ -26,9 +26,10 @@ export type Database = {
           engravable: boolean | null
           gender: string | null
           id: number | null
+          jewelry_setting: number | null
           length: number | null
           made_to_order: boolean | null
-          material_type_id: number | null
+          material_type: number | null
           metal_finish: number | null
           metal_texture: number | null
           msrp: unknown | null
@@ -40,7 +41,6 @@ export type Database = {
           repair_upgrade: string | null
           returnable: boolean | null
           serial_number: number
-          setting: number | null
           side_stones: number | null
           sku_number: string | null
           st_cert_clarity: number | null
@@ -81,9 +81,10 @@ export type Database = {
           engravable?: boolean | null
           gender?: string | null
           id?: number | null
+          jewelry_setting?: number | null
           length?: number | null
           made_to_order?: boolean | null
-          material_type_id?: number | null
+          material_type?: number | null
           metal_finish?: number | null
           metal_texture?: number | null
           msrp?: unknown | null
@@ -95,7 +96,6 @@ export type Database = {
           repair_upgrade?: string | null
           returnable?: boolean | null
           serial_number?: number
-          setting?: number | null
           side_stones?: number | null
           sku_number?: string | null
           st_cert_clarity?: number | null
@@ -136,9 +136,10 @@ export type Database = {
           engravable?: boolean | null
           gender?: string | null
           id?: number | null
+          jewelry_setting?: number | null
           length?: number | null
           made_to_order?: boolean | null
-          material_type_id?: number | null
+          material_type?: number | null
           metal_finish?: number | null
           metal_texture?: number | null
           msrp?: unknown | null
@@ -150,7 +151,6 @@ export type Database = {
           repair_upgrade?: string | null
           returnable?: boolean | null
           serial_number?: number
-          setting?: number | null
           side_stones?: number | null
           sku_number?: string | null
           st_cert_clarity?: number | null
@@ -227,7 +227,7 @@ export type Database = {
           },
           {
             foreignKeyName: "ar_jewelry_master_material_type_id_fkey"
-            columns: ["material_type_id"]
+            columns: ["material_type"]
             isOneToOne: false
             referencedRelation: "material_type"
             referencedColumns: ["id"]
@@ -262,7 +262,7 @@ export type Database = {
           },
           {
             foreignKeyName: "ar_jewelry_master_setting_fkey"
-            columns: ["setting"]
+            columns: ["jewelry_setting"]
             isOneToOne: false
             referencedRelation: "jewelry_setting"
             referencedColumns: ["id"]
@@ -479,14 +479,14 @@ export type Database = {
           },
           {
             foreignKeyName: "ar_stone_master_st_cert_clarity_fkey"
-            columns: ["st_cert_clarity"]
+            columns: ["st_cert_color"]
             isOneToOne: false
             referencedRelation: "st_clarity_grade"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "ar_stone_master_st_cert_color_fkey"
-            columns: ["st_cert_color"]
+            columns: ["st_cert_clarity"]
             isOneToOne: false
             referencedRelation: "st_color_grade"
             referencedColumns: ["id"]
@@ -558,76 +558,76 @@ export type Database = {
       }
       ar_style: {
         Row: {
+          description: string
           id: number
-          style: string
         }
         Insert: {
+          description: string
           id?: number
-          style: string
         }
         Update: {
+          description?: string
           id?: number
-          style?: string
         }
         Relationships: []
       }
       band_style: {
         Row: {
+          description: string
           id: number
-          style: string
         }
         Insert: {
+          description: string
           id?: number
-          style: string
         }
         Update: {
+          description?: string
           id?: number
-          style?: string
         }
         Relationships: []
       }
       band_width: {
         Row: {
+          description: number
           id: number
-          width: number
         }
         Insert: {
+          description: number
           id?: number
-          width: number
         }
         Update: {
+          description?: number
           id?: number
-          width?: number
         }
         Relationships: []
       }
       chain_type: {
         Row: {
+          description: string
           id: number
-          type: string
         }
         Insert: {
+          description: string
           id?: number
-          type: string
         }
         Update: {
+          description?: string
           id?: number
-          type?: string
         }
         Relationships: []
       }
       charm_type: {
         Row: {
+          description: string
           id: number
-          type: string
         }
         Insert: {
+          description: string
           id?: number
-          type: string
         }
         Update: {
+          description?: string
           id?: number
-          type?: string
         }
         Relationships: []
       }
@@ -651,219 +651,219 @@ export type Database = {
       }
       earring_type: {
         Row: {
+          description: string
           id: number
-          type: string
         }
         Insert: {
+          description: string
           id?: number
-          type: string
         }
         Update: {
+          description?: string
           id?: number
-          type?: string
         }
         Relationships: []
       }
       jewelry_setting: {
         Row: {
+          description: string
           id: number
-          setting: string
         }
         Insert: {
+          description: string
           id?: number
-          setting: string
         }
         Update: {
+          description?: string
           id?: number
-          setting?: string
         }
         Relationships: []
       }
       length: {
         Row: {
+          description: unknown | null
           id: number
-          length: unknown | null
         }
         Insert: {
+          description?: unknown | null
           id?: number
-          length?: unknown | null
         }
         Update: {
+          description?: unknown | null
           id?: number
-          length?: unknown | null
         }
         Relationships: []
       }
       material_type: {
         Row: {
+          description: string
           id: number
           mat_code: string
           mat_color: number
-          metal_type: string
         }
         Insert: {
+          description: string
           id?: number
           mat_code: string
           mat_color: number
-          metal_type: string
         }
         Update: {
+          description?: string
           id?: number
           mat_code?: string
           mat_color?: number
-          metal_type?: string
         }
         Relationships: []
       }
       metal_finish: {
         Row: {
-          finish: string
+          description: string
           id: number
         }
         Insert: {
-          finish: string
+          description: string
           id?: number
         }
         Update: {
-          finish?: string
+          description?: string
           id?: number
         }
         Relationships: []
       }
       metal_texture: {
         Row: {
+          description: string
           id: number
-          texture: string
         }
         Insert: {
+          description: string
           id?: number
-          texture: string
         }
         Update: {
+          description?: string
           id?: number
-          texture?: string
         }
         Relationships: []
       }
       pendant_type: {
         Row: {
+          description: string
           id: number
-          type: string
         }
         Insert: {
+          description: string
           id?: number
-          type: string
         }
         Update: {
+          description?: string
           id?: number
-          type?: string
         }
         Relationships: []
       }
       product_type: {
         Row: {
           code: string
+          description: string
           prod_code: string
-          product_type: string
         }
         Insert: {
           code: string
+          description: string
           prod_code: string
-          product_type: string
         }
         Update: {
           code?: string
+          description?: string
           prod_code?: string
-          product_type?: string
         }
         Relationships: []
       }
       side_stones: {
         Row: {
+          description: string
           id: number
-          stone: string
         }
         Insert: {
+          description: string
           id?: number
-          stone: string
         }
         Update: {
+          description?: string
           id?: number
-          stone?: string
         }
         Relationships: []
       }
       st_cert_cut: {
         Row: {
-          cut: string
+          description: string
           id: number
         }
         Insert: {
-          cut: string
+          description: string
           id?: number
         }
         Update: {
-          cut?: string
+          description?: string
           id?: number
         }
         Relationships: []
       }
       st_cert_type: {
         Row: {
-          cert_type: string
+          description: string
           id: number
         }
         Insert: {
-          cert_type: string
+          description: string
           id?: number
         }
         Update: {
-          cert_type?: string
+          description?: string
           id?: number
         }
         Relationships: []
       }
       st_clarity_grade: {
         Row: {
-          grade: string
+          description: string
           id: number
         }
         Insert: {
-          grade: string
+          description: string
           id?: number
         }
         Update: {
-          grade?: string
+          description?: string
           id?: number
         }
         Relationships: []
       }
       st_color: {
         Row: {
-          color: string
+          description: string
           id: number
         }
         Insert: {
-          color: string
+          description: string
           id?: number
         }
         Update: {
-          color?: string
+          description?: string
           id?: number
         }
         Relationships: []
       }
       st_color_grade: {
         Row: {
-          grade: string
+          description: string
           id: number
         }
         Insert: {
-          grade: string
+          description: string
           id?: number
         }
         Update: {
-          grade?: string
+          description?: string
           id?: number
         }
         Relationships: []
@@ -888,31 +888,31 @@ export type Database = {
       }
       st_orientation: {
         Row: {
+          description: string
           id: number
-          orientation: string
         }
         Insert: {
+          description: string
           id?: number
-          orientation: string
         }
         Update: {
+          description?: string
           id?: number
-          orientation?: string
         }
         Relationships: []
       }
       st_origin: {
         Row: {
+          description: string
           id: number
-          origin: string
         }
         Insert: {
+          description: string
           id?: number
-          origin: string
         }
         Update: {
+          description?: string
           id?: number
-          origin?: string
         }
         Relationships: []
       }
@@ -936,46 +936,46 @@ export type Database = {
       }
       st_product_type: {
         Row: {
+          description: string
           prod_code: string
-          type: string
         }
         Insert: {
+          description: string
           prod_code: string
-          type: string
         }
         Update: {
+          description?: string
           prod_code?: string
-          type?: string
         }
         Relationships: []
       }
       st_shape: {
         Row: {
+          description: string
           id: number
-          shape: string
         }
         Insert: {
+          description: string
           id?: number
-          shape: string
         }
         Update: {
+          description?: string
           id?: number
-          shape?: string
         }
         Relationships: []
       }
       st_source: {
         Row: {
+          description: string
           id: number
-          source: string
         }
         Insert: {
+          description: string
           id?: number
-          source: string
         }
         Update: {
+          description?: string
           id?: number
-          source?: string
         }
         Relationships: []
       }
