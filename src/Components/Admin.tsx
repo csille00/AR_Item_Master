@@ -28,7 +28,7 @@ import {getStoneShapeFromClient} from "../model/queries/StoneShapeDAO.ts";
 import {getStSourceFromClient} from "../model/queries/StSourceDAO.ts";
 import {getStoneTypesFromClient} from "../model/queries/StoneTypeDAO.ts";
 import {AdminRow} from "./Util/AdminRow.tsx";
-import {addOption, deleteOption, updateOption} from "../model/queries/BaseDAO.ts";
+import {addOption, deleteOption, getOptionsFromClient, updateOption} from "../model/queries/BaseDAO.ts";
 import {AddOptionModal} from "./Modal/AddOptionModal.tsx";
 import {EditOptionModal} from "./Modal/EditOptionModal.tsx";
 
@@ -49,7 +49,7 @@ const Admin = () => {
         [AdminTables.CTW_RANGE]: getStylesFromClient, //TODO: Fix this
         [AdminTables.EARRING_TYPE]: getEarringTypeFromClient,
         [AdminTables.JEWELRY_SETTING]: getSettingsFromClient,
-        [AdminTables.LENGTH]: getStylesFromClient,//TODO: Fix this
+        [AdminTables.LENGTH]: () => getOptionsFromClient(AdminTables.LENGTH.toLowerCase().replace(/ /g, "_")),
         [AdminTables.MATERIAL_TYPE]: getMetalTypeFromClient,
         [AdminTables.METAL_FINISH]: getMetalFinishesClient,
         [AdminTables.METAL_TEXTURE]: getMetalTexturesFromClient,
@@ -57,10 +57,10 @@ const Admin = () => {
         [AdminTables.PRODUCT_TYPE]: getProductTypesFromClient,
         [AdminTables.SIDE_STONES]: getSideStonesFromClient,
         [AdminTables.ST_CERT_CUT]: getStCertCutFromClient,
-        [AdminTables.ST_CERT_TYPE]: getStylesFromClient,//TODO: Fix this
+        [AdminTables.ST_CERT_TYPE]: () => getOptionsFromClient(AdminTables.ST_CERT_TYPE.toLowerCase().replace(/ /g, "_")),
         [AdminTables.ST_CLARITY_GRADE]: getCertClarityFromClient,
         [AdminTables.ST_COLOR]: getStoneColorFromClient,
-        [AdminTables.ST_COLOR_GRADE]: getStylesFromClient,//TODO: Fix this
+        [AdminTables.ST_COLOR_GRADE]: () => getOptionsFromClient(AdminTables.ST_COLOR_GRADE.toLowerCase().replace(/ /g, "_")),
         [AdminTables.ST_ORIENTATION]: getStoneOrientationFromClient,
         [AdminTables.ST_ORIGIN]: getStoneOriginFromClient,
         [AdminTables.ST_PRICE_RANGE]: getStylesFromClient,//TODO: Fix this
@@ -118,8 +118,8 @@ const Admin = () => {
 
     const handleUpdateOption = async (updatedOption: Option) => {
         try {
-            console.log(selectedTable.toLowerCase().replace(" ", "_"))
-            await updateOption(selectedTable.toLowerCase().replace(" ", "_"), updatedOption);
+            console.log(selectedTable.toLowerCase().replace(/ /g, "_"))
+            await updateOption(selectedTable.toLowerCase().replace(/ /g, "_"), updatedOption);
             setNonce(nonce + 1); // Reload data after update
             setEditingOption(null); // Close the modal
         } catch (error) {
@@ -130,7 +130,7 @@ const Admin = () => {
     const handleAddOption = async (option: Option) => {
         try {
             console.log("option to add: ", option)
-            await addOption(selectedTable.toLowerCase().replace(' ', '_'), option)
+            await addOption(selectedTable.toLowerCase().replace(/ /g, '_'), option)
             setNonce(nonce + 1);
         } catch (error) {
             setError(`Failed to add ${option.description}. Please try again later.`);
@@ -138,7 +138,7 @@ const Admin = () => {
     }
 
     const onDelete = async (item: Option) => {
-        await deleteOption(selectedTable.toLowerCase().replace(" ", "_"), item);
+        await deleteOption(selectedTable.toLowerCase().replace(/ /g, "_"), item);
         setNonce(nonce + 1);
     };
 
