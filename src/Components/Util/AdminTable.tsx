@@ -2,13 +2,15 @@ import React from "react";
 
 export interface AdminTableProps {
     title: string;
-    columns: string[];
     data: any;
     style?: string | null;
     children: (item: any, columns: string[]) => React.JSX.Element;
+    setAddOptionModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AdminTable = ({title, columns, data, style, children}: AdminTableProps) => {
+export const AdminTable = ({title, data, setAddOptionModalOpen, style, children}: AdminTableProps) => {
+    const columns = data && data.length > 0 ? Object.keys(data[0]) : [];
+
     return (
         <>
             <div className={`mx-4 border border-lightgr rounded-lg mt-10 bg-white ${style ? style : ''}`}>
@@ -16,7 +18,7 @@ export const AdminTable = ({title, columns, data, style, children}: AdminTablePr
                     <h1 className="text-argray text-left my-8 text-4xl justify-start">{title}</h1>
                     <button
                         className="bg-argold hover:font-bold hover:bg-darkgold hover:border-darkgold rounded-lg h-12 mx-1.5 flex items-center"
-                        onClick={() => console.log("add")}>
+                        onClick={() => setAddOptionModalOpen(true)}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                              stroke="#FFFFFF" className="size-5 mx-1">
                             <path strokeLinecap="round" strokeLinejoin="round"
@@ -38,8 +40,6 @@ export const AdminTable = ({title, columns, data, style, children}: AdminTablePr
                         </thead>
                         <tbody>
                         {data.map((item: any) => (
-
-                            // Directly render the TableRow here
                             children(item, columns)
                         ))}
                         </tbody>

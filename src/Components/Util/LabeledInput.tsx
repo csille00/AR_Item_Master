@@ -3,10 +3,11 @@ import {LabeledInputType} from "../../Definitions/enum.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
 
 interface LabeledInputProps {
-    label: string;
+    label?: string;
     type: LabeledInputType;
     style?: string | null;
     boxStyle?: string | null;
+    placeholder?: string | null;
     value: string;
     required: boolean
     options?: Option[];
@@ -46,7 +47,7 @@ const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = 
                     className={inputBox}
                     name="myInput"
                     type={type}
-                    // placeholder={placeholder ?? ""}
+                    placeholder={placeholder ?? ""}
                     value={value}
                     onChange={onChange}
                 />

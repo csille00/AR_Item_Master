@@ -11,7 +11,7 @@ import {getChainTypesFromClient} from "../model/queries/ChainTypeDAO.ts";
 import {getCharmTypeFromClient} from "../model/queries/CharmTypeDAO.ts";
 import {getEarringTypeFromClient} from "../model/queries/EarringTypeDAO.ts";
 import {getSettingsFromClient} from "../model/queries/JewelrySettingDAO.ts";
-import {getMetalTypesFromClient} from "../model/queries/MetalTypeDAO.ts";
+import {getMetalTypeFromClient} from "../model/queries/MetalTypeDAO.ts";
 import {getMetalFinishesClient} from "../model/queries/MetalFinishDAO.ts";
 import {getMetalTexturesFromClient} from "../model/queries/MetalTextureDAO.ts";
 import {getPendantTypeFromClient} from "../model/queries/PendantTypeDAO.ts";
@@ -28,45 +28,48 @@ import {getStoneShapeFromClient} from "../model/queries/StoneShapeDAO.ts";
 import {getStSourceFromClient} from "../model/queries/StSourceDAO.ts";
 import {getStoneTypesFromClient} from "../model/queries/StoneTypeDAO.ts";
 import {AdminRow} from "./Util/AdminRow.tsx";
-import {deleteOption} from "../model/queries/BaseDAO.ts";
+import {addOption, deleteOption, updateOption} from "../model/queries/BaseDAO.ts";
+import {AddOptionModal} from "./Modal/AddOptionModal.tsx";
+import {EditOptionModal} from "./Modal/EditOptionModal.tsx";
 
 const Admin = () => {
-    const [tableData, setTableData] = useState<Option[]>();
+    const [tableData, setTableData] = useState<any[]>();
     const [isLoading, setIsLoading] = useState(true);
+    const [addOptionModalIsOpen, setAddOptionModalIsOpen] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedTable, setSelectedTable] = useState<string>(AdminTables.AR_STYLE);
     const [nonce, setNonce] = useState(1)
-    const fetchFunctions: Record<AdminTables, () => Promise<Option[] | undefined>> = {
+    const [editingOption, setEditingOption] = useState<Option | null>(null);
+    const fetchFunctions: Record<AdminTables, () => Promise<any[] | undefined>> = {
         [AdminTables.AR_STYLE]: getStylesFromClient,
         [AdminTables.BAND_STYLE]: getBandStyleFromClient,
         [AdminTables.BAND_WIDTH]: getBandWidthFromClient,
         [AdminTables.CHAIN_TYPE]: getChainTypesFromClient,
         [AdminTables.CHARM_TYPE]: getCharmTypeFromClient,
-        [AdminTables.CTW_RANGE]: getStylesFromClient,
+        [AdminTables.CTW_RANGE]: getStylesFromClient, //TODO: Fix this
         [AdminTables.EARRING_TYPE]: getEarringTypeFromClient,
         [AdminTables.JEWELRY_SETTING]: getSettingsFromClient,
-        [AdminTables.LENGTH]: getStylesFromClient,
-        [AdminTables.MATERIAL_TYPE]: getMetalTypesFromClient,
+        [AdminTables.LENGTH]: getStylesFromClient,//TODO: Fix this
+        [AdminTables.MATERIAL_TYPE]: getMetalTypeFromClient,
         [AdminTables.METAL_FINISH]: getMetalFinishesClient,
         [AdminTables.METAL_TEXTURE]: getMetalTexturesFromClient,
         [AdminTables.PENDANT_TYPE]: getPendantTypeFromClient,
         [AdminTables.PRODUCT_TYPE]: getProductTypesFromClient,
         [AdminTables.SIDE_STONES]: getSideStonesFromClient,
         [AdminTables.ST_CERT_CUT]: getStCertCutFromClient,
-        [AdminTables.ST_CERT_TYPE]: getStylesFromClient,
+        [AdminTables.ST_CERT_TYPE]: getStylesFromClient,//TODO: Fix this
         [AdminTables.ST_CLARITY_GRADE]: getCertClarityFromClient,
         [AdminTables.ST_COLOR]: getStoneColorFromClient,
-        [AdminTables.ST_COLOR_GRADE]: getStylesFromClient,
-        [AdminTables.ST_CUT]: getStoneCutFromClient,
+        [AdminTables.ST_COLOR_GRADE]: getStylesFromClient,//TODO: Fix this
         [AdminTables.ST_ORIENTATION]: getStoneOrientationFromClient,
         [AdminTables.ST_ORIGIN]: getStoneOriginFromClient,
-        [AdminTables.ST_PRICE_RANGE]: getStylesFromClient,
+        [AdminTables.ST_PRICE_RANGE]: getStylesFromClient,//TODO: Fix this
         [AdminTables.ST_PRODUCT_TYPE]: getStoneProductTypesFromClient,
         [AdminTables.ST_SHAPE]: getStoneShapeFromClient,
         [AdminTables.ST_SOURCE]: getStSourceFromClient,
         [AdminTables.ST_TYPE]: getStoneTypesFromClient,
+        [AdminTables.ST_CUT]: getStoneCutFromClient
     };
-    const columns = ["id", "description"];
 
     const fetchData = async (table: string) => {
         setIsLoading(true);
@@ -74,6 +77,18 @@ const Admin = () => {
             const fetchFunction = fetchFunctions[table as AdminTables];
             const data = fetchFunction ? await fetchFunction() : [];
             if (data) {
+                //sort data by id
+                data.sort((a, b) => {
+                    if (a.id && b.id) {
+                        // Numeric comparison if IDs are numbers
+                        if (typeof a.id === "number" && typeof b.id === "number") {
+                            return a.id - b.id;
+                        }
+                        // String comparison if IDs are strings
+                        return String(a.id).localeCompare(String(b.id));
+                    }
+                    return 0;
+                });
                 setTableData(data);
             }
         } catch (error) {
@@ -88,22 +103,44 @@ const Admin = () => {
     }, [selectedTable, nonce]);
 
     if (error) {
-        return <Error message={error ?? ""} />;
+        return <Error message={error} />;
     }
 
     if (isLoading) {
         return <ArLoader />;
     }
 
-    const onEdit = async (item: Option) => {
-        console.log(item)
-        setNonce(nonce + 1)
+    const onEdit = (item: Option) => {
+        console.log('Editing option:', item);  // Log the item being edited
+        setEditingOption(item);
+        console.log('EditingOption state after setting:', editingOption);  // Log the state after setting
+    };
+
+    const handleUpdateOption = async (updatedOption: Option) => {
+        try {
+            console.log(selectedTable.toLowerCase().replace(" ", "_"))
+            await updateOption(selectedTable.toLowerCase().replace(" ", "_"), updatedOption);
+            setNonce(nonce + 1); // Reload data after update
+            setEditingOption(null); // Close the modal
+        } catch (error) {
+            setError(`Failed to update ${updatedOption.description}. Please try again later.`);
+        }
+    };
+
+    const handleAddOption = async (option: Option) => {
+        try {
+            console.log("option to add: ", option)
+            await addOption(selectedTable.toLowerCase().replace(' ', '_'), option)
+            setNonce(nonce + 1);
+        } catch (error) {
+            setError(`Failed to add ${option.description}. Please try again later.`);
+        }
     }
 
     const onDelete = async (item: Option) => {
-        await deleteOption(selectedTable.toLowerCase().replace(" ", "_"), item)
-        setNonce(nonce + 1)
-    }
+        await deleteOption(selectedTable.toLowerCase().replace(" ", "_"), item);
+        setNonce(nonce + 1);
+    };
 
     return (
         <div className="flex h-screen">
@@ -113,7 +150,7 @@ const Admin = () => {
                         <li
                             key={index}
                             className={`cursor-pointer p-2 hover:bg-gray-300 ${
-                                table === selectedTable ? 'bg-gray-300 font-bold' : ''
+                                table === selectedTable ? 'bg-argold text-white font-bold rounded' : ''
                             }`}
                             onClick={() => setSelectedTable(table)}
                         >
@@ -126,14 +163,38 @@ const Admin = () => {
             <div className="w-3/4 p-4">
                 <AdminTable
                     title={selectedTable}
-                    columns={columns}
                     data={tableData}
                     style={'w-full'}
+                    setAddOptionModalOpen={setAddOptionModalIsOpen}
                 >
-                    {(item, columns) => <AdminRow item={item} columns={columns} onEdit={onEdit} onDelete={onDelete}/>}
+                    {(item, columns) => (
+                        <AdminRow
+                            item={item}
+                            columns={columns}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
+                        />
+                    )}
                 </AdminTable>
             </div>
+
+            {editingOption && (
+                <EditOptionModal
+                    option={editingOption}
+                    isOpen={!!editingOption}
+                    onClose={() => setEditingOption(null)}
+                    onUpdateOption={handleUpdateOption}
+                    title={`${editingOption.description}`}
+                />
+            )}
+            <AddOptionModal
+                isOpen={addOptionModalIsOpen}
+                onClose={() => setAddOptionModalIsOpen(false)}
+                title={`Add to ${selectedTable}`}
+                onAddOption={handleAddOption}
+            />
         </div>
     );
 };
+
 export default Admin;
