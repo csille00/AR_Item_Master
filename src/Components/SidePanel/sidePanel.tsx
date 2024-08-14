@@ -1,4 +1,3 @@
-import logoutIcon from "../../assets/logout.svg"
 import {SupabaseClient} from "@supabase/supabase-js";
 import Button from "../Util/Button.tsx";
 import {NavLink, useNavigate} from "react-router-dom";
@@ -14,10 +13,8 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
         console.log("sign out")
         await client.auth.signOut()
     }
-
-    const btnStyle = "bg-argray font-light text-lightgr hover:text-white text-xl mb-4 text-left hover:font-bold";
     const hoverClasses = (isActive: boolean): string =>
-        `text-xl mb-6 flex items-center hover:font-bold text-left ${isActive
+        `text-3xl mb-10 flex items-center hover:font-bold text-left font-light pl-4 ${isActive
             ? 'text-argold font-bold hover:text-argold'
             : 'font-light text-lightgr hover:text-lightgr'}`
 
@@ -25,22 +22,20 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
         <svg xmlns="http://www.w3.org/2000/svg"
              fill="none"
              viewBox="0 0 24 24"
-             strokeWidth={1.5}
+             strokeWidth={1}
              stroke={isActive ? "#A6947A" : "#BABCBE"}
-             className="size-6 mr-4"
+             className="size-10 mr-3"
         >
             <path strokeLinecap="round" strokeLinejoin="round" d={svg}/>
             {svg2 && (
                 <path strokeLinecap="round" strokeLinejoin="round" d={svg2}/>
             )}
-
-
         </svg>
     );
 
 
     return (
-        <div className="flex flex-col items-center bg-argray h-full shadow-md p-2">
+        <div className="flex flex-col bg-argray h-full shadow-md p-2">
             <div className="mb-10 mt-4">
                 <img src={'https://www.alexisrussell.com/cdn/shop/files/ar-logo-white-520_500x.png?v=1620051910'}
                      alt="Logo" className="w-full"/>
@@ -96,12 +91,21 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
                 </NavLink>
             </div>
             <div className="mt-auto fixed bottom-0">
-                <Button
-                    icon={logoutIcon}
+                <NavLink
+                    to={"/"}
+                    className={(hoverClasses(false))}
                     onClick={logOut}
-                    text={"Log Out"}
-                    style={btnStyle}
-                />
+                >
+                    {({isActive}) => (
+                        <>
+                            {renderIcon(
+                                false,
+                                "M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+                            )}
+                            Logout
+                        </>)
+                    }
+                </NavLink>
             </div>
         </div>
     );
