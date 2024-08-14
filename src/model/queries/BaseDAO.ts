@@ -6,14 +6,29 @@ const client = getClient()
 export async function getOptionsFromClient(tableName: string): Promise<Option[] | undefined> {
     const {data, error} = await client
         .from(tableName)
-        .select('id,description');
+        .select('id,description')
+        .order('id', {ascending: true})
     if (error) {
         throw error;
     }
     if (data) {
         const result: Option[] = []
         data.forEach(item => result.push({id: item.id, description: item.description}))
-        return result
+        return data
+    }
+}
+
+export async function addOption(tableName: string, option: Option): Promise<void> {
+    try {
+        console.log("from base dao: ", tableName, " ", option)
+        await client
+            .from(tableName)
+            .insert([
+                {description: option.description}
+            ])
+    } catch (error) {
+        console.log(error);
+        throw error;
     }
 }
 

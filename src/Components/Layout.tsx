@@ -1,9 +1,6 @@
-import React, {ReactNode, useEffect, useState} from 'react';
 import SidePanel from "./SidePanel/sidePanel.tsx";
 import {Outlet} from 'react-router-dom';
-import {SupabaseClient} from "@supabase/supabase-js";
 import useClient from "../hooks/useClient.tsx";
-import Authentication from "./Authentication.tsx";
 
 const Layout = () => {
     const client = useClient()

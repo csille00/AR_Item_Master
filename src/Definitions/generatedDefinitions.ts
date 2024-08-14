@@ -696,22 +696,22 @@ export type Database = {
       }
       material_type: {
         Row: {
+          description: string
           id: number
           mat_code: string
           mat_color: number
-          metal_type: string
         }
         Insert: {
+          description: string
           id?: number
           mat_code: string
           mat_color: number
-          metal_type: string
         }
         Update: {
+          description?: string
           id?: number
           mat_code?: string
           mat_color?: number
-          metal_type?: string
         }
         Relationships: []
       }
@@ -763,18 +763,18 @@ export type Database = {
       product_type: {
         Row: {
           code: string
+          description: string
           prod_code: string
-          product_type: string
         }
         Insert: {
           code: string
+          description: string
           prod_code: string
-          product_type: string
         }
         Update: {
           code?: string
+          description?: string
           prod_code?: string
-          product_type?: string
         }
         Relationships: []
       }

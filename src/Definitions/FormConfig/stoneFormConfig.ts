@@ -1,6 +1,6 @@
 import {FormColumn} from "../FormColumn.ts"
 import {ArStoneMasterColumns, LabeledInputType, StoneProductTypeIds} from "../enum.ts";
-import {getStoneTypesFromClient} from "../../model/queries/StoneTypeDAO.ts";
+import {getStoneTypesOptionsFromClient} from "../../model/queries/StoneTypeDAO.ts";
 import {getCertTypesFromClient} from "../../model/queries/STCertTypeDAO.ts";
 import {getColorGradeFromClient} from "../../model/queries/StColorGradeDAO.ts";
 import {getCertClarityFromClient} from "../../model/queries/StCertClarityDAO.ts";
@@ -16,7 +16,7 @@ import {getStCertCutFromClient} from "../../model/queries/STCertCutDAO.ts";
 const baseRows: FormColumn[] = [
     new FormColumn(ArStoneMasterColumns.MSRP, LabeledInputType.NUMBER, true, null, {high: Number.MAX_SAFE_INTEGER, low: 0}),
     new FormColumn(ArStoneMasterColumns.COST, LabeledInputType.NUMBER, true, null, {high: Number.MAX_SAFE_INTEGER, low: 0}),
-    new FormColumn(ArStoneMasterColumns.ST_TYPE, LabeledInputType.SELECT, true, await getStoneTypesFromClient()),
+    new FormColumn(ArStoneMasterColumns.ST_TYPE, LabeledInputType.SELECT, true, await getStoneTypesOptionsFromClient()),
     new FormColumn(ArStoneMasterColumns.ST_SOURCE, LabeledInputType.SELECT, true, await getStSourceFromClient()),
     new FormColumn(ArStoneMasterColumns.ST_COLOR, LabeledInputType.SELECT, true, await getStoneColorFromClient()),
     new FormColumn(ArStoneMasterColumns.ST_SHAPE, LabeledInputType.SELECT, true, await getStoneShapeFromClient()),
