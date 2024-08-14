@@ -46,13 +46,20 @@ export async function deleteOption(tableName: string, option: Option): Promise<v
 }
 
 export async function updateOption(tableName: string, newOption: Option): Promise<void> {
-    try {
-        await client
-            .from(tableName)
-            .update({description: newOption.description})
-            .eq('id', newOption.id)
-    } catch (error) {
+    const {error} = await client
+        .from(tableName)
+        .update({description: newOption.description})
+        .eq('id', newOption.id)
+    if (error) {
         console.log(error);
         throw error;
     }
 }
+
+/*
+tables that are different from id, description:
+ctw_range
+material type /
+st_cut /
+st_type /
+ */
