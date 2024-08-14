@@ -21,7 +21,6 @@ function App() {
                         <Route path="stone" element={<Stone/>}/>
                         <Route path="addJewelry" element={<AddJewelryForm/>}/>
                         <Route path="addStone" element={<AddStoneForm/>}/>
-                        {/*<Route path="logout" element={<Logout />} />*/}
                         <Route path="admin" element={<Admin/>}/>
                         {/*<Route path="*" element={<NoPage />} />*/}
                     </Route>
