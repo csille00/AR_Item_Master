@@ -6,7 +6,7 @@ import {Option} from "../../Definitions/DropdownOption.ts";
 interface AdminRowProps {
     item: Option,
     columns: string[],
-    onEdit: (item: Option) => Promise<void>
+    onEdit: (item: Option) => void
     onDelete: (item: Option) => Promise<void>
 }
 
@@ -19,8 +19,18 @@ export const AdminRow: React.FC<AdminRowProps> = ({ item, columns, onEdit, onDel
                 </td>
             ))}
             <td className="p-4 flex justify-end gap-2">
-                <img src={edit} alt="Edit" className="w-4 h-4 cursor-pointer" onClick={() => (onEdit(item))}/>
-                <img src={deleteIcon} alt="Delete" className="w-4 h-4 cursor-pointer" onClick={() => (onDelete(item))}/>
+                <img
+                    src={edit}
+                    alt="Edit"
+                    className="w-4 h-4 cursor-pointer"
+                    onClick={() => onEdit(item)}
+                />
+                <img
+                    src={deleteIcon}
+                    alt="Delete"
+                    className="w-4 h-4 cursor-pointer"
+                    onClick={() => onDelete(item)}
+                />
             </td>
         </tr>
     );
