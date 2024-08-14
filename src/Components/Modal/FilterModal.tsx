@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import Button from "./Button.tsx";
+import Button from "../Util/Button.tsx";
 import {FilterOption} from "../../Definitions/FilterOption.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArLoader} from "./Loading.tsx";
-import {Error} from "./Error.tsx";
+import {ArLoader} from "../Util/Loading.tsx";
+import {Error} from "../Util/Error.tsx";
+import {Modal} from "../Util/Modal.tsx";
 
-interface ModalProps {
+interface FilterModalProps {
     isOpen: boolean;
     onClose: () => void;
     type: string
@@ -14,7 +15,7 @@ interface ModalProps {
     onApplyFilters: () => void;
 }
 
-export const FilterModal: React.FC<ModalProps> = ({
+export const FilterModal: React.FC<FilterModalProps> = ({
                                                       isOpen,
                                                       onClose,
                                                       type,
@@ -68,41 +69,35 @@ export const FilterModal: React.FC<ModalProps> = ({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-argray bg-opacity-50">
-            <div className="bg-white p-4 rounded-md w-full max-w-md">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Filter</h2>
-                    <button onClick={onClose} className="text-argray bg-white text-xl">
-                        &times;
-                    </button>
-                </div>
-                <div className="mb-4">
-                    <div className="flex justify-start items-center">
-                        <label className="py-2 flex justify-between items-center">
-                            <div className="inline mx-4">
-                                {type}
-                            </div>
-                        </label>
-                        <select
-                            className="p-2 rounded-lg border"
-                            name="selectType"
-                            onChange={(e) => handleChange(type, e)}
-                        >
-                            <option key={'disabled'} disabled={true} value='' selected={true}>--</option>
-                            <option key={'ALL'} value='ALL'>All</option>
-                            {productTypeOptions.map((option, index) => (
-                                <option key={index} value={option.id}>
-                                    {option.description}
-                                </option>
-                            ))}
-                        </select>
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            title="Filter"
+            width="max-w-md"
+            footer={
+                <Button text="Apply" onClick={handleApply} style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white" />
+            }
+        >
+            <div className="flex items-center justify-between mr-4">
+                <label className="py-2 flex justify-between items-center">
+                    <div className="inline mx-4">
+                        {type}
                     </div>
-                </div>
-                <div className="flex justify-between m-4 pt-2">
-                    <Button text="Apply" onClick={handleApply}
-                            style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white"/>
-                </div>
+                </label>
+                <select
+                    className="p-2 rounded-lg border"
+                    name="selectType"
+                    onChange={(e) => handleChange(type, e)}
+                >
+                    <option key={'disabled'} disabled={true} value='' selected={true}>--</option>
+                    <option key={'ALL'} value='ALL'>All</option>
+                    {productTypeOptions.map((option, index) => (
+                        <option key={index} value={option.id}>
+                            {option.description}
+                        </option>
+                    ))}
+                </select>
             </div>
-        </div>
+        </Modal>
     );
 };
