@@ -13,7 +13,7 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
         await client.auth.signOut()
     }
     const hoverClasses = (isActive: boolean): string =>
-        `text-3xl mb-10 flex items-center hover:font-bold text-left font-light pl-4 ${isActive
+        `text-2xl mb-10 flex items-center hover:font-bold text-left font-light pl-4 ${isActive
             ? 'text-argold font-bold hover:text-argold'
             : 'font-light text-lightgr hover:text-lightgr'}`
 
@@ -23,7 +23,7 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
              viewBox="0 0 24 24"
              strokeWidth={1}
              stroke={isActive ? "#A6947A" : "#BABCBE"}
-             className="size-10 mr-3"
+             className="size-8 mr-3"
         >
             <path strokeLinecap="round" strokeLinejoin="round" d={svg}/>
             {svg2 && (

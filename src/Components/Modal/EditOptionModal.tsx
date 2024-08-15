@@ -11,7 +11,7 @@ import {Bounce, toast} from "react-toastify";
 export interface ChangeOptionModalProps {
     isOpen: boolean;
     onClose: () => void;
-    title: string;
+    label: string;
     option: Option;
     onUpdateOption: (option: Option) => Promise<void>;
 }
@@ -19,7 +19,7 @@ export interface ChangeOptionModalProps {
 export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
                                                                         isOpen,
                                                                         onClose,
-                                                                        title,
+                                                                        label,
                                                                         option,
                                                                         onUpdateOption,
                                                                     }) => {
@@ -77,14 +77,14 @@ export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
             }
         >
             <div className="flex items-center justify-between m-4">
-                <label className="">
-                    <div className="">
-                        {title}
-                    </div>
-                </label>
+                <label>{label}</label>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                     stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+                </svg>
                 <LabeledInput
                     type={LabeledInputType.STRING}
-                    onChange={(e) => setNewOption({ ...newOption, description: e.target.value })}
+                    onChange={(e) => setNewOption({...newOption, description: e.target.value})}
                     value={`${newOption.description}`}
                     placeholder={"New Description"}
                     required={false}
