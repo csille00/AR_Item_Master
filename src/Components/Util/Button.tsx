@@ -1,15 +1,15 @@
 import React from "react";
 
 interface ButtonProps {
-    icon?: string | null;
-    text: string;
+    icon?: SVGElement | null;
+    text?: string | null;
     style?: string | null;
     onClick: (event?: React.FormEvent | undefined) => void;
 }
 
-const Button: React.FC<ButtonProps> = ({icon = null, text, onClick, style = ""}) => {
+const Button: React.FC<ButtonProps> = ({icon = null, text = null, onClick, style = ""}) => {
 
-    const styles = `btn flex items-center py-1 px-2 hover:outline-none ${style}`;
+    const styles = `btn flex items-center py-1 px-4 hover:outline-none ${style}`;
 
     return (
         <a
@@ -23,13 +23,15 @@ const Button: React.FC<ButtonProps> = ({icon = null, text, onClick, style = ""})
             }}
         >
             {icon && (
-                <span className="mr-2 h-6 w-6">
+                <span className="h-6 w-6">
                     <img src={icon}/>
                 </span>
             )}
-            <span className="p-2">
+            {text && (
+                <span className="p-2">
                 {text}
             </span>
+            )}
         </a>
     );
 };
