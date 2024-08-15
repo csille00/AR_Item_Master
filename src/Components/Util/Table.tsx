@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
@@ -19,7 +19,17 @@ export interface TableProps {
 }
 
 
-const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalOpen, fetchDataAsCSV, children, filename}: TableProps) => {
+const Table = ({
+                   title,
+                   columns,
+                   data,
+                   style,
+                   setColumnModalOpen,
+                   setFilterModalOpen,
+                   fetchDataAsCSV,
+                   children,
+                   filename
+               }: TableProps) => {
     const navigate = useNavigate();
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -27,7 +37,7 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
     const handleSort = (column: string) => {
         //for now, only support the sorting of the data column.
         // It is set up to support the other ones, I just dont know how to properly sort them right now (8/05/24)
-        if(!(column == ArJewelryMasterColumns.DATE)) return
+        if (!(column == ArJewelryMasterColumns.DATE)) return
         if (sortColumn === column) {
             // Toggle sort direction
             setSortDirection(prevDirection => prevDirection === 'asc' ? 'desc' : 'asc');
@@ -56,9 +66,9 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
     }, [data, sortColumn, sortDirection])
 
     const download = async () => {
-        if(!fetchDataAsCSV) return
+        if (!fetchDataAsCSV) return
         const data = await fetchDataAsCSV()
-        const blob = new Blob([data], { type: 'text/csv' });
+        const blob = new Blob([data], {type: 'text/csv'});
         const url = window.URL.createObjectURL(blob);
         // Create a link element
         const a = document.createElement('a');
@@ -113,7 +123,7 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                             text="Download"
                             onClick={download}
                             style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
-                       />
+                        />
                     </div>
                 </div>
                 {/*Added inline styling because tailwind height has limitations*/}
@@ -133,6 +143,11 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                         {sortedData.map((item: any, index: React.Key | null | undefined) => (
                             <tr key={index}>
                                 {children ? children(item, columns) : null}
+                                <td>
+                                    <NavLink to={`/productDetails/1234`} className="">
+                                        View More
+                                    </NavLink>
+                                </td>
                             </tr>
                         ))}
                         </tbody>

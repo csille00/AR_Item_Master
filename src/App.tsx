@@ -10,6 +10,7 @@ import Admin from "./Components/Admin.tsx";
 import AddJewelryForm from "./Components/Add/AddJewelryForm.tsx";
 import AddStoneForm from "./Components/Add/AddStoneForm.tsx";
 import AuthProtectedRoute from "./Components/AuthProtectedRoute.tsx";
+import ProductDetails from "./Components/ProductDetails.tsx";
 
 function App() {
     return (
@@ -21,8 +22,8 @@ function App() {
                         <Route path="stone" element={<Stone/>}/>
                         <Route path="addJewelry" element={<AddJewelryForm/>}/>
                         <Route path="addStone" element={<AddStoneForm/>}/>
-                        {/*<Route path="logout" element={<Logout />} />*/}
                         <Route path="admin" element={<Admin/>}/>
+                        <Route path="productDetails/:sku" element={<ProductDetails/>}/>
                         {/*<Route path="*" element={<NoPage />} />*/}
                     </Route>
                 </Route>
