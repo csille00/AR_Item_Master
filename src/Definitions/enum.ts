@@ -224,7 +224,7 @@ export enum LabeledInputType {
     SELECT = "select"  // Add a type for select
 }
 
-//must be able to be converted into actual database table name with a .toLower().replace(" ", "_")
+//must be able to be converted into actual database table name with a .toLower().replace(/ /g, "_")
 export enum AdminTables {
     AR_STYLE = "Ar Style",
     BAND_STYLE = "Band Style",

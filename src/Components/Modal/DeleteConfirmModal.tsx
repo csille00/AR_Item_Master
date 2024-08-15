@@ -8,28 +8,30 @@ import LabeledInput from "../Util/LabeledInput.tsx";
 import {LabeledInputType} from "../../Definitions/enum.ts";
 import {Bounce, toast} from "react-toastify";
 
-export interface AddOptionModalProps {
+export interface DeleteConfirmModalProps {
     isOpen: boolean;
     onClose: () => void;
     label: string;
-    onAddOption: (option: Option) => Promise<void>;
+    option: Option;
+    onDeleteOption: (option: Option) => Promise<void>;
 }
 
-export const AddOptionModal: React.FC<AddOptionModalProps> = ({
-                                                                        isOpen,
-                                                                        onClose,
-                                                                        label,
-                                                                        onAddOption,
-                                                                    }) => {
-    const [newOption, setNewOption] = useState<Option | null>({description: ""});  // Initialize with the passed option
+export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
+                                                                          isOpen,
+                                                                          onClose,
+                                                                          label,
+                                                                          option,
+                                                                          onDeleteOption,
+                                                                      }) => {
+    const [newOption, setNewOption] = useState<Option>(option);
     const [isLoading, setIsLoading] = useState(false);  // Set loading to false initially
     const [error, setError] = useState<string | null>(null);
 
-    const handleApply = async () => {
+    const handleDelete = async () => {
         if (newOption) {
             try {
                 setIsLoading(true);
-                await onAddOption(newOption);
+                await onDeleteOption(newOption);
                 toast.success('Success!', {
                     position: "top-right",
                     autoClose: 3000,
@@ -51,11 +53,12 @@ export const AddOptionModal: React.FC<AddOptionModalProps> = ({
         }
     };
 
-    if(isLoading){
+
+    if (isLoading) {
         return <ArLoader/>
     }
 
-    if(error){
+    if (error) {
         return <Error message={error}/>
     }
 
@@ -67,26 +70,17 @@ export const AddOptionModal: React.FC<AddOptionModalProps> = ({
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title={"Add"}
+            title={"Confirm Delete"}
             width="max-w-sm"
             footer={
-                <Button text="Add" onClick={handleApply}
-                        style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white" />
-            }
-        >
+                <Button text="Delete" onClick={handleDelete}
+                        style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white"/>
+
+            }>
             <div className="flex items-center justify-between m-4">
-                <label>{label}</label>
-                <LabeledInput
-                    type={LabeledInputType.STRING}
-                    onChange={(e) => setNewOption({ ...newOption, description: e.target.value })}
-                    value={`${newOption?.description}`}
-                    placeholder={"New Description"}
-                    required={false}
-                    style=""
-                    boxStyle="p-2 rounded-lg border w-44"
-                />
+                <label>Are you sure you want to delete <span className="font-bold">{label}</span>?</label>
             </div>
         </Modal>
-    );
+    )
 };
 
