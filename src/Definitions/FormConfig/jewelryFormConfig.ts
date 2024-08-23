@@ -16,7 +16,7 @@ import {getStylesFromClient} from "../../model/queries/ArStyleDAO.ts";
 import {getStSourceFromClient} from "../../model/queries/StSourceDAO.ts";
 import {getStoneColorFromClient} from "../../model/queries/StoneColorDAO.ts";
 import {getStoneShapeFromClient} from "../../model/queries/StoneShapeDAO.ts";
-import {getStoneCutFromClient} from "../../model/queries/StoneCutDAO.ts";
+import {getStoneCutOptionFromClient} from "../../model/queries/StoneCutDAO.ts";
 import {getStoneOrientationFromClient} from "../../model/queries/StoneOrientationDAO.ts";
 import {getStoneOriginFromClient} from "../../model/queries/StoneOriginDAO.ts";
 import {getStCertCutFromClient} from "../../model/queries/STCertCutDAO.ts";
@@ -40,7 +40,7 @@ const stoneTypeRows: FormColumn[] = [
     new FormColumn(ArJewelryMasterColumns.ST_SOURCE, LabeledInputType.SELECT, true, await getStSourceFromClient()),
     new FormColumn(ArJewelryMasterColumns.ST_COLOR, LabeledInputType.SELECT, true, await getStoneColorFromClient()),
     new FormColumn(ArJewelryMasterColumns.ST_SHAPE, LabeledInputType.SELECT, true, await getStoneShapeFromClient()),
-    new FormColumn(ArJewelryMasterColumns.ST_CUT, LabeledInputType.SELECT, true, await getStoneCutFromClient()),
+    new FormColumn(ArJewelryMasterColumns.ST_CUT, LabeledInputType.SELECT, true, await getStoneCutOptionFromClient()),
     new FormColumn(ArJewelryMasterColumns.ST_HEIGHT, LabeledInputType.NUMBER, true, null, {high: 49.99, low: 0.01}),
     new FormColumn(ArJewelryMasterColumns.ST_WIDTH, LabeledInputType.NUMBER, true, null, {high: 49.99, low: 0.01}),
     new FormColumn(ArJewelryMasterColumns.ST_ORIENTATION, LabeledInputType.SELECT, true, await getStoneOrientationFromClient()),
@@ -105,7 +105,7 @@ const getEngagementRingRows = async (): Promise<FormColumn[]> => {
             new FormColumn(ArJewelryMasterColumns.ST_SOURCE, LabeledInputType.SELECT, false, await getStSourceFromClient()),
             new FormColumn(ArJewelryMasterColumns.ST_COLOR, LabeledInputType.SELECT, false, await getStoneColorFromClient()),
             new FormColumn(ArJewelryMasterColumns.ST_SHAPE, LabeledInputType.SELECT, false, await getStoneShapeFromClient()),
-            new FormColumn(ArJewelryMasterColumns.ST_CUT, LabeledInputType.SELECT, false, await getStoneCutFromClient()),
+            new FormColumn(ArJewelryMasterColumns.ST_CUT, LabeledInputType.SELECT, false, await getStoneCutOptionFromClient()),
             new FormColumn(ArJewelryMasterColumns.ST_HEIGHT, LabeledInputType.NUMBER, true, null, {high: 49.99, low: 0.01}),
             new FormColumn(ArJewelryMasterColumns.ST_WIDTH, LabeledInputType.NUMBER, true, null, {high: 49.99, low: 0.01}),
             new FormColumn(ArJewelryMasterColumns.ST_ORIENTATION, LabeledInputType.SELECT, false, await getStoneOrientationFromClient()),
@@ -136,13 +136,6 @@ const getEngagementRingRows = async (): Promise<FormColumn[]> => {
             new FormColumn(ArJewelryMasterColumns.EARRING_TYPE, LabeledInputType.SELECT, false, await getEarringTypeFromClient()),
             new FormColumn(ArJewelryMasterColumns.CHARM_TYPE, LabeledInputType.SELECT, false, await getCharmTypeFromClient()),
             new FormColumn(ArJewelryMasterColumns.REPAIR_UPGRADE, LabeledInputType.SELECT, false, yesNoOption),
-            new FormColumn(ArJewelryMasterColumns.CONFIGURATOR, LabeledInputType.SELECT, false, yesNoOption),
-            new FormColumn(ArJewelryMasterColumns.MULTI_TEXTURE, LabeledInputType.SELECT, false, yesNoOption),
-            new FormColumn(ArJewelryMasterColumns.MULTI_FINISH, LabeledInputType.SELECT, false, yesNoOption),
-            new FormColumn(ArJewelryMasterColumns.BUNDLE, LabeledInputType.SELECT, false, yesNoOption),
-            new FormColumn(ArJewelryMasterColumns.ID, LabeledInputType.NUMBER, false),
-            new FormColumn(ArJewelryMasterColumns.VARIANT_ID, LabeledInputType.NUMBER, false),
-            new FormColumn(ArJewelryMasterColumns.WEIGHT, LabeledInputType.NUMBER, false, null, {high: Number.MAX_SAFE_INTEGER, low: 0}),
         ];
     } catch (error) {
         throw new Error("Error Fetching objects from database. Please try again later")
