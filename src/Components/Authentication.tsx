@@ -1,7 +1,7 @@
 import '../index.css'
 import React, { useState, useEffect, SetStateAction} from 'react'
 import {Auth} from '@supabase/auth-ui-react'
-import {ThemeSupa} from '@supabase/auth-ui-shared'
+import {supabase, ThemeSupa} from '@supabase/auth-ui-shared'
 import {Session} from "@supabase/supabase-js";
 import useClient from "../hooks/useClient.tsx";
 import logoSrc from "../assets/Logo.png"
@@ -15,15 +15,14 @@ const Authentication: React.FC = () => {
             setSession(session)
         })
 
-        const {
-            data: {subscription},
-        } = client.auth.onAuthStateChange((_event: any, session: SetStateAction<Session | null>) => {
+        const { data: {subscription}} = client.auth.onAuthStateChange((_event: string, session: SetStateAction<Session | null>) => {
             setSession(session)
+            if(_event == 'SIGNED_IN') {
+                window.location.reload()
+            }
         })
 
-        return () => {
-            subscription?.unsubscribe()
-        }
+        return () => subscription?.unsubscribe()
     }, [])
 
     if (!session) {
@@ -33,7 +32,7 @@ const Authentication: React.FC = () => {
                     <div className="flex align-center justify-center w-1/2 h-1/5 mx-auto">
                         <img src={logoSrc}/>
                     </div>
-                    <h3 className="font-thin">
+                    <h3 className="font-light">
                         Item Master Login
                     </h3>
                     <div className="flex align-center justify-center w-full">
@@ -44,6 +43,7 @@ const Authentication: React.FC = () => {
                                     sign_in: {
                                         email_label: '',
                                         password_label: '',
+                                        loading_button_label: 'Signing in...'
                                     },
                                 },
                             }}
@@ -60,6 +60,7 @@ const Authentication: React.FC = () => {
                                     },
                                 },
                             }}
+
                         />
                     </div>
                 </div>
