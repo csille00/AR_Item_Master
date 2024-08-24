@@ -12,6 +12,7 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
     const logOut = async () => {
         console.log("sign out")
         await client.auth.signOut()
+        window.location.reload()
     }
     const hoverClasses = (isActive: boolean): string =>
         `text-2xl mb-10 flex items-center hover:font-bold text-left font-light pl-4 ${isActive
@@ -92,19 +93,15 @@ const SidePanel: React.FC<SidePanelProps> = ({client}) => {
             </div>
             <div className="mt-auto fixed bottom-0">
                 <NavLink
-                    to={"/"}
+                    to={window.location.href}
                     className={(hoverClasses(false))}
                     onClick={logOut}
                 >
-                    {({isActive}) => (
-                        <>
-                            {renderIcon(
-                                false,
-                                "M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
-                            )}
-                            Logout
-                        </>)
-                    }
+                    {renderIcon(
+                        false,
+                        "M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+                    )}
+                    Logout
                 </NavLink>
             </div>
         </div>
