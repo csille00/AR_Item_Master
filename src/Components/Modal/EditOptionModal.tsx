@@ -17,12 +17,12 @@ export interface ChangeOptionModalProps {
 }
 
 export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
-                                                                        isOpen,
-                                                                        onClose,
-                                                                        label,
-                                                                        option,
-                                                                        onUpdateOption,
-                                                                    }) => {
+                                                                      isOpen,
+                                                                      onClose,
+                                                                      label,
+                                                                      option,
+                                                                      onUpdateOption,
+                                                                  }) => {
     const [newOption, setNewOption] = useState<Option>(option);  // Initialize with the passed option
     const [isLoading, setIsLoading] = useState(false);  // Set loading to false initially
     const [error, setError] = useState<string | null>(null);
@@ -53,11 +53,11 @@ export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
         }
     };
 
-    if(isLoading){
+    if (isLoading) {
         return <ArLoader/>
     }
 
-    if(error){
+    if (error) {
         return <Error message={error}/>
     }
 
@@ -71,9 +71,14 @@ export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
             onClose={onClose}
             title={"Edit"}
             width="max-w-sm"
+            noX={true}
             footer={
-                <Button text="Apply" onClick={handleApply}
-                        style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white" />
+                <>
+                    <Button text="Apply" onClick={handleApply}
+                            style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white"/>
+                    <Button text="Cancel" onClick={onClose}
+                            style="bg-superlightgr text-sm text-argray py-1 rounded-md hover:bg-lightgr hover:text-white"/>
+                </>
             }
         >
             <div className="flex items-center justify-between m-4">

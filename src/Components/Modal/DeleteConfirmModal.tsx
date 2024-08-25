@@ -7,6 +7,7 @@ import {Modal} from "../Util/Modal.tsx";
 import LabeledInput from "../Util/LabeledInput.tsx";
 import {LabeledInputType} from "../../Definitions/enum.ts";
 import {Bounce, toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 export interface DeleteConfirmModalProps {
     isOpen: boolean;
@@ -61,10 +62,15 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
             onClose={onClose}
             title={"Confirm Delete"}
             width="max-w-sm"
+            noX={true}
             footer={
-                <Button text="Delete" onClick={handleDelete}
-                        style="bg-red text-sm text-white py-1 rounded-md hover:bg-darkred hover:text-white"/>
+                <>
+                    <Button text="Delete" onClick={handleDelete}
+                            style="bg-red text-sm text-white py-1 rounded-md hover:bg-darkred hover:text-white"/>
+                    <Button text="Cancel" onClick={onClose}
+                            style="bg-superlightgr text-sm text-argray py-1 rounded-md hover:bg-lightgr hover:text-white"/>
 
+                </>
             }>
             <div className="flex items-center justify-between m-4">
                 <label>Are you sure you want to delete <span className="font-bold">{label}</span>?</label>
