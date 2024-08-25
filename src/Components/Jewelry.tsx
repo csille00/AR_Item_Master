@@ -79,6 +79,7 @@ const Jewelry: React.FC = () => {
             <ChangeViewModal
                 isOpen={isColumnModalOpen}
                 onClose={() => setColumnModalOpen(false)}
+                label="Column Filter"
                 columns={columns}
                 initialColumns={initialColumnsState}
                 allColumns={Object.values(ArJewelryMasterColumns)}
@@ -87,6 +88,7 @@ const Jewelry: React.FC = () => {
             <FilterModal
                 isOpen={isFilterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
+                label="Filter"
                 fetchProductTypes={getProductTypesFromClient}
                 type={ArJewelryMasterColumns.TYPE}
                 setFilterOptions={setFilterOptions}

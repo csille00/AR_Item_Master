@@ -1,4 +1,6 @@
 import React from 'react';
+import {ArLoader} from "./Loading.tsx";
+import {Error} from "./Error.tsx";
 
 interface ModalProps {
     isOpen: boolean;
@@ -8,10 +10,30 @@ interface ModalProps {
     footer?: React.ReactNode;
     width?: string; // Optional to control width of the modal
     noX?: boolean;
+    isLoading?: boolean;
+    error?: string | null;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, footer, width = 'max-w-md', noX = false }) => {
+export const Modal: React.FC<ModalProps> = ({
+                                                isOpen,
+                                                onClose,
+                                                title,
+                                                children,
+                                                footer,
+                                                width = 'max-w-md',
+                                                noX = false,
+                                                isLoading,
+                                                error
+                                            }) => {
     if (!isOpen) return null;
+
+    if (isLoading) {
+        return <ArLoader/>
+    }
+
+    if (error) {
+        return <Error message={error}/>
+    }
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-argray bg-opacity-50">

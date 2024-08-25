@@ -1,17 +1,14 @@
 import React, {useState} from 'react';
 import Button from "../Util/Button.tsx";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArLoader} from "../Util/Loading.tsx";
 import {Error} from "../Util/Error.tsx";
 import {Modal} from "../Util/Modal.tsx";
 import LabeledInput from "../Util/LabeledInput.tsx";
 import {LabeledInputType} from "../../Definitions/enum.ts";
 import {Bounce, toast} from "react-toastify";
+import {GenericModalProps} from "../../Definitions/props.ts";
 
-export interface AddOptionModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    label: string;
+export interface AddOptionModalProps extends GenericModalProps {
     onAddOption: (option: Option) => Promise<void>;
 }
 
@@ -51,18 +48,6 @@ export const AddOptionModal: React.FC<AddOptionModalProps> = ({
         }
     };
 
-    if (isLoading) {
-        return <ArLoader/>
-    }
-
-    if (error) {
-        return <Error message={error}/>
-    }
-
-    if (!isOpen) {
-        return null;
-    }
-
     return (
         <Modal
             isOpen={isOpen}
@@ -70,6 +55,8 @@ export const AddOptionModal: React.FC<AddOptionModalProps> = ({
             title={"Add"}
             width="max-w-sm"
             noX={true}
+            isLoading={isLoading}
+            error={error}
             footer={
                 <>
                     <Button text="Add" onClick={handleApply}
