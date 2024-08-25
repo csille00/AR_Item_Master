@@ -1,18 +1,11 @@
 import React, {useState} from 'react';
 import Button from "../Util/Button.tsx";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArLoader} from "../Util/Loading.tsx";
 import {Error} from "../Util/Error.tsx";
 import {Modal} from "../Util/Modal.tsx";
-import LabeledInput from "../Util/LabeledInput.tsx";
-import {LabeledInputType} from "../../Definitions/enum.ts";
-import {Bounce, toast} from "react-toastify";
-import {useNavigate} from "react-router-dom";
+import {GenericModalProps} from "../../Definitions/props.ts";
 
-export interface DeleteConfirmModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    label: string;
+export interface DeleteConfirmModalProps extends GenericModalProps {
     option: Option;
     onDeleteOption: (option: Option) => Promise<void>;
 }
@@ -43,19 +36,6 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
         }
     };
 
-
-    if (isLoading) {
-        return <ArLoader/>
-    }
-
-    if (error) {
-        return <Error message={error}/>
-    }
-
-    if (!isOpen) {
-        return null;
-    }
-
     return (
         <Modal
             isOpen={isOpen}
@@ -63,6 +43,8 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
             title={"Confirm Delete"}
             width="max-w-sm"
             noX={true}
+            isLoading={isLoading}
+            error={error}
             footer={
                 <>
                     <Button text="Delete" onClick={handleDelete}

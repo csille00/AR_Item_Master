@@ -1,7 +1,7 @@
 import '../index.css'
-import React, { useState, useEffect, SetStateAction} from 'react'
+import React, {SetStateAction, useEffect, useState} from 'react'
 import {Auth} from '@supabase/auth-ui-react'
-import {supabase, ThemeSupa} from '@supabase/auth-ui-shared'
+import {ThemeSupa} from '@supabase/auth-ui-shared'
 import {Session} from "@supabase/supabase-js";
 import useClient from "../hooks/useClient.tsx";
 import logoSrc from "../assets/Logo.png"
@@ -15,9 +15,10 @@ const Authentication: React.FC = () => {
             setSession(session)
         })
 
-        const { data: {subscription}} = client.auth.onAuthStateChange((_event: string, session: SetStateAction<Session | null>) => {
+        const {data: {subscription}} = client.auth.onAuthStateChange((_event: string, session: SetStateAction<Session | null>) => {
             setSession(session)
-            if(_event == 'SIGNED_IN') {
+            // need page reload when user is logging in
+            if (_event == 'SIGNED_IN') {
                 window.location.reload()
             }
         })
@@ -60,7 +61,6 @@ const Authentication: React.FC = () => {
                                     },
                                 },
                             }}
-
                         />
                     </div>
                 </div>

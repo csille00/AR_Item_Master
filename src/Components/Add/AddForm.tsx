@@ -141,14 +141,6 @@ export const AddForm: React.FC<SharedFormProps> = ({
                 >
                     Stone
                 </NavLink>
-                {/*<button onClick={() => navigate('/addJewelry')}*/}
-                {/*        className="bg-argray text-white hover:text-white rounded w-32 text-center mb-2 m-4">*/}
-                {/*    Jewelry*/}
-                {/*</button>*/}
-                {/*<button onClick={() => navigate('/addStone')}*/}
-                {/*        className="bg-superlightgr text-argray hover:text-argray border border-argray rounded w-32 text-center">*/}
-                {/*    Stone*/}
-                {/*</button>*/}
             </div>
             <div className="bg-white rounded-lg shadow-md p-4 mx-10 my-4">
                 <div className="flex justify-center px-10">

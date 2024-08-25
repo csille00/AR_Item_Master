@@ -2,13 +2,11 @@ import React, {useEffect, useState} from 'react';
 import Button from "../Util/Button.tsx";
 import {FilterOption} from "../../Definitions/FilterOption.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArLoader} from "../Util/Loading.tsx";
 import {Error} from "../Util/Error.tsx";
 import {Modal} from "../Util/Modal.tsx";
+import {GenericModalProps} from "../../Definitions/props.ts";
 
-interface FilterModalProps {
-    isOpen: boolean;
-    onClose: () => void;
+interface FilterModalProps extends GenericModalProps {
     type: string
     setFilterOptions: (options: FilterOption[]) => void;
     fetchProductTypes: () => Promise<Option[] | undefined>;
@@ -16,13 +14,14 @@ interface FilterModalProps {
 }
 
 export const FilterModal: React.FC<FilterModalProps> = ({
-                                                      isOpen,
-                                                      onClose,
-                                                      type,
-                                                      setFilterOptions,
-                                                      fetchProductTypes,
-                                                      onApplyFilters,
-                                                  }) => {
+                                                            isOpen,
+                                                            onClose,
+                                                            label,
+                                                            type,
+                                                            setFilterOptions,
+                                                            fetchProductTypes,
+                                                            onApplyFilters,
+                                                        }) => {
     const [productTypeOptions, setProductTypeOptions] = useState<Option[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -58,24 +57,17 @@ export const FilterModal: React.FC<FilterModalProps> = ({
         }
     };
 
-    if (isLoading) {
-        return <ArLoader/>;
-    }
-
-    if (error) {
-        return <Error message={error}/>
-    }
-
-    if (!isOpen) return null;
-
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title="Filter"
+            title={label}
             width="max-w-md"
+            isLoading={isLoading}
+            error={error}
             footer={
-                <Button text="Apply" onClick={handleApply} style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white" />
+                <Button text="Apply" onClick={handleApply}
+                        style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white"/>
             }
         >
             <div className="flex items-center justify-between mr-4">
