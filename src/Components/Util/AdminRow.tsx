@@ -1,7 +1,8 @@
 import React from "react";
-import edit from "../../assets/edit.svg";
+import editIcon from "../../assets/edit.svg";
 import deleteIcon from "../../assets/delete.svg";
 import {Option} from "../../Definitions/DropdownOption.ts";
+import Button from "./Button.tsx";
 
 interface AdminRowProps {
     item: Option,
@@ -19,16 +20,12 @@ export const AdminRow: React.FC<AdminRowProps> = ({ item, columns, onEdit, onDel
                 </td>
             ))}
             <td className="p-4 flex justify-end gap-2">
-                <img
-                    src={edit}
-                    alt="Edit"
-                    className="w-4 h-4 cursor-pointer"
+                <Button
+                    icon={editIcon as SVGElement}
                     onClick={() => onEdit(item)}
                 />
-                <img
-                    src={deleteIcon}
-                    alt="Delete"
-                    className="w-4 h-4 cursor-pointer"
+                <Button
+                    icon={deleteIcon as SVGElement}
                     onClick={() => onDelete(item)}
                 />
             </td>

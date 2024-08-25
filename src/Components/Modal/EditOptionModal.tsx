@@ -1,28 +1,25 @@
 import React, {useState} from 'react';
 import Button from "../Util/Button.tsx";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArLoader} from "../Util/Loading.tsx";
 import {Error} from "../Util/Error.tsx";
 import {Modal} from "../Util/Modal.tsx";
 import LabeledInput from "../Util/LabeledInput.tsx";
 import {LabeledInputType} from "../../Definitions/enum.ts";
 import {Bounce, toast} from "react-toastify";
+import {GenericModalProps} from "../../Definitions/props.ts";
 
-export interface ChangeOptionModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    title: string;
+export interface ChangeOptionModalProps extends GenericModalProps {
     option: Option;
     onUpdateOption: (option: Option) => Promise<void>;
 }
 
 export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
-                                                                        isOpen,
-                                                                        onClose,
-                                                                        title,
-                                                                        option,
-                                                                        onUpdateOption,
-                                                                    }) => {
+                                                                      isOpen,
+                                                                      onClose,
+                                                                      label,
+                                                                      option,
+                                                                      onUpdateOption,
+                                                                  }) => {
     const [newOption, setNewOption] = useState<Option>(option);  // Initialize with the passed option
     const [isLoading, setIsLoading] = useState(false);  // Set loading to false initially
     const [error, setError] = useState<string | null>(null);
@@ -53,38 +50,33 @@ export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
         }
     };
 
-    if(isLoading){
-        return <ArLoader/>
-    }
-
-    if(error){
-        return <Error message={error}/>
-    }
-
-    if (!isOpen) {
-        return null;
-    }
-
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
             title={"Edit"}
             width="max-w-sm"
+            noX={true}
+            isLoading={isLoading}
+            error={error}
             footer={
-                <Button text="Apply" onClick={handleApply}
-                        style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white" />
+                <>
+                    <Button text="Apply" onClick={handleApply}
+                            style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white"/>
+                    <Button text="Cancel" onClick={onClose}
+                            style="bg-superlightgr text-sm text-argray py-1 rounded-md hover:bg-lightgr hover:text-white"/>
+                </>
             }
         >
             <div className="flex items-center justify-between m-4">
-                <label className="">
-                    <div className="">
-                        {title}
-                    </div>
-                </label>
+                <label>{label}</label>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                     stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+                </svg>
                 <LabeledInput
                     type={LabeledInputType.STRING}
-                    onChange={(e) => setNewOption({ ...newOption, description: e.target.value })}
+                    onChange={(e) => setNewOption({...newOption, description: e.target.value})}
                     value={`${newOption.description}`}
                     placeholder={"New Description"}
                     required={false}
