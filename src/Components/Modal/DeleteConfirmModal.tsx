@@ -32,17 +32,6 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
             try {
                 setIsLoading(true);
                 await onDeleteOption(newOption);
-                toast.success('Success!', {
-                    position: "top-right",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: false,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                    transition: Bounce,
-                });
             } catch (error) {
                 console.error((error as Error).message);
                 setError(`Failed to update ${newOption.description}. Please try again later.`);
@@ -74,7 +63,7 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
             width="max-w-sm"
             footer={
                 <Button text="Delete" onClick={handleDelete}
-                        style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white"/>
+                        style="bg-red text-sm text-white py-1 rounded-md hover:bg-darkred hover:text-white"/>
 
             }>
             <div className="flex items-center justify-between m-4">

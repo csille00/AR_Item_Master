@@ -11,7 +11,7 @@ export interface AdminTableProps {
 }
 
 export const AdminTable = ({title, data, setAddOptionModalOpen, style, children}: AdminTableProps) => {
-    const columns = data && data.length > 0 ? Object.keys(data[0]) : [];
+    const columns = data && data.length > 0 ? Object.keys(data[0]).map(key => key.toUpperCase()) : [];
 
     return (
         <>
@@ -38,7 +38,7 @@ export const AdminTable = ({title, data, setAddOptionModalOpen, style, children}
                         </thead>
                         <tbody>
                         {data.map((item: any) => (
-                            children(item, columns)
+                            children(item, columns.map(column => column.toLowerCase()))
                         ))}
                         </tbody>
                     </table>
