@@ -7,9 +7,10 @@ interface ModalProps {
     children: React.ReactNode;
     footer?: React.ReactNode;
     width?: string; // Optional to control width of the modal
+    noX?: boolean;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, footer, width = 'max-w-md' }) => {
+export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, footer, width = 'max-w-md', noX = false }) => {
     if (!isOpen) return null;
 
     return (
@@ -17,9 +18,11 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
             <div className={`bg-white p-4 rounded-md w-full ${width}`}>
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold mx-4">{title}</h2>
-                    <button onClick={onClose} className="text-argray bg-white text-xl">
-                        &times;
-                    </button>
+                    {!noX &&
+                        <button onClick={onClose} className="text-argray bg-white text-xl">
+                            &times;
+                        </button>
+                    }
                 </div>
                 <div className="mb-4">
                     {children}
