@@ -1,12 +1,7 @@
-import {SupabaseClient} from "@supabase/supabase-js";
 import {NavLink} from "react-router-dom";
 import React from "react";
 
-interface SidePanelProps {
-    client: SupabaseClient
-}
-
-const SidePanel: React.FC<SidePanelProps> = ({client}) => {
+const SidePanel = ({client}) => {
 
     const logOut = async () => {
         console.log("sign out")
