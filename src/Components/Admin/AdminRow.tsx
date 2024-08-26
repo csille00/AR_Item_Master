@@ -2,7 +2,7 @@ import React from "react";
 import editIcon from "../../assets/edit.svg";
 import deleteIcon from "../../assets/delete.svg";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import Button from "./Button.tsx";
+import Button from "../Util/Button.tsx";
 
 interface AdminRowProps {
     item: Option,
