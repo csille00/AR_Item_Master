@@ -5,9 +5,7 @@ import {ArStoneMasterColumns} from "../Definitions/enum.ts";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
 import {getStoneDataAsCSV, getStoneMasterItemsFromClient, StoneMasterQuery} from "../model/queries/ArStoneMasterDAO.ts";
-import {StoneRow} from "./Util/StoneRow.tsx";
 import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
-import {ArLoader} from "./Util/Loading.tsx";
 import {Error} from "./Util/Error.tsx";
 import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
 import {Tables} from "../Definitions/generatedDefinitions.ts";
@@ -37,6 +35,7 @@ const Stone: React.FC = () => {
                 setStoneData(data);
             }
         } catch (error) {
+            console.log(error)
             setError('Error fetching items from the database: ' + (error as Error).message);
         } finally {
             setIsLoading(false);
@@ -51,19 +50,13 @@ const Stone: React.FC = () => {
         fetchData().then()
     }, []);
 
-    if (isLoading) {
-        return <ArLoader/>;
-    }
-
-    if (error || !stoneData) {
-        return <Error message={error ?? ""}/>
-    }
-
     return (
         <>
             <Table columns={columns}
                    data={stoneData}
                    title="Stone Master"
+                   isLoading={isLoading}
+                   error={error}
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}
                    fetchDataAsCSV={getStoneDataAsCSV}
@@ -74,6 +67,7 @@ const Stone: React.FC = () => {
             <ChangeViewModal
                 isOpen={isColumnModalOpen}
                 onClose={() => setColumnModalOpen(false)}
+                label="Column Filter"
                 columns={columns}
                 initialColumns={initialColumnState}
                 allColumns={Object.values(ArStoneMasterColumns)}
@@ -82,6 +76,7 @@ const Stone: React.FC = () => {
             <FilterModal
                 isOpen={isFilterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
+                label={"Filter"}
                 type={ArStoneMasterColumns.TYPE}
                 fetchProductTypes={getStoneProductTypesFromClient}
                 setFilterOptions={setFilterOptions}
