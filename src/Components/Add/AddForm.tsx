@@ -15,7 +15,7 @@ interface SharedFormProps {
     fetchProductTypes: () => Promise<Option[] | undefined>;
     initialType: string;
     typeValue: string
-    submitForm: (formData: { [key: string]: string | number }, columns: FormColumn[]) => Promise<boolean>;
+    submitForm: (formData: { [key: string]: string | number }, columns: FormColumn[]) => Promise<string | null>;
 }
 
 export const AddForm: React.FC<SharedFormProps> = ({
@@ -32,7 +32,6 @@ export const AddForm: React.FC<SharedFormProps> = ({
     const [formData, setFormData] = useState<{ [key: string]: string }>({[typeValue]: initialType});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const getProductTypes = async () => {
@@ -91,10 +90,24 @@ export const AddForm: React.FC<SharedFormProps> = ({
         if (!event) return;
         event.preventDefault();
         formData[typeValue] = type
-        const valid = await submitForm(formData, columns)
-        if (!valid) {
-            return
+
+        for (const column of columns) {
+            if (column.required && (formData[column.label] === undefined || formData[column.label] === '')) {
+                alert(`${column.label} is required.`);
+                return
+            }
+            if (
+                column.type == LabeledInputType.NUMBER
+                && column.constraint
+                && (Number(formData[column.label]) < column.constraint.low || Number(formData[column.label]) > column.constraint.high)
+            ) {
+                alert(`${column.label} must be between ${column.constraint.low} and ${column.constraint.high}.`);
+                return
+            }
         }
+
+        const error = await submitForm(formData, columns)
+        setError(error) //this function will return null on success, and an error string on error, which means I can just set the error to the result
         handleClear()
 
         toast.success('Success!', {
@@ -129,16 +142,10 @@ export const AddForm: React.FC<SharedFormProps> = ({
     return (
         <>
             <div className="m-12">
-                <NavLink
-                    to={'/addJewelry'}
-                    className={({isActive}) => (hoverClasses(isActive))}
-                >
+                <NavLink to={'/addJewelry'} className={({isActive}) => (hoverClasses(isActive))}>
                     Jewelry
                 </NavLink>
-                <NavLink
-                    to={'/addStone'}
-                    className={({isActive}) => (hoverClasses(isActive))}
-                >
+                <NavLink to={'/addStone'} className={({isActive}) => (hoverClasses(isActive))}>
                     Stone
                 </NavLink>
             </div>
