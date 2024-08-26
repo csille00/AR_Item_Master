@@ -1,8 +1,12 @@
-import {ArJewelryMasterColumns, MapFormDataToJewelryMasterColumns} from "../../Definitions/enum.ts";
+import {MapFormDataToJewelryMasterColumns} from "../../Definitions/enum.ts";
 import React from "react";
-import {Tables} from "../../Definitions/generatedDefinitions.ts";
 
-const getNestedValue = (item: any, column: ArJewelryMasterColumns) => {
+export interface ItemMasterRowProps<T, U> {
+    item: T
+    columns: string[]
+}
+
+function getNestedValue<U>(item: any, column: U) {
     const value = item[MapFormDataToJewelryMasterColumns[column]];
 
     if (typeof value === 'object' && value !== null) {
@@ -18,13 +22,13 @@ const getNestedValue = (item: any, column: ArJewelryMasterColumns) => {
     }
 
     return value;
-};
+}
 
-const JewelryRow = ({item, columns}: { item: Tables<'ar_jewelry_master'>, columns: string[] }): React.ReactNode => {
+export function ItemMasterRow<T, U>(props: ItemMasterRowProps<T, U>): React.ReactNode {
     return (
         <>
-            {columns.map((column, index) => {
-                const value = getNestedValue(item, column as ArJewelryMasterColumns);
+            {props.columns.map((column, index) => {
+                const value = getNestedValue<U>(props.item, column as U);
                 return (
                     <td key={index} className="p-4">
                         {String(value)}
@@ -33,6 +37,4 @@ const JewelryRow = ({item, columns}: { item: Tables<'ar_jewelry_master'>, column
             })}
         </>
     );
-};
-
-export default JewelryRow;
+}

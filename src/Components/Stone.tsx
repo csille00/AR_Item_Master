@@ -9,6 +9,8 @@ import {StoneRow} from "./Util/StoneRow.tsx";
 import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
 import {ArLoader} from "./Util/Loading.tsx";
 import {Error} from "./Util/Error.tsx";
+import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
+import {Tables} from "../Definitions/generatedDefinitions.ts";
 
 
 const Stone: React.FC = () => {
@@ -67,7 +69,7 @@ const Stone: React.FC = () => {
                    fetchDataAsCSV={getStoneDataAsCSV}
                    filename={"ar_stone_master.csv"}
             >
-                {(item, columns) => <StoneRow item={item} columns={columns}/>}
+                {(item, columns) => <ItemMasterRow<Tables<'ar_stone_master'>, ArStoneMasterColumns> item={item} columns={columns}/>}
             </Table>
             <ChangeViewModal
                 isOpen={isColumnModalOpen}
