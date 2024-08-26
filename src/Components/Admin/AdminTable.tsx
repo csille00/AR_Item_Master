@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "./Button.tsx";
+import Button from "../Util/Button.tsx";
 import addIcon from "../../assets/addWhite.svg";
 
 export interface AdminTableProps {
