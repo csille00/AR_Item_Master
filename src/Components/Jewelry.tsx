@@ -9,7 +9,6 @@ import {
 import {ArJewelryMasterColumns} from "../Definitions/enum.ts";
 import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
 import {FilterOption} from "../Definitions/FilterOption.ts";
-import {ArLoader} from "./Util/Loading.tsx";
 import 'react-toastify/dist/ReactToastify.css';
 import {Error} from "./Util/Error.tsx";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
@@ -57,19 +56,13 @@ const Jewelry: React.FC = () => {
     //     fetchData([]).then()
     // }
 
-    if (error) {
-        return <Error message={error}/>
-    }
-
-    if (isLoading) {
-        return <ArLoader/>;
-    }
-
     return (
         <>
             <Table columns={columns}
                    data={jewelryData}
                    title="Jewelry Master"
+                   isLoading={isLoading}
+                   error={error}
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}
                    fetchDataAsCSV={getJewelryDataAsCSV}

@@ -6,12 +6,16 @@ import downloadIcon from "../../assets/download.svg"
 import tableIcon from "../../assets/table.svg"
 import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 import addIcon from "../../assets/addWhite.svg";
+import {Error} from "./Error.tsx";
+import {ArLoader} from "./Loading.tsx";
 
 export interface TableProps {
     title: string;
     columns: string[];
     data: any;
     style?: string | null;
+    error?: string | null;
+    isLoading?: boolean
     setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     fetchDataAsCSV?: () => Promise<string>;
@@ -20,7 +24,7 @@ export interface TableProps {
 }
 
 
-const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalOpen, fetchDataAsCSV, children, filename}: TableProps) => {
+const Table = ({title, columns, data, style, error, isLoading, setColumnModalOpen, setFilterModalOpen, fetchDataAsCSV, children, filename}: TableProps) => {
     const navigate = useNavigate();
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -68,6 +72,14 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
 
         a.click();
         window.URL.revokeObjectURL(url);
+    }
+
+    if (error) {
+        return <Error message={error}/>
+    }
+
+    if (isLoading) {
+        return <ArLoader/>;
     }
 
     return (
