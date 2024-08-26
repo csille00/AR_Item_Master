@@ -1,19 +1,16 @@
 import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
 import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
-import {
-    getJewelryDataAsCSV,
-    getJewelryMasterPageFromClient,
-    JewelryMasterQuery
-} from "../model/queries/ArJewelryMasterDAO.ts";
-import {ArJewelryMasterColumns} from "../Definitions/enum.ts";
-import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
+import {AdminTables, ArJewelryMasterColumns} from "../Definitions/enum.ts";
 import {FilterOption} from "../Definitions/FilterOption.ts";
 import 'react-toastify/dist/ReactToastify.css';
 import {Error} from "./Util/Error.tsx";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
 import {Tables} from "../Definitions/generatedDefinitions.ts";
+import {JewelryMasterQuery} from "../model/DAO/interface/ArJewelryMasterDAO.ts";
+import {FactoryDAO} from "../model/DAO/interface/FactoryDAO.ts";
+import {SupabaseFactoryDAO} from "../model/DAO/Supabase/SupabaseFactoryDAO.ts";
 
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
@@ -31,12 +28,15 @@ const Jewelry: React.FC = () => {
         ArJewelryMasterColumns.STATUS
     ]
     const [columns, setColumns] = useState<string[]>(initialColumnsState);
+    const daoFactory: FactoryDAO = new SupabaseFactoryDAO()
+    const jewelryMasterDAO = daoFactory.getArJewelryMasterDAO()
+    const productTypesDAO = daoFactory.getProductTypesDAO()
 
     const fetchData = async (filters: FilterOption[] = []) => {
         console.log('fetchData: ', filters)
         setIsLoading(true);
         try {
-            const data = await getJewelryMasterPageFromClient(1, filterOptions); // Pass filters to the fetch function
+            const data = await jewelryMasterDAO.getJewelryMasterPageFromClient(1, filterOptions); // Pass filters to the fetch function
             if (data) {
                 setJewelryData(data);
             }
@@ -65,7 +65,7 @@ const Jewelry: React.FC = () => {
                    error={error}
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}
-                   fetchDataAsCSV={getJewelryDataAsCSV}
+                   fetchDataAsCSV={jewelryMasterDAO.getJewelryDataAsCSV}
                    filename={'ar_jewelry_master.csv'}
             >
                 {(item, columns) => <ItemMasterRow<Tables<'ar_jewelry_master'>, ArJewelryMasterColumns> item={item} columns={columns}/>}
@@ -83,7 +83,7 @@ const Jewelry: React.FC = () => {
                 isOpen={isFilterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
                 label="Filter"
-                fetchProductTypes={getProductTypesFromClient}
+                fetchProductTypes={() => productTypesDAO.getProductTypesFromClient(AdminTables.PRODUCT_TYPE)}
                 type={ArJewelryMasterColumns.TYPE}
                 setFilterOptions={setFilterOptions}
                 onApplyFilters={fetchData}

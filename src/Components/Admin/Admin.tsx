@@ -1,37 +1,15 @@
 import {useEffect, useState} from "react";
 import {Error} from "../Util/Error.tsx";
 import {ArLoader} from "../Util/Loading.tsx";
-import {getStylesFromClient} from "../../model/queries/ArStyleDAO.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
 import {AdminTable} from "./AdminTable.tsx";
-import {getBandStyleFromClient} from "../../model/queries/BandStyleDAO.ts";
-import {getBandWidthFromClient} from "../../model/queries/BandWidthDAO.ts";
 import {AdminTables} from "../../Definitions/enum.ts";
-import {getChainTypesFromClient} from "../../model/queries/ChainTypeDAO.ts";
-import {getCharmTypeFromClient} from "../../model/queries/CharmTypeDAO.ts";
-import {getEarringTypeFromClient} from "../../model/queries/EarringTypeDAO.ts";
-import {getSettingsFromClient} from "../../model/queries/JewelrySettingDAO.ts";
-import {getMetalTypeFromClient} from "../../model/queries/MetalTypeDAO.ts";
-import {getMetalFinishesClient} from "../../model/queries/MetalFinishDAO.ts";
-import {getMetalTexturesFromClient} from "../../model/queries/MetalTextureDAO.ts";
-import {getPendantTypeFromClient} from "../../model/queries/PendantTypeDAO.ts";
-import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
-import {getSideStonesFromClient} from "../../model/queries/SideStonesDAO.ts";
-import {getStCertCutFromClient} from "../../model/queries/STCertCutDAO.ts";
-import {getCertClarityFromClient} from "../../model/queries/StCertClarityDAO.ts";
-import {getStoneColorFromClient} from "../../model/queries/StoneColorDAO.ts";
-import {getStoneCutFromClient} from "../../model/queries/StoneCutDAO.ts";
-import {getStoneOrientationFromClient} from "../../model/queries/StoneOrientationDAO.ts";
-import {getStoneOriginFromClient} from "../../model/queries/StoneOriginDAO.ts";
-import {getStoneProductTypesFromClient} from "../../model/queries/StoneProductTypeDAO.ts";
-import {getStoneShapeFromClient} from "../../model/queries/StoneShapeDAO.ts";
-import {getStSourceFromClient} from "../../model/queries/StSourceDAO.ts";
-import {getStoneTypesFromClient} from "../../model/queries/StoneTypeDAO.ts";
 import {AdminRow} from "./AdminRow.tsx";
-import {addOption, deleteOption, getOptionsFromClient, updateOption} from "../../model/queries/BaseDAO.ts";
 import {AddOptionModal} from "../Modal/AddOptionModal.tsx";
 import {EditOptionModal} from "../Modal/EditOptionModal.tsx";
 import {DeleteConfirmModal} from "../Modal/DeleteConfirmModal.tsx";
+import {FactoryDAO} from "../../model/DAO/interface/FactoryDAO.ts";
+import {SupabaseFactoryDAO} from "../../model/DAO/Supabase/SupabaseFactoryDAO.ts";
 
 const Admin = () => {
     const [tableData, setTableData] = useState<any[]>();
@@ -42,43 +20,13 @@ const Admin = () => {
     const [nonce, setNonce] = useState(1)
     const [editingOption, setEditingOption] = useState<Option | null>(null);
     const [deletingOption, setDeletingOption] = useState<Option | null>(null);
-
-    const fetchFunctions: Record<AdminTables, () => Promise<any[] | undefined>> = {
-        [AdminTables.AR_STYLE]: getStylesFromClient,
-        [AdminTables.BAND_STYLE]: getBandStyleFromClient,
-        [AdminTables.BAND_WIDTH]: getBandWidthFromClient,
-        [AdminTables.CHAIN_TYPE]: getChainTypesFromClient,
-        [AdminTables.CHARM_TYPE]: getCharmTypeFromClient,
-        [AdminTables.CTW_RANGE]: getStylesFromClient, //TODO: Fix this
-        [AdminTables.EARRING_TYPE]: getEarringTypeFromClient,
-        [AdminTables.JEWELRY_SETTING]: getSettingsFromClient,
-        [AdminTables.LENGTH]: () => getOptionsFromClient(AdminTables.LENGTH.toLowerCase().replace(/ /g, "_")),
-        [AdminTables.MATERIAL_TYPE]: getMetalTypeFromClient,
-        [AdminTables.METAL_FINISH]: getMetalFinishesClient,
-        [AdminTables.METAL_TEXTURE]: getMetalTexturesFromClient,
-        [AdminTables.PENDANT_TYPE]: getPendantTypeFromClient,
-        [AdminTables.PRODUCT_TYPE]: getProductTypesFromClient,
-        [AdminTables.SIDE_STONES]: getSideStonesFromClient,
-        [AdminTables.ST_CERT_CUT]: getStCertCutFromClient,
-        [AdminTables.ST_CERT_TYPE]: () => getOptionsFromClient(AdminTables.ST_CERT_TYPE.toLowerCase().replace(/ /g, "_")),
-        [AdminTables.ST_CLARITY_GRADE]: getCertClarityFromClient,
-        [AdminTables.ST_COLOR]: getStoneColorFromClient,
-        [AdminTables.ST_COLOR_GRADE]: () => getOptionsFromClient(AdminTables.ST_COLOR_GRADE.toLowerCase().replace(/ /g, "_")),
-        [AdminTables.ST_ORIENTATION]: getStoneOrientationFromClient,
-        [AdminTables.ST_ORIGIN]: getStoneOriginFromClient,
-        [AdminTables.ST_PRICE_RANGE]: getStylesFromClient,//TODO: Fix this
-        [AdminTables.ST_PRODUCT_TYPE]: getStoneProductTypesFromClient,
-        [AdminTables.ST_SHAPE]: getStoneShapeFromClient,
-        [AdminTables.ST_SOURCE]: getStSourceFromClient,
-        [AdminTables.ST_TYPE]: getStoneTypesFromClient,
-        [AdminTables.ST_CUT]: getStoneCutFromClient
-    };
+    const daoFactory: FactoryDAO = new SupabaseFactoryDAO()
+    const DAO = daoFactory.getBaseDAO()
 
     const fetchData = async (table: string) => {
         setIsLoading(true);
         try {
-            const fetchFunction = fetchFunctions[table as AdminTables];
-            const data = fetchFunction ? await fetchFunction() : [];
+            const data = await DAO.getOptionsFromClient(table.toLowerCase().replace(/ /g, "_"));
             if (data) {
                 //sort data by id
                 data.sort((a, b) => {
@@ -122,7 +70,7 @@ const Admin = () => {
     const handleUpdateOption = async (updatedOption: Option) => {
         try {
             console.log(selectedTable.toLowerCase().replace(/ /g, "_"))
-            await updateOption(selectedTable.toLowerCase().replace(/ /g, "_"), updatedOption);
+            await DAO.updateOption(selectedTable.toLowerCase().replace(/ /g, "_"), updatedOption);
             setNonce(nonce + 1); // Reload data after update
             setEditingOption(null); // Close the modal
         } catch (error) {
@@ -133,7 +81,7 @@ const Admin = () => {
     const handleAddOption = async (option: Option) => {
         try {
             console.log("option to add: ", option)
-            await addOption(selectedTable.toLowerCase().replace(/ /g, '_'), option)
+            await DAO.addOption(selectedTable.toLowerCase().replace(/ /g, '_'), option)
             setNonce(nonce + 1);
         } catch (error) {
             setError(`Failed to add ${option.description}. Please try again later.`);
@@ -147,7 +95,7 @@ const Admin = () => {
     };
 
     const handleDeleteOption = async (item: Option) => {
-        await deleteOption(selectedTable.toLowerCase().replace(/ /g, "_"), item);
+        await DAO.deleteOption(selectedTable.toLowerCase().replace(/ /g, "_"), item);
         setNonce(nonce + 1);
     }
 

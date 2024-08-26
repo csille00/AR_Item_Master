@@ -1,17 +1,21 @@
 import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
-import {getStoneProductTypesFromClient} from "../../model/queries/StoneProductTypeDAO.ts";
 import {getStoneFormConfig} from "../../Definitions/FormConfig/stoneFormConfig.ts";
 import {
+    AdminTables,
     ArStoneMasterColumns,
     LabeledInputType,
     MapFormDataToStoneMasterColumns,
     StoneProductTypeIds,
 } from "../../Definitions/enum.ts";
 import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
-import {insertIntoStoneMaster} from "../../model/queries/ArStoneMasterDAO.ts";
+import {FactoryDAO} from "../../model/DAO/interface/FactoryDAO.ts";
+import {SupabaseFactoryDAO} from "../../model/DAO/Supabase/SupabaseFactoryDAO.ts";
 
 const AddStoneForm = () => {
+    const daoFactory: FactoryDAO = new SupabaseFactoryDAO()
+    const stoneMasterDAO = daoFactory.getArStoneMasterDAO()
+    const productTypesDAO = daoFactory.getProductTypesDAO()
 
     const addStone = async (formData: { [key: string]: string | number }, columns: FormColumn[]): Promise<string | null> => {
 
@@ -39,7 +43,7 @@ const AddStoneForm = () => {
         data.date = new Date().toISOString();
 
         try {
-            await insertIntoStoneMaster(data);
+            await stoneMasterDAO.insertIntoStoneMaster(data);
             return null;
         } catch (error) {
             console.error("Error inserting data:", error);
@@ -52,7 +56,7 @@ const AddStoneForm = () => {
             <AddForm
                 title="Add Stone"
                 fetchColumns={(type: string) => getStoneFormConfig(type)}
-                fetchProductTypes={getStoneProductTypesFromClient}
+                fetchProductTypes={() => productTypesDAO.getProductTypesFromClient(AdminTables.ST_PRODUCT_TYPE)}
                 initialType={StoneProductTypeIds.ELS}
                 typeValue={ArStoneMasterColumns.TYPE}
                 submitForm={addStone}

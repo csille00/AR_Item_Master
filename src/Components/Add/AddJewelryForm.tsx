@@ -1,6 +1,6 @@
 import {getFormConfig} from "../../Definitions/FormConfig/jewelryFormConfig.ts";
-import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
 import {
+    AdminTables,
     ArJewelryMasterColumns,
     LabeledInputType,
     MapFormDataToJewelryMasterColumns, ProductTypeIds,
@@ -8,10 +8,14 @@ import {
 } from "../../Definitions/enum.ts";
 import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
-import {insertIntoJewelryMaster} from "../../model/queries/ArJewelryMasterDAO.ts";
 import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
+import {FactoryDAO} from "../../model/DAO/interface/FactoryDAO.ts";
+import {SupabaseFactoryDAO} from "../../model/DAO/Supabase/SupabaseFactoryDAO.ts";
 
 const AddJewelryForm = () => {
+    const daoFactory: FactoryDAO = new SupabaseFactoryDAO()
+    const jewelryMasterDAO = daoFactory.getArJewelryMasterDAO()
+    const productTypesDAO = daoFactory.getProductTypesDAO()
 
     const addJewelry = async (formData: {
         [key: string]: string | number
@@ -44,7 +48,7 @@ const AddJewelryForm = () => {
         data.status = Status.ACTIVE;
 
         try {
-            await insertIntoJewelryMaster(data);
+            await jewelryMasterDAO.insertIntoJewelryMaster(data);
             return null;
         } catch (error) {
             console.error("Error inserting data:", error);
@@ -56,7 +60,7 @@ const AddJewelryForm = () => {
         <AddForm
             title="Add Jewelry"
             fetchColumns={(type: string) => getFormConfig(type)}
-            fetchProductTypes={getProductTypesFromClient}
+            fetchProductTypes={() => productTypesDAO.getProductTypesFromClient(AdminTables.PRODUCT_TYPE)}
             initialType={ProductTypeIds.ENG}
             typeValue={ArJewelryMasterColumns.TYPE}
             submitForm={addJewelry}

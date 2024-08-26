@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
 import {FilterOption} from "../Definitions/FilterOption.ts";
-import {ArStoneMasterColumns} from "../Definitions/enum.ts";
+import {AdminTables, ArStoneMasterColumns} from "../Definitions/enum.ts";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
-import {getStoneDataAsCSV, getStoneMasterItemsFromClient, StoneMasterQuery} from "../model/queries/ArStoneMasterDAO.ts";
-import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
 import {Error} from "./Util/Error.tsx";
 import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
 import {Tables} from "../Definitions/generatedDefinitions.ts";
+import {StoneMasterQuery} from "../model/DAO/interface/ArStoneMasterDAO.ts";
+import {FactoryDAO} from "../model/DAO/interface/FactoryDAO.ts";
+import {SupabaseFactoryDAO} from "../model/DAO/Supabase/SupabaseFactoryDAO.ts";
 
 
 const Stone: React.FC = () => {
@@ -25,12 +26,15 @@ const Stone: React.FC = () => {
         ArStoneMasterColumns.DATE,
     ]
     const [columns, setColumns] = useState<string[]>(initialColumnState);
+    const daoFactory: FactoryDAO = new SupabaseFactoryDAO()
+    const stoneMasterDAO = daoFactory.getArStoneMasterDAO()
+    const productTypesDAO = daoFactory.getProductTypesDAO()
 
     const fetchData = async (filters: FilterOption[] = []) => {
         console.log('fetchData: ', filters)
         setIsLoading(true);
         try {
-            const data = await getStoneMasterItemsFromClient(filterOptions); // Pass filters to the fetch function
+            const data = await stoneMasterDAO.getStoneMasterItemsFromClient(filterOptions); // Pass filters to the fetch function
             if (data) {
                 setStoneData(data);
             }
@@ -59,7 +63,7 @@ const Stone: React.FC = () => {
                    error={error}
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}
-                   fetchDataAsCSV={getStoneDataAsCSV}
+                   fetchDataAsCSV={stoneMasterDAO.getStoneDataAsCSV}
                    filename={"ar_stone_master.csv"}
             >
                 {(item, columns) => <ItemMasterRow<Tables<'ar_stone_master'>, ArStoneMasterColumns> item={item} columns={columns}/>}
@@ -78,7 +82,7 @@ const Stone: React.FC = () => {
                 onClose={() => setFilterModalOpen(false)}
                 label={"Filter"}
                 type={ArStoneMasterColumns.TYPE}
-                fetchProductTypes={getStoneProductTypesFromClient}
+                fetchProductTypes={() => productTypesDAO.getProductTypesFromClient(AdminTables.ST_PRODUCT_TYPE)}
                 setFilterOptions={setFilterOptions}
                 onApplyFilters={fetchData}
             />
