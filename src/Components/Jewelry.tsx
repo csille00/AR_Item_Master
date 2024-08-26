@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
-import JewelryRow from "./Util/JewelryRow.tsx";
+import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
 import {
     getJewelryDataAsCSV,
     getJewelryMasterPageFromClient,
@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {Error} from "./Util/Error.tsx";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
+import {Tables} from "../Definitions/generatedDefinitions.ts";
 
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
@@ -74,7 +75,7 @@ const Jewelry: React.FC = () => {
                    fetchDataAsCSV={getJewelryDataAsCSV}
                    filename={'ar_jewelry_master.csv'}
             >
-                {(item, columns) => <JewelryRow item={item} columns={columns}/>}
+                {(item, columns) => <ItemMasterRow<Tables<'ar_jewelry_master'>, ArJewelryMasterColumns> item={item} columns={columns}/>}
             </Table>
             <ChangeViewModal
                 isOpen={isColumnModalOpen}
