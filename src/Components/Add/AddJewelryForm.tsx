@@ -15,21 +15,8 @@ const AddJewelryForm = () => {
 
     const addJewelry = async (formData: {
         [key: string]: string | number
-    }, columns: FormColumn[]): Promise<boolean> => {
+    }, columns: FormColumn[]): Promise<string | null> => {
         // Ensure all required fields are filled out
-        for (const column of columns) {
-            if (column.required && (formData[column.label] === undefined || formData[column.label] === '')) {
-                alert(`${column.label} is required.`);
-                return false;
-            }
-            if (
-                column.type == LabeledInputType.NUMBER
-                && column.constraint
-                && (Number(formData[column.label]) < column.constraint.low || Number(formData[column.label]) > column.constraint.high)
-            ) {
-                alert(`${column.label} must be between ${column.constraint.low} and ${column.constraint.high}.`);
-            }
-        }
 
         let data: TablesInsert<'ar_jewelry_master'> = {};
         console.log('Form data: \n', formData)
@@ -58,10 +45,10 @@ const AddJewelryForm = () => {
 
         try {
             await insertIntoJewelryMaster(data);
-            return true;
+            return null;
         } catch (error) {
             console.error("Error inserting data:", error);
-            return false;
+            return error;
         }
     };
 
