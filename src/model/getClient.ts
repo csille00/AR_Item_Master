@@ -1,5 +1,5 @@
 import { createBrowserClient } from '@supabase/ssr';
-import {Database} from "../Definitions/definitions.ts";
+import {Database} from "../Definitions/generatedDefinitions.ts";
 import {SupabaseClient} from "@supabase/supabase-js";
 import invariant from 'tiny-invariant';
 

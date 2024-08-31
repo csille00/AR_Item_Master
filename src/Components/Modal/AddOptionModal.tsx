@@ -1,26 +1,23 @@
 import React, {useState} from 'react';
 import Button from "../Util/Button.tsx";
 import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArLoader} from "../Util/Loading.tsx";
 import {Error} from "../Util/Error.tsx";
 import {Modal} from "../Util/Modal.tsx";
 import LabeledInput from "../Util/LabeledInput.tsx";
 import {LabeledInputType} from "../../Definitions/enum.ts";
 import {Bounce, toast} from "react-toastify";
+import {GenericModalProps} from "../../Definitions/props.ts";
 
-export interface AddOptionModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    title: string;
+export interface AddOptionModalProps extends GenericModalProps {
     onAddOption: (option: Option) => Promise<void>;
 }
 
 export const AddOptionModal: React.FC<AddOptionModalProps> = ({
-                                                                        isOpen,
-                                                                        onClose,
-                                                                        title,
-                                                                        onAddOption,
-                                                                    }) => {
+                                                                  isOpen,
+                                                                  onClose,
+                                                                  label,
+                                                                  onAddOption,
+                                                              }) => {
     const [newOption, setNewOption] = useState<Option | null>({description: ""});  // Initialize with the passed option
     const [isLoading, setIsLoading] = useState(false);  // Set loading to false initially
     const [error, setError] = useState<string | null>(null);
@@ -51,38 +48,29 @@ export const AddOptionModal: React.FC<AddOptionModalProps> = ({
         }
     };
 
-    if(isLoading){
-        return <ArLoader/>
-    }
-
-    if(error){
-        return <Error message={error}/>
-    }
-
-    if (!isOpen) {
-        return null;
-    }
-
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title={"Edit"}
+            title={"Add"}
             width="max-w-sm"
+            noX={true}
+            isLoading={isLoading}
+            error={error}
             footer={
-                <Button text="Add" onClick={handleApply}
-                        style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white" />
+                <>
+                    <Button text="Add" onClick={handleApply}
+                            style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white"/>
+                    <Button text="Cancel" onClick={onClose}
+                            style="bg-superlightgr text-sm text-argray py-1 rounded-md hover:bg-lightgr hover:text-white"/>
+                </>
             }
         >
             <div className="flex items-center justify-between m-4">
-                <label className="">
-                    <div className="">
-                        {title}
-                    </div>
-                </label>
+                <label>{label}</label>
                 <LabeledInput
                     type={LabeledInputType.STRING}
-                    onChange={(e) => setNewOption({ ...newOption, description: e.target.value })}
+                    onChange={(e) => setNewOption({...newOption, description: e.target.value})}
                     value={`${newOption?.description}`}
                     placeholder={"New Description"}
                     required={false}

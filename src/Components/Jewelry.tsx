@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
-import JewelryRow from "./Util/JewelryRow.tsx";
+import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
 import {
     getJewelryDataAsCSV,
     getJewelryMasterPageFromClient,
@@ -9,11 +9,11 @@ import {
 import {ArJewelryMasterColumns} from "../Definitions/enum.ts";
 import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
 import {FilterOption} from "../Definitions/FilterOption.ts";
-import {ArLoader} from "./Util/Loading.tsx";
 import 'react-toastify/dist/ReactToastify.css';
 import {Error} from "./Util/Error.tsx";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
+import {Tables} from "../Definitions/generatedDefinitions.ts";
 
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
@@ -56,29 +56,24 @@ const Jewelry: React.FC = () => {
     //     fetchData([]).then()
     // }
 
-    if (error) {
-        return <Error message={error}/>
-    }
-
-    if (isLoading) {
-        return <ArLoader/>;
-    }
-
     return (
         <>
             <Table columns={columns}
                    data={jewelryData}
                    title="Jewelry Master"
+                   isLoading={isLoading}
+                   error={error}
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}
                    fetchDataAsCSV={getJewelryDataAsCSV}
                    filename={'ar_jewelry_master.csv'}
             >
-                {(item, columns) => <JewelryRow item={item} columns={columns}/>}
+                {(item, columns) => <ItemMasterRow<Tables<'ar_jewelry_master'>, ArJewelryMasterColumns> item={item} columns={columns}/>}
             </Table>
             <ChangeViewModal
                 isOpen={isColumnModalOpen}
                 onClose={() => setColumnModalOpen(false)}
+                label="Column Filter"
                 columns={columns}
                 initialColumns={initialColumnsState}
                 allColumns={Object.values(ArJewelryMasterColumns)}
@@ -87,6 +82,7 @@ const Jewelry: React.FC = () => {
             <FilterModal
                 isOpen={isFilterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
+                label="Filter"
                 fetchProductTypes={getProductTypesFromClient}
                 type={ArJewelryMasterColumns.TYPE}
                 setFilterOptions={setFilterOptions}

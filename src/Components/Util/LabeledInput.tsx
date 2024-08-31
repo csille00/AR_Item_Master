@@ -21,12 +21,14 @@ const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = 
 
     return (
         <div  className={labeledInput}>
-            <label>
-                <div className="inline mx-4">
-                    {label}
-                    {required && <span style={{color: 'red'}}> *</span>}
-                </div>
-            </label>
+            {label && (
+                <label>
+                    <div className="inline mx-4">
+                        {label}
+                        {required && <span style={{color: 'red'}}> *</span>}
+                    </div>
+                </label>
+            )}
             {type === LabeledInputType.SELECT && options ? (
                 <select
                     className={inputBox}

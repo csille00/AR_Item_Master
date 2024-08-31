@@ -5,12 +5,17 @@ import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
 import tableIcon from "../../assets/table.svg"
 import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
+import addIcon from "../../assets/addWhite.svg";
+import {Error} from "./Error.tsx";
+import {ArLoader} from "./Loading.tsx";
 
 export interface TableProps {
     title: string;
     columns: string[];
     data: any;
     style?: string | null;
+    error?: string | null;
+    isLoading?: boolean
     setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     fetchDataAsCSV?: () => Promise<string>;
@@ -19,7 +24,7 @@ export interface TableProps {
 }
 
 
-const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalOpen, fetchDataAsCSV, children, filename}: TableProps) => {
+const Table = ({title, columns, data, style, error, isLoading, setColumnModalOpen, setFilterModalOpen, fetchDataAsCSV, children, filename}: TableProps) => {
     const navigate = useNavigate();
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -69,6 +74,14 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
         window.URL.revokeObjectURL(url);
     }
 
+    if (error) {
+        return <Error message={error}/>
+    }
+
+    if (isLoading) {
+        return <ArLoader/>;
+    }
+
     return (
         <>
             <div className="mt-5 mx-4 flex justify-end">
@@ -87,29 +100,25 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                 <div className="flex items-center justify-between p-4">
                     <h1 className="text-argray text-left my-8 text-4xl justify-start">{title}</h1>
                     <div className="flex justify-end items-center">
-                        <button
-                            className="bg-argold hover:font-bold hover:bg-darkgold hover:border-darkgold rounded-lg h-12 mx-1.5 flex items-center"
-                            onClick={() => navigate('/addJewelry')}>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                                 stroke="#FFFFFF" className="size-5 mx-1">
-                                <path strokeLinecap="round" strokeLinejoin="round"
-                                      d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                            </svg>
-                        </button>
                         <Button
-                            icon={filterIcon}
+                            icon={addIcon as SVGElement}
+                            style="bg-argold hover:font-bold hover:bg-darkgold hover:border-darkgold rounded-lg h-12 mx-1.5 flex items-center"
+                            onClick={() => navigate('/addJewelry')}
+                        />
+                        <Button
+                            icon={filterIcon as SVGElement}
                             text="Filter"
                             onClick={() => setFilterModalOpen(true)}
                             style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
-                            icon={tableIcon}
+                            icon={tableIcon as SVGElement}
                             text="Change View"
                             onClick={() => setColumnModalOpen(true)}
                             style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
-                            icon={downloadIcon}
+                            icon={downloadIcon as SVGElement}
                             text="Download"
                             onClick={download}
                             style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
@@ -117,7 +126,7 @@ const Table = ({title, columns, data, style, setColumnModalOpen, setFilterModalO
                     </div>
                 </div>
                 {/*Added inline styling because tailwind height has limitations*/}
-                <div className="flex justify-center pb-6 px-4 overflow-y-scroll h-auto" style={{maxHeight: '34rem'}}>
+                <div className="flex justify-center pb-6 px-4 overflow-y-scroll h-auto" style={{maxHeight: '44rem'}}>
                     <table className="w-full text-left text-argray">
                         <thead className="sticky top-0 bg-white">
                         <tr>

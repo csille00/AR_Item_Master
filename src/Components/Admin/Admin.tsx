@@ -1,36 +1,37 @@
 import {useEffect, useState} from "react";
-import {Error} from "./Util/Error.tsx";
-import {ArLoader} from "./Util/Loading.tsx";
-import {getStylesFromClient} from "../model/queries/ArStyleDAO.ts";
-import {Option} from "../Definitions/DropdownOption.ts";
-import {AdminTable} from "./Util/AdminTable.tsx";
-import {getBandStyleFromClient} from "../model/queries/BandStyleDAO.ts";
-import {getBandWidthFromClient} from "../model/queries/BandWidthDAO.ts";
-import {AdminTables} from "../Definitions/enum.ts";
-import {getChainTypesFromClient} from "../model/queries/ChainTypeDAO.ts";
-import {getCharmTypeFromClient} from "../model/queries/CharmTypeDAO.ts";
-import {getEarringTypeFromClient} from "../model/queries/EarringTypeDAO.ts";
-import {getSettingsFromClient} from "../model/queries/JewelrySettingDAO.ts";
-import {getMetalTypeFromClient} from "../model/queries/MetalTypeDAO.ts";
-import {getMetalFinishesClient} from "../model/queries/MetalFinishDAO.ts";
-import {getMetalTexturesFromClient} from "../model/queries/MetalTextureDAO.ts";
-import {getPendantTypeFromClient} from "../model/queries/PendantTypeDAO.ts";
-import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
-import {getSideStonesFromClient} from "../model/queries/SideStonesDAO.ts";
-import {getStCertCutFromClient} from "../model/queries/STCertCutDAO.ts";
-import {getCertClarityFromClient} from "../model/queries/StCertClarityDAO.ts";
-import {getStoneColorFromClient} from "../model/queries/StoneColorDAO.ts";
-import {getStoneCutFromClient} from "../model/queries/StoneCutDAO.ts";
-import {getStoneOrientationFromClient} from "../model/queries/StoneOrientationDAO.ts";
-import {getStoneOriginFromClient} from "../model/queries/StoneOriginDAO.ts";
-import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
-import {getStoneShapeFromClient} from "../model/queries/StoneShapeDAO.ts";
-import {getStSourceFromClient} from "../model/queries/StSourceDAO.ts";
-import {getStoneTypesFromClient} from "../model/queries/StoneTypeDAO.ts";
-import {AdminRow} from "./Util/AdminRow.tsx";
-import {addOption, deleteOption, getOptionsFromClient, updateOption} from "../model/queries/BaseDAO.ts";
-import {AddOptionModal} from "./Modal/AddOptionModal.tsx";
-import {EditOptionModal} from "./Modal/EditOptionModal.tsx";
+import {Error} from "../Util/Error.tsx";
+import {ArLoader} from "../Util/Loading.tsx";
+import {getStylesFromClient} from "../../model/queries/ArStyleDAO.ts";
+import {Option} from "../../Definitions/DropdownOption.ts";
+import {AdminTable} from "./AdminTable.tsx";
+import {getBandStyleFromClient} from "../../model/queries/BandStyleDAO.ts";
+import {getBandWidthFromClient} from "../../model/queries/BandWidthDAO.ts";
+import {AdminTables} from "../../Definitions/enum.ts";
+import {getChainTypesFromClient} from "../../model/queries/ChainTypeDAO.ts";
+import {getCharmTypeFromClient} from "../../model/queries/CharmTypeDAO.ts";
+import {getEarringTypeFromClient} from "../../model/queries/EarringTypeDAO.ts";
+import {getSettingsFromClient} from "../../model/queries/JewelrySettingDAO.ts";
+import {getMetalTypeFromClient} from "../../model/queries/MetalTypeDAO.ts";
+import {getMetalFinishesClient} from "../../model/queries/MetalFinishDAO.ts";
+import {getMetalTexturesFromClient} from "../../model/queries/MetalTextureDAO.ts";
+import {getPendantTypeFromClient} from "../../model/queries/PendantTypeDAO.ts";
+import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
+import {getSideStonesFromClient} from "../../model/queries/SideStonesDAO.ts";
+import {getStCertCutFromClient} from "../../model/queries/STCertCutDAO.ts";
+import {getCertClarityFromClient} from "../../model/queries/StCertClarityDAO.ts";
+import {getStoneColorFromClient} from "../../model/queries/StoneColorDAO.ts";
+import {getStoneCutFromClient} from "../../model/queries/StoneCutDAO.ts";
+import {getStoneOrientationFromClient} from "../../model/queries/StoneOrientationDAO.ts";
+import {getStoneOriginFromClient} from "../../model/queries/StoneOriginDAO.ts";
+import {getStoneProductTypesFromClient} from "../../model/queries/StoneProductTypeDAO.ts";
+import {getStoneShapeFromClient} from "../../model/queries/StoneShapeDAO.ts";
+import {getStSourceFromClient} from "../../model/queries/StSourceDAO.ts";
+import {getStoneTypesFromClient} from "../../model/queries/StoneTypeDAO.ts";
+import {AdminRow} from "./AdminRow.tsx";
+import {addOption, deleteOption, getOptionsFromClient, updateOption} from "../../model/queries/BaseDAO.ts";
+import {AddOptionModal} from "../Modal/AddOptionModal.tsx";
+import {EditOptionModal} from "../Modal/EditOptionModal.tsx";
+import {DeleteConfirmModal} from "../Modal/DeleteConfirmModal.tsx";
 
 const Admin = () => {
     const [tableData, setTableData] = useState<any[]>();
@@ -40,6 +41,8 @@ const Admin = () => {
     const [selectedTable, setSelectedTable] = useState<string>(AdminTables.AR_STYLE);
     const [nonce, setNonce] = useState(1)
     const [editingOption, setEditingOption] = useState<Option | null>(null);
+    const [deletingOption, setDeletingOption] = useState<Option | null>(null);
+
     const fetchFunctions: Record<AdminTables, () => Promise<any[] | undefined>> = {
         [AdminTables.AR_STYLE]: getStylesFromClient,
         [AdminTables.BAND_STYLE]: getBandStyleFromClient,
@@ -103,11 +106,11 @@ const Admin = () => {
     }, [selectedTable, nonce]);
 
     if (error) {
-        return <Error message={error} />;
+        return <Error message={error}/>;
     }
 
     if (isLoading) {
-        return <ArLoader />;
+        return <ArLoader/>;
     }
 
     const onEdit = (item: Option) => {
@@ -138,9 +141,15 @@ const Admin = () => {
     }
 
     const onDelete = async (item: Option) => {
+        console.log('Deleting option:', item);  // Log the item being edited
+        setDeletingOption(item);
+        console.log('DeletingOption state after setting:', deletingOption);  // Log the state after setting
+    };
+
+    const handleDeleteOption = async (item: Option) => {
         await deleteOption(selectedTable.toLowerCase().replace(/ /g, "_"), item);
         setNonce(nonce + 1);
-    };
+    }
 
     return (
         <div className="flex h-screen">
@@ -149,8 +158,8 @@ const Admin = () => {
                     {Object.values(AdminTables).map((table, index) => (
                         <li
                             key={index}
-                            className={`cursor-pointer p-2 hover:bg-gray-300 ${
-                                table === selectedTable ? 'bg-argold text-white font-bold rounded' : ''
+                            className={`cursor-pointer p-2 ${
+                                table === selectedTable ? 'bg-lightgr text-white font-bold rounded' : ''
                             }`}
                             onClick={() => setSelectedTable(table)}
                         >
@@ -184,15 +193,24 @@ const Admin = () => {
                     isOpen={!!editingOption}
                     onClose={() => setEditingOption(null)}
                     onUpdateOption={handleUpdateOption}
-                    title={`${editingOption.description}`}
+                    label={`${editingOption.description}`}
                 />
             )}
             <AddOptionModal
                 isOpen={addOptionModalIsOpen}
                 onClose={() => setAddOptionModalIsOpen(false)}
-                title={`Add to ${selectedTable}`}
+                label={`Add to ${selectedTable}`}
                 onAddOption={handleAddOption}
             />
+            {deletingOption && (
+                <DeleteConfirmModal
+                    option={deletingOption}
+                    isOpen={!!deletingOption}
+                    onClose={() => setDeletingOption(null)}
+                    label={`${deletingOption.description}`}
+                    onDeleteOption={handleDeleteOption}
+                />
+            )}
         </div>
     );
 };

@@ -13,22 +13,7 @@ import {insertIntoStoneMaster} from "../../model/queries/ArStoneMasterDAO.ts";
 
 const AddStoneForm = () => {
 
-    const addStone = async (formData: { [key: string]: string | number }, columns: FormColumn[]): Promise<boolean> => {
-        // Ensure all required fields are filled out
-        for (const column of columns) {
-            if (column.required && (formData[column.label] === undefined || formData[column.label] === '')) {
-                alert(`${column.label} is required.`);
-                return false;
-            }
-
-            if (
-                column.type == LabeledInputType.NUMBER
-                && column.constraint
-                && (Number(formData[column.label]) < column.constraint.low || Number(formData[column.label]) > column.constraint.high)
-            ) {
-                alert(`${column.label} must be between ${column.constraint.low} and ${column.constraint.high}.`);
-            }
-        }
+    const addStone = async (formData: { [key: string]: string | number }, columns: FormColumn[]): Promise<string | null> => {
 
         let data: TablesInsert<'ar_stone_master'> = {};
         // Iterate through formData keys to build the data object
@@ -55,10 +40,10 @@ const AddStoneForm = () => {
 
         try {
             await insertIntoStoneMaster(data);
-            return true;
+            return null;
         } catch (error) {
             console.error("Error inserting data:", error);
-            return false;
+            return error;
         }
     };
 
