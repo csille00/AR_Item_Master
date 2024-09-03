@@ -4,7 +4,7 @@ import Button from "../Util/Button.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
 import {LabeledInputType} from "../../Definitions/enum.ts";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {ArLoader} from "../Util/Loading.tsx";
 import {Bounce, toast, ToastContainer} from "react-toastify";
 import {Error} from "../Util/Error.tsx";

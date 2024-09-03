@@ -6,7 +6,11 @@ import {
     getJewelryMasterPageFromClient,
     JewelryMasterQuery
 } from "../model/queries/ArJewelryMasterDAO.ts";
-import {ArJewelryMasterColumns} from "../Definitions/enum.ts";
+import {
+    ArJewelryMasterColumns,
+    JewelryMasterColumnsMap,
+    MapFormDataToJewelryMasterColumns
+} from "../Definitions/enum.ts";
 import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
 import {FilterOption} from "../Definitions/FilterOption.ts";
 import 'react-toastify/dist/ReactToastify.css';
@@ -68,7 +72,7 @@ const Jewelry: React.FC = () => {
                    fetchDataAsCSV={getJewelryDataAsCSV}
                    filename={'ar_jewelry_master.csv'}
             >
-                {(item, columns) => <ItemMasterRow<Tables<'ar_jewelry_master'>, ArJewelryMasterColumns> item={item} columns={columns}/>}
+                {(item, columns) => <ItemMasterRow<Tables<'ar_jewelry_master'>, JewelryMasterColumnsMap> item={item} columns={columns} map={MapFormDataToJewelryMasterColumns}/>}
             </Table>
             <ChangeViewModal
                 isOpen={isColumnModalOpen}

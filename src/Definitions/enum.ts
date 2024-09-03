@@ -38,7 +38,7 @@ export enum StoneProductTypeIds {
 export enum ArJewelryMasterColumns {
     SERIAL_NUMBER = "Serial Number",
     TYPE = "Product Type",
-    SKU = "SKU",
+    SKU = "SKU Number",
     STYLE_NUMBER = "Style Number",
     PRODUCT_NAME = "Product Name",
     MSRP = "MSRP",
@@ -57,8 +57,8 @@ export enum ArJewelryMasterColumns {
     ST_CERT_CUT = "ST Cert Cut",
     ST_CUT = "ST Cut",
     ST_CERT_TYPE = "ST Cert Type",
-    ST_CERT_COLOR = "ST Cert Color",
-    ST_CERT_CLARITY = "ST Cert Clarity",
+    ST_CERT_COLOR = "ST Color Grade",
+    ST_CERT_CLARITY = "ST Clarity Grade",
     AR_STYLE = "AR Style",
     AGE = "Age",
     GENDER = "Gender",
@@ -112,8 +112,8 @@ export const MapFormDataToJewelryMasterColumns: { [key in ArJewelryMasterColumns
     [ArJewelryMasterColumns.ST_CERT_TYPE]: 'st_cert_type',
     [ArJewelryMasterColumns.ST_CERT_NUMBER]: 'st_cert_type',
     [ArJewelryMasterColumns.ST_CERT_CUT]: 'st_cert_cut',
-    [ArJewelryMasterColumns.ST_CERT_COLOR]: 'st_cert_color',
-    [ArJewelryMasterColumns.ST_CERT_CLARITY]: 'st_cert_clarity',
+    [ArJewelryMasterColumns.ST_CERT_COLOR]: 'st_color_grade',
+    [ArJewelryMasterColumns.ST_CERT_CLARITY]: 'st_clarity_grade',
     [ArJewelryMasterColumns.AR_STYLE]: 'ar_style',
     [ArJewelryMasterColumns.AGE]: 'age',
     [ArJewelryMasterColumns.GENDER]: 'gender',
@@ -145,9 +145,13 @@ export const MapFormDataToJewelryMasterColumns: { [key in ArJewelryMasterColumns
     [ArJewelryMasterColumns.WEIGHT]: 'weight',
 };
 
+export type JewelryMasterColumnsMap = {
+    [key in ArJewelryMasterColumns]: keyof TablesInsert<'ar_jewelry_master'>;
+};
+
 export enum ArStoneMasterColumns {
     SERIAL_NUMBER = "Serial Number",
-    SKU = "SKU-Number",
+    SKU = "SKU Number",
     TYPE = "ST Product Type",
     STYLE_NUMBER = "Style Number",
     PRODUCT_NAME = "Product Name",
@@ -167,8 +171,8 @@ export enum ArStoneMasterColumns {
     ST_CERT_TYPE = "ST Cert Type",
     ST_CERT_NUMBER = "ST Cert #",
     ST_CERT_CUT = "ST Cert Cut",
-    ST_CERT_COLOR = "ST Cert Color",
-    ST_CERT_CLARITY = "ST Cert Clarity",
+    ST_CERT_COLOR = "ST Color Grade",
+    ST_CERT_CLARITY = "ST Clarity Grade",
     ST_CTW_RANGE = "ST CTW Range",
     ST_TABLE = "ST Table",
     MEMO = "Memo",
@@ -203,8 +207,8 @@ export const MapFormDataToStoneMasterColumns: { [key in ArStoneMasterColumns]: k
     [ArStoneMasterColumns.ST_CERT_TYPE]: 'st_cert_type',
     [ArStoneMasterColumns.ST_CERT_NUMBER]: 'st_cert_num',
     [ArStoneMasterColumns.ST_CERT_CUT]: 'st_cert_cut',
-    [ArStoneMasterColumns.ST_CERT_COLOR]: 'st_cert_color',
-    [ArStoneMasterColumns.ST_CERT_CLARITY]: 'st_cert_clarity',
+    [ArStoneMasterColumns.ST_CERT_COLOR]: 'st_color_grade',
+    [ArStoneMasterColumns.ST_CERT_CLARITY]: 'st_clarity_grade',
     [ArStoneMasterColumns.ST_CTW_RANGE]: 'st_ctw_range',
     [ArStoneMasterColumns.ST_TABLE]: 'st_table',
     [ArStoneMasterColumns.MEMO]: 'memo',
@@ -215,6 +219,10 @@ export const MapFormDataToStoneMasterColumns: { [key in ArStoneMasterColumns]: k
     [ArStoneMasterColumns.REFINED_STATUS]: 'refined_status',
     [ArStoneMasterColumns.QUANTITY]: 'quantity',
     [ArStoneMasterColumns.DATE_QUANTITY_ADDED]: 'date_quantity_added',
+};
+
+export type StoneMasterColumnsMap = {
+    [key in ArStoneMasterColumns]: keyof TablesInsert<'ar_stone_master'>;
 };
 
 export enum LabeledInputType {

@@ -51,8 +51,8 @@ const createStoneMasterQuery = () => {
             st_origin(description),
             st_cert_type(description),
             st_cert_cut(description),
-            st_cert_color(description),
-            st_cert_clarity(description)
+            st_color_grade(description),
+            st_clarity_grade!ar_stone_master_st_clarity_grade_fkey(description)
         `);
 }
 

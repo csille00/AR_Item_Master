@@ -7,7 +7,7 @@ import {getCertClarityFromClient} from "../../model/queries/StCertClarityDAO.ts"
 import {getStSourceFromClient} from "../../model/queries/StSourceDAO.ts";
 import {getStoneColorFromClient} from "../../model/queries/StoneColorDAO.ts";
 import {getStoneShapeFromClient} from "../../model/queries/StoneShapeDAO.ts";
-import {getStoneCutFromClient} from "../../model/queries/StoneCutDAO.ts";
+import {getStoneCutOptionFromClient} from "../../model/queries/StoneCutDAO.ts";
 import {getStoneOrientationFromClient} from "../../model/queries/StoneOrientationDAO.ts";
 import {getStoneOriginFromClient} from "../../model/queries/StoneOriginDAO.ts";
 import {getStCertCutFromClient} from "../../model/queries/STCertCutDAO.ts";
@@ -20,7 +20,7 @@ const baseRows: FormColumn[] = [
     new FormColumn(ArStoneMasterColumns.ST_SOURCE, LabeledInputType.SELECT, true, await getStSourceFromClient()),
     new FormColumn(ArStoneMasterColumns.ST_COLOR, LabeledInputType.SELECT, true, await getStoneColorFromClient()),
     new FormColumn(ArStoneMasterColumns.ST_SHAPE, LabeledInputType.SELECT, true, await getStoneShapeFromClient()),
-    new FormColumn(ArStoneMasterColumns.ST_CUT, LabeledInputType.SELECT, true, await getStoneCutFromClient()),
+    new FormColumn(ArStoneMasterColumns.ST_CUT, LabeledInputType.SELECT, true, await getStoneCutOptionFromClient()),
     new FormColumn(ArStoneMasterColumns.ST_HEIGHT, LabeledInputType.NUMBER, true, null, {high: 49.99, low: 0.01}),
     new FormColumn(ArStoneMasterColumns.ST_WIDTH, LabeledInputType.NUMBER, true, null, {high: 49.99, low: 0.01}),
     new FormColumn(ArStoneMasterColumns.ST_ORIENTATION, LabeledInputType.SELECT, true, await getStoneOrientationFromClient()),

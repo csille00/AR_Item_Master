@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
 import {FilterOption} from "../Definitions/FilterOption.ts";
-import {ArStoneMasterColumns} from "../Definitions/enum.ts";
+import {ArStoneMasterColumns, MapFormDataToStoneMasterColumns, StoneMasterColumnsMap} from "../Definitions/enum.ts";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
 import {getStoneDataAsCSV, getStoneMasterItemsFromClient, StoneMasterQuery} from "../model/queries/ArStoneMasterDAO.ts";
@@ -62,7 +62,7 @@ const Stone: React.FC = () => {
                    fetchDataAsCSV={getStoneDataAsCSV}
                    filename={"ar_stone_master.csv"}
             >
-                {(item, columns) => <ItemMasterRow<Tables<'ar_stone_master'>, ArStoneMasterColumns> item={item} columns={columns}/>}
+                {(item, columns) => <ItemMasterRow<Tables<'ar_stone_master'>, StoneMasterColumnsMap> item={item} columns={columns} map={MapFormDataToStoneMasterColumns}/>}
             </Table>
             <ChangeViewModal
                 isOpen={isColumnModalOpen}
