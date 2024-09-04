@@ -1,4 +1,3 @@
-import {getFormConfig} from "../../Definitions/FormConfig/jewelryFormConfig.ts";
 import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
 import {
     ArJewelryMasterColumns,
@@ -10,9 +9,11 @@ import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {insertIntoJewelryMaster} from "../../model/queries/ArJewelryMasterDAO.ts";
 import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
+import {JewelryFormConfig} from "../../Definitions/FormConfig/jewelryFormConfig.ts";
 
 const AddJewelryForm = () => {
 
+    const jewelryConfig = new JewelryFormConfig()
     const addJewelry = async (formData: {
         [key: string]: string | number
     }, columns: FormColumn[]): Promise<string | null> => {
@@ -55,7 +56,7 @@ const AddJewelryForm = () => {
     return (
         <AddForm
             title="Add Jewelry"
-            fetchColumns={(type: string) => getFormConfig(type)}
+            fetchColumns={(type: string) => jewelryConfig.getFormConfig(type)}
             fetchProductTypes={getProductTypesFromClient}
             initialType={ProductTypeIds.ENG}
             typeValue={ArJewelryMasterColumns.TYPE}

@@ -44,6 +44,7 @@ export type Database = {
           side_stones: number | null
           sku_number: string | null
           st_cert_cut: number | null
+          st_cert_number: number | null
           st_cert_type: number | null
           st_clarity_grade: number | null
           st_color: number | null
@@ -58,7 +59,7 @@ export type Database = {
           st_shape: number | null
           st_source: number | null
           st_table: string | null
-          st_type: string | null
+          st_type: number | null
           st_width: number | null
           status: string | null
           style_number: number | null
@@ -99,6 +100,7 @@ export type Database = {
           side_stones?: number | null
           sku_number?: string | null
           st_cert_cut?: number | null
+          st_cert_number?: number | null
           st_cert_type?: number | null
           st_clarity_grade?: number | null
           st_color?: number | null
@@ -113,7 +115,7 @@ export type Database = {
           st_shape?: number | null
           st_source?: number | null
           st_table?: string | null
-          st_type?: string | null
+          st_type?: number | null
           st_width?: number | null
           status?: string | null
           style_number?: number | null
@@ -154,6 +156,7 @@ export type Database = {
           side_stones?: number | null
           sku_number?: string | null
           st_cert_cut?: number | null
+          st_cert_number?: number | null
           st_cert_type?: number | null
           st_clarity_grade?: number | null
           st_color?: number | null
@@ -168,7 +171,7 @@ export type Database = {
           st_shape?: number | null
           st_source?: number | null
           st_table?: string | null
-          st_type?: string | null
+          st_type?: number | null
           st_width?: number | null
           status?: string | null
           style_number?: number | null
@@ -289,6 +292,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "ar_jewelry_master_st_clarity_grade_fkey"
+            columns: ["st_clarity_grade"]
+            isOneToOne: false
+            referencedRelation: "st_color_grade"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "ar_jewelry_master_st_color_fkey"
             columns: ["st_color"]
             isOneToOne: false
@@ -335,7 +345,14 @@ export type Database = {
             columns: ["st_type"]
             isOneToOne: false
             referencedRelation: "st_type"
-            referencedColumns: ["st_type"]
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_st_color_grade"
+            columns: ["st_color_grade"]
+            isOneToOne: false
+            referencedRelation: "st_color_grade"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -345,10 +362,9 @@ export type Database = {
           cost: unknown | null
           date: string | null
           date_quantity_added: string | null
-          material_type_id: number | null
+          material_type: number | null
           memo: string | null
           msrp: unknown | null
-          prod_code: string | null
           prod_name: string | null
           quantity: number | null
           refined_status: string | null
@@ -368,11 +384,12 @@ export type Database = {
           st_number: string | null
           st_orientation: number | null
           st_origin: number | null
+          st_product_type: string | null
           st_shape: number | null
           st_sku: string | null
           st_source: number | null
           st_table: string | null
-          st_type: string | null
+          st_type: number | null
           st_width: number | null
           style_number: string | null
         }
@@ -381,10 +398,9 @@ export type Database = {
           cost?: unknown | null
           date?: string | null
           date_quantity_added?: string | null
-          material_type_id?: number | null
+          material_type?: number | null
           memo?: string | null
           msrp?: unknown | null
-          prod_code?: string | null
           prod_name?: string | null
           quantity?: number | null
           refined_status?: string | null
@@ -404,11 +420,12 @@ export type Database = {
           st_number?: string | null
           st_orientation?: number | null
           st_origin?: number | null
+          st_product_type?: string | null
           st_shape?: number | null
           st_sku?: string | null
           st_source?: number | null
           st_table?: string | null
-          st_type?: string | null
+          st_type?: number | null
           st_width?: number | null
           style_number?: string | null
         }
@@ -417,10 +434,9 @@ export type Database = {
           cost?: unknown | null
           date?: string | null
           date_quantity_added?: string | null
-          material_type_id?: number | null
+          material_type?: number | null
           memo?: string | null
           msrp?: unknown | null
-          prod_code?: string | null
           prod_name?: string | null
           quantity?: number | null
           refined_status?: string | null
@@ -440,25 +456,26 @@ export type Database = {
           st_number?: string | null
           st_orientation?: number | null
           st_origin?: number | null
+          st_product_type?: string | null
           st_shape?: number | null
           st_sku?: string | null
           st_source?: number | null
           st_table?: string | null
-          st_type?: string | null
+          st_type?: number | null
           st_width?: number | null
           style_number?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "ar_stone_master_material_type_id_fkey"
-            columns: ["material_type_id"]
+            foreignKeyName: "ar_stone_master_material_type_fkey"
+            columns: ["material_type"]
             isOneToOne: false
             referencedRelation: "material_type"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "ar_stone_master_prod_code_fkey"
-            columns: ["prod_code"]
+            columns: ["st_product_type"]
             isOneToOne: false
             referencedRelation: "st_product_type"
             referencedColumns: ["prod_code"]
@@ -538,7 +555,7 @@ export type Database = {
             columns: ["st_type"]
             isOneToOne: false
             referencedRelation: "st_type"
-            referencedColumns: ["st_type"]
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -967,6 +984,7 @@ export type Database = {
       }
       st_type: {
         Row: {
+          id: number
           mat_code: string | null
           mat_color: string | null
           mat_color_name: string | null
@@ -1011,6 +1029,7 @@ export type Database = {
           st_type: string
         }
         Insert: {
+          id?: number
           mat_code?: string | null
           mat_color?: string | null
           mat_color_name?: string | null
@@ -1055,6 +1074,7 @@ export type Database = {
           st_type: string
         }
         Update: {
+          id?: number
           mat_code?: string | null
           mat_color?: string | null
           mat_color_name?: string | null

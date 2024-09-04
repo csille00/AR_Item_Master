@@ -1,7 +1,6 @@
 import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {getStoneProductTypesFromClient} from "../../model/queries/StoneProductTypeDAO.ts";
-import {getStoneFormConfig} from "../../Definitions/FormConfig/stoneFormConfig.ts";
 import {
     ArStoneMasterColumns,
     LabeledInputType,
@@ -10,9 +9,10 @@ import {
 } from "../../Definitions/enum.ts";
 import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
 import {insertIntoStoneMaster} from "../../model/queries/ArStoneMasterDAO.ts";
+import {StoneFormConfig} from "../../Definitions/FormConfig/stoneFormConfig.ts";
 
 const AddStoneForm = () => {
-
+    const stoneConfig = new StoneFormConfig()
     const addStone = async (formData: { [key: string]: string | number }, columns: FormColumn[]): Promise<string | null> => {
 
         let data: TablesInsert<'ar_stone_master'> = {};
@@ -22,7 +22,7 @@ const AddStoneForm = () => {
             const column = columns.find(it => it.label === key);
 
             //if the column type is number, cast data to number to avoid errors
-            if (column?.type == LabeledInputType.NUMBER) {
+            if (column?.type == LabeledInputType.NUMBER || column?.type == LabeledInputType.SELECT) {
                 dataToAssign = Number(dataToAssign)
             }
 
@@ -51,7 +51,7 @@ const AddStoneForm = () => {
         <>
             <AddForm
                 title="Add Stone"
-                fetchColumns={(type: string) => getStoneFormConfig(type)}
+                fetchColumns={(type: string) => stoneConfig.getStoneFormConfig(type)}
                 fetchProductTypes={getStoneProductTypesFromClient}
                 initialType={StoneProductTypeIds.ELS}
                 typeValue={ArStoneMasterColumns.TYPE}
