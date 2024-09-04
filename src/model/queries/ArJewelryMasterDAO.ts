@@ -32,6 +32,7 @@ const createJewelryMasterQuery = () => {
             st_cost,
             st_ctw_range,
             st_table,
+            st_cert_number,
             age,
             gender,
             returnable,
@@ -105,6 +106,7 @@ export async function getJewelryMasterPageFromClient(
     if (error) {
         throw error;
     }
+    console.log('in dao: ', data)
     return data as JewelryMasterQuery;
 }
 

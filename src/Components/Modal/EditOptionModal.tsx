@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import Button from "../Util/Button.tsx";
-import {Option} from "../../Definitions/DropdownOption.ts";
 import {Error} from "../Util/Error.tsx";
 import {Modal} from "../Util/Modal.tsx";
 import LabeledInput from "../Util/LabeledInput.tsx";
@@ -9,18 +8,17 @@ import {Bounce, toast} from "react-toastify";
 import {GenericModalProps} from "../../Definitions/props.ts";
 
 export interface ChangeOptionModalProps extends GenericModalProps {
-    option: Option;
-    onUpdateOption: (option: Option) => Promise<void>;
+    option: {[key: string]: any};
+    onUpdateOption: (option: {[key: string]: any}) => Promise<void>;
 }
 
 export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
                                                                       isOpen,
                                                                       onClose,
-                                                                      label,
                                                                       option,
                                                                       onUpdateOption,
                                                                   }) => {
-    const [newOption, setNewOption] = useState<Option>(option);  // Initialize with the passed option
+    const [newOption, setNewOption] = useState<{[key: string]: any}>(option);  // Initialize with the passed option
     const [isLoading, setIsLoading] = useState(false);  // Set loading to false initially
     const [error, setError] = useState<string | null>(null);
 
@@ -50,12 +48,38 @@ export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
         }
     };
 
+    const renderInput = (key: string, value: any) => {
+        if (key === 'id') {
+            return null; // Skip rendering for 'id' or any specific column you want to exclude
+        }
+
+        let type: LabeledInputType;
+        if (typeof value === 'number') {
+            type = LabeledInputType.NUMBER;
+        } else {
+            type = LabeledInputType.STRING;
+        }
+
+        return (
+            <LabeledInput
+                label={key.toUpperCase()}
+                type={type}
+                onChange={(e) => setNewOption({ ...newOption, [key]: type === LabeledInputType.NUMBER ? Number(e.target.value) : e.target.value })}
+                value={type === LabeledInputType.NUMBER ? newOption[key] : `${newOption[key]}`}
+                placeholder={`Enter ${key}`}
+                required={false}
+                style=""
+                boxStyle="p-2 rounded-lg border w-44"
+            />
+        );
+    };
+
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
             title={"Edit"}
-            width="max-w-sm"
+            width="max-w-md"
             noX={true}
             isLoading={isLoading}
             error={error}
@@ -68,21 +92,8 @@ export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
                 </>
             }
         >
-            <div className="flex items-center justify-between m-4">
-                <label>{label}</label>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
-                </svg>
-                <LabeledInput
-                    type={LabeledInputType.STRING}
-                    onChange={(e) => setNewOption({...newOption, description: e.target.value})}
-                    value={`${newOption.description}`}
-                    placeholder={"New Description"}
-                    required={false}
-                    style=""
-                    boxStyle="p-2 rounded-lg border w-44"
-                />
+            <div className="flex flex-col m-4">
+                {Object.entries(newOption).map(([key, value]) => renderInput(key, value))}
             </div>
         </Modal>
     );
