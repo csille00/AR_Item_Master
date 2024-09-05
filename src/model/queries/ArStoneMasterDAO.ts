@@ -63,15 +63,12 @@ export async function getStoneMasterItemsFromClient(
 ): Promise<StoneMasterQuery | undefined> {
     // Apply filters
     const stoneMasterQuery = createStoneMasterQuery()
-    if(!filters.some(filter => filter.value == 'ALL')) {
-        filters.forEach(filter => {
-            const column = MapFormDataToStoneMasterColumns[filter.column as keyof typeof MapFormDataToStoneMasterColumns];
-            if (column) {
-                stoneMasterQuery.eq(column, filter.value);
-            }
-        });
-    }
-
+    filters.forEach(filter => {
+        const column = MapFormDataToStoneMasterColumns[filter.column as keyof typeof MapFormDataToStoneMasterColumns];
+        if (column && filter.value !== 'ALL') {
+            stoneMasterQuery.eq(column, filter.value);
+        }
+    });
     const {data, error} = await stoneMasterQuery
     console.log('data in dao: ', data)
 

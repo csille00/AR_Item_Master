@@ -92,14 +92,12 @@ export async function getJewelryMasterPageFromClient(
     jewelryMasterQuery.range(start, end)
 
     // Apply filters
-    if(!filters.some(filter => filter.value == 'ALL')) {
-        filters.forEach(filter => {
-            const column = MapFormDataToJewelryMasterColumns[filter.column as keyof typeof MapFormDataToJewelryMasterColumns];
-            if (column) {
-                jewelryMasterQuery.eq(column, filter.value);
-            }
-        });
-    }
+    filters.forEach(filter => {
+        const column = MapFormDataToJewelryMasterColumns[filter.column as keyof typeof MapFormDataToJewelryMasterColumns];
+        if (column && filter.value !== 'ALL') {
+            jewelryMasterQuery.eq(column, filter.value);
+        }
+    });
 
     const {data, error} = await jewelryMasterQuery
 

@@ -27,10 +27,10 @@ import {getCharmTypeFromClient} from "../../model/queries/CharmTypeDAO.ts";
 
 export class JewelryFormConfig {
     private baseRows: FormColumn[] = [];
-    private stoneTypeRows: FormColumn[] = []
+    private jewelryTypeRows: FormColumn[] = []
 
     constructor() {
-        this.initializeStoneTypeRows().then()
+        this.initializeJewelryTypeRows().then()
         this.initializeBaseRows().then()
     }
 
@@ -45,8 +45,10 @@ export class JewelryFormConfig {
         {description: gender.FEMALE}
     ]
 
-    private async initializeStoneTypeRows() {
-        this.stoneTypeRows = [
+    private ageOption: Option[] = [{description: age.ADULT}]
+
+    private async initializeJewelryTypeRows() {
+        this.jewelryTypeRows = [
             new FormColumn(ArJewelryMasterColumns.ST_SOURCE, LabeledInputType.SELECT, true, await getStSourceFromClient()),
             new FormColumn(ArJewelryMasterColumns.ST_COLOR, LabeledInputType.SELECT, true, await getStoneColorFromClient()),
             new FormColumn(ArJewelryMasterColumns.ST_SHAPE, LabeledInputType.SELECT, true, await getStoneShapeFromClient()),
@@ -75,8 +77,8 @@ export class JewelryFormConfig {
             }),
             new FormColumn(ArJewelryMasterColumns.ST_TYPE, LabeledInputType.SELECT, false, await getStoneTypesOptionsFromClient()),
             new FormColumn(ArJewelryMasterColumns.AR_STYLE, LabeledInputType.SELECT, true, await getStylesFromClient()),
-            ...this.stoneTypeRows,
-            new FormColumn(ArJewelryMasterColumns.AGE, LabeledInputType.SELECT, true, [{description: age.ADULT}]),
+            ...this.jewelryTypeRows,
+            new FormColumn(ArJewelryMasterColumns.AGE, LabeledInputType.SELECT, true, this.ageOption),
             new FormColumn(ArJewelryMasterColumns.GENDER, LabeledInputType.SELECT, true, this.genderOptions),
             new FormColumn(ArJewelryMasterColumns.RETURNABLE, LabeledInputType.SELECT, true, this.yesNoOption),
             new FormColumn(ArJewelryMasterColumns.ENGRAVABLE, LabeledInputType.SELECT, true, this.yesNoOption),
@@ -153,7 +155,7 @@ export class JewelryFormConfig {
                 new FormColumn(ArJewelryMasterColumns.ST_CERT_COLOR, LabeledInputType.SELECT, true, await getColorGradeFromClient()),
                 new FormColumn(ArJewelryMasterColumns.ST_CERT_CLARITY, LabeledInputType.SELECT, true, await getCertClarityFromClient()),
                 new FormColumn(ArJewelryMasterColumns.AR_STYLE, LabeledInputType.SELECT, true, await getStylesFromClient()),
-                new FormColumn(ArJewelryMasterColumns.AGE, LabeledInputType.SELECT, true, [{description: age.ADULT}]),
+                new FormColumn(ArJewelryMasterColumns.AGE, LabeledInputType.SELECT, true, this.ageOption),
                 new FormColumn(ArJewelryMasterColumns.GENDER, LabeledInputType.SELECT, true, this.genderOptions),
                 new FormColumn(ArJewelryMasterColumns.RETURNABLE, LabeledInputType.SELECT, true, this.yesNoOption),
                 new FormColumn(ArJewelryMasterColumns.ENGRAVABLE, LabeledInputType.SELECT, true, this.yesNoOption),

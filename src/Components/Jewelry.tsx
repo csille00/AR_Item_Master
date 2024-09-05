@@ -18,6 +18,30 @@ import {Error} from "./Util/Error.tsx";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
 import {Tables} from "../Definitions/generatedDefinitions.ts";
+import {getStoneTypesOptionsFromClient} from "../model/queries/StoneTypeDAO.ts";
+import {getStSourceFromClient} from "../model/queries/StSourceDAO.ts";
+import {getStoneColorFromClient} from "../model/queries/StoneColorDAO.ts";
+import {getStoneShapeFromClient} from "../model/queries/StoneShapeDAO.ts";
+import {getStoneCutOptionFromClient} from "../model/queries/StoneCutDAO.ts";
+import {getStoneOrientationFromClient} from "../model/queries/StoneOrientationDAO.ts";
+import {getStoneOriginFromClient} from "../model/queries/StoneOriginDAO.ts";
+import {getCertTypesFromClient} from "../model/queries/STCertTypeDAO.ts";
+import {getStCertCutFromClient} from "../model/queries/STCertCutDAO.ts";
+import {getColorGradeFromClient} from "../model/queries/StColorGradeDAO.ts";
+import {getCertClarityFromClient} from "../model/queries/StCertClarityDAO.ts";
+import {getStylesFromClient} from "../model/queries/ArStyleDAO.ts";
+import {getMetalTypeFromClient} from "../model/queries/MetalTypeDAO.ts";
+import {getMetalFinishesClient} from "../model/queries/MetalFinishDAO.ts";
+import {getMetalTexturesFromClient} from "../model/queries/MetalTextureDAO.ts";
+import {getBandStyleFromClient} from "../model/queries/BandStyleDAO.ts";
+import {getBandWidthFromClient} from "../model/queries/BandWidthDAO.ts";
+import {getSettingsFromClient} from "../model/queries/JewelrySettingDAO.ts";
+import {getSideStonesFromClient} from "../model/queries/SideStonesDAO.ts";
+import {getChainTypesFromClient} from "../model/queries/ChainTypeDAO.ts";
+import {getPendantTypeFromClient} from "../model/queries/PendantTypeDAO.ts";
+import {getEarringTypeFromClient} from "../model/queries/EarringTypeDAO.ts";
+import {getCharmTypeFromClient} from "../model/queries/CharmTypeDAO.ts";
+import {JewelryFormConfig} from "../Definitions/FormConfig/jewelryFormConfig.ts";
 
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
@@ -55,11 +79,6 @@ const Jewelry: React.FC = () => {
         fetchData().then()
     }, []);
 
-    // const handleClearFilters = () => {
-    //     setFilterOptions([])
-    //     fetchData([]).then()
-    // }
-
     return (
         <>
             <Table columns={columns}
@@ -72,7 +91,9 @@ const Jewelry: React.FC = () => {
                    fetchDataAsCSV={getJewelryDataAsCSV}
                    filename={'ar_jewelry_master.csv'}
             >
-                {(item, columns) => <ItemMasterRow<Tables<'ar_jewelry_master'>, JewelryMasterColumnsMap> item={item} columns={columns} map={MapFormDataToJewelryMasterColumns}/>}
+                {(item, columns) => <ItemMasterRow<Tables<'ar_jewelry_master'>, JewelryMasterColumnsMap> item={item}
+                                                                                                         columns={columns}
+                                                                                                         map={MapFormDataToJewelryMasterColumns}/>}
             </Table>
             <ChangeViewModal
                 isOpen={isColumnModalOpen}
@@ -87,9 +108,34 @@ const Jewelry: React.FC = () => {
                 isOpen={isFilterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
                 label="Filter"
-                fetchProductTypes={getProductTypesFromClient}
-                type={ArJewelryMasterColumns.TYPE}
+                fetchFilters={{
+                    'Product Type': getProductTypesFromClient,
+                    'ST Type': getStoneTypesOptionsFromClient,
+                    'ST Source': getStSourceFromClient,
+                    'ST Color': getStoneColorFromClient,
+                    'ST Shape': getStoneShapeFromClient,
+                    'ST Cut': getStoneCutOptionFromClient,
+                    'ST Orientation': getStoneOrientationFromClient,
+                    'ST Origin': getStoneOriginFromClient,
+                    'ST Cert Type': getCertTypesFromClient,
+                    'ST Cert Cut': getStCertCutFromClient,
+                    'ST Color Grade': getColorGradeFromClient,
+                    'ST Clarity Grade': getCertClarityFromClient,
+                    'AR Style': getStylesFromClient,
+                    'Material Type': getMetalTypeFromClient,
+                    'Metal Finish': getMetalFinishesClient,
+                    'Metal Texture': getMetalTexturesFromClient,
+                    'Band Style': getBandStyleFromClient,
+                    'Band Width': getBandWidthFromClient,
+                    'Jewelry Setting': getSettingsFromClient,
+                    'Side Stones': getSideStonesFromClient,
+                    'Chain Type': getChainTypesFromClient,
+                    'Pendant Type': getPendantTypeFromClient,
+                    'Earring Type': getEarringTypeFromClient,
+                    'Charm Type': getCharmTypeFromClient,
+                }}
                 setFilterOptions={setFilterOptions}
+                filterOptions={filterOptions}
                 onApplyFilters={fetchData}
             />
         </>

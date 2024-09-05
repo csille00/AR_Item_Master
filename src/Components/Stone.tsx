@@ -9,6 +9,15 @@ import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeD
 import {Error} from "./Util/Error.tsx";
 import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
 import {Tables} from "../Definitions/generatedDefinitions.ts";
+import {getStSourceFromClient} from "../model/queries/StSourceDAO.ts";
+import {getStoneTypesOptionsFromClient} from "../model/queries/StoneTypeDAO.ts";
+import {getStoneColorFromClient} from "../model/queries/StoneColorDAO.ts";
+import {getStoneShapeFromClient} from "../model/queries/StoneShapeDAO.ts";
+import {getStoneCutOptionFromClient} from "../model/queries/StoneCutDAO.ts";
+import {getStoneOrientationFromClient} from "../model/queries/StoneOrientationDAO.ts";
+import {getCertTypesFromClient} from "../model/queries/STCertTypeDAO.ts";
+import {getColorGradeFromClient} from "../model/queries/StColorGradeDAO.ts";
+import {getCertClarityFromClient} from "../model/queries/StCertClarityDAO.ts";
 
 
 const Stone: React.FC = () => {
@@ -42,10 +51,6 @@ const Stone: React.FC = () => {
         }
     };
 
-    // const handleClearFilters = () => {
-    //     setFilterOptions([])
-    // }
-
     useEffect(() => {
         fetchData().then()
     }, []);
@@ -77,9 +82,21 @@ const Stone: React.FC = () => {
                 isOpen={isFilterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
                 label={"Filter"}
-                type={ArStoneMasterColumns.TYPE}
-                fetchProductTypes={getStoneProductTypesFromClient}
+                fetchFilters={{
+                    'ST Product Type': getStoneProductTypesFromClient,
+                    'ST Source': getStSourceFromClient,
+                    'ST Type': getStoneTypesOptionsFromClient,
+                    'ST Color': getStoneColorFromClient,
+                    'ST Shape': getStoneShapeFromClient,
+                    'ST Cut': getStoneCutOptionFromClient,
+                    'ST Orientation': getStoneOrientationFromClient,
+                    'ST Origin': getStoneCutOptionFromClient,
+                    'ST Cert Type': getCertTypesFromClient,
+                    'ST Color Grade': getColorGradeFromClient,
+                    'ST Clarity Grade': getCertClarityFromClient
+                }}
                 setFilterOptions={setFilterOptions}
+                filterOptions={filterOptions}
                 onApplyFilters={fetchData}
             />
         </>
