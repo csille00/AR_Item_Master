@@ -79,6 +79,10 @@ const Jewelry: React.FC = () => {
         fetchData().then()
     }, []);
 
+    const transformSortColumn = (col: string): string => {
+        return  MapFormDataToJewelryMasterColumns[col as keyof typeof MapFormDataToJewelryMasterColumns];
+    }
+
     return (
         <>
             <Table columns={columns}
@@ -86,6 +90,7 @@ const Jewelry: React.FC = () => {
                    title="Jewelry Master"
                    isLoading={isLoading}
                    error={error}
+                   getSortColumn={(column) => transformSortColumn(column)}
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}
                    fetchDataAsCSV={getJewelryDataAsCSV}

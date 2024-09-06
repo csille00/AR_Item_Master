@@ -4,7 +4,6 @@ import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
 import tableIcon from "../../assets/table.svg"
-import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 import addIcon from "../../assets/addWhite.svg";
 import {Error} from "./Error.tsx";
 import {ArLoader} from "./Loading.tsx";
@@ -16,6 +15,7 @@ export interface TableProps {
     style?: string | null;
     error?: string | null;
     isLoading?: boolean
+    getSortColumn: (column: string) => string
     setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     fetchDataAsCSV?: () => Promise<string>;
@@ -24,15 +24,25 @@ export interface TableProps {
 }
 
 
-const Table = ({title, columns, data, style, error, isLoading, setColumnModalOpen, setFilterModalOpen, fetchDataAsCSV, children, filename}: TableProps) => {
+const Table = ({
+                   title,
+                   columns,
+                   data,
+                   style,
+                   error,
+                   isLoading,
+                   getSortColumn,
+                   setColumnModalOpen,
+                   setFilterModalOpen,
+                   fetchDataAsCSV,
+                   children,
+                   filename
+               }: TableProps) => {
     const navigate = useNavigate();
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
     const handleSort = (column: string) => {
-        //for now, only support the sorting of the data column.
-        // It is set up to support the other ones, I just dont know how to properly sort them right now (8/05/24)
-        if(!(column == ArJewelryMasterColumns.DATE)) return
         if (sortColumn === column) {
             // Toggle sort direction
             setSortDirection(prevDirection => prevDirection === 'asc' ? 'desc' : 'asc');
@@ -43,12 +53,20 @@ const Table = ({title, columns, data, style, error, isLoading, setColumnModalOpe
         }
     };
 
+    const getValueByPath = (obj) => {
+        if(obj === null) return ''
+        if(typeof obj !== 'object') return obj;
+        return Object.values(obj)[0]
+    };
+
     const sortedData = React.useMemo(() => {
         if (!sortColumn) return data;
 
         return [...data].sort((a, b) => {
-            const aValue = a['date'];
-            const bValue = b['date'];
+            const col = getSortColumn(sortColumn);
+
+            const aValue = getValueByPath(a[col]);
+            const bValue = getValueByPath(b[col]);
 
             if (typeof aValue === 'number' && typeof bValue === 'number') {
                 return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
@@ -58,12 +76,12 @@ const Table = ({title, columns, data, style, error, isLoading, setColumnModalOpe
                 return sortDirection === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
             }
         });
-    }, [data, sortColumn, sortDirection])
+    }, [data, sortColumn, sortDirection]);
 
     const download = async () => {
-        if(!fetchDataAsCSV) return
+        if (!fetchDataAsCSV) return
         const data = await fetchDataAsCSV()
-        const blob = new Blob([data], { type: 'text/csv' });
+        const blob = new Blob([data], {type: 'text/csv'});
         const url = window.URL.createObjectURL(blob);
         // Create a link element
         const a = document.createElement('a');
@@ -122,7 +140,7 @@ const Table = ({title, columns, data, style, error, isLoading, setColumnModalOpe
                             text="Download"
                             onClick={download}
                             style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
-                       />
+                        />
                     </div>
                 </div>
                 {/*Added inline styling because tailwind height has limitations*/}

@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
 import {FilterOption} from "../Definitions/FilterOption.ts";
-import {ArStoneMasterColumns, MapFormDataToStoneMasterColumns, StoneMasterColumnsMap} from "../Definitions/enum.ts";
+import {
+    ArStoneMasterColumns,
+    MapFormDataToJewelryMasterColumns,
+    MapFormDataToStoneMasterColumns,
+    StoneMasterColumnsMap
+} from "../Definitions/enum.ts";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
 import {getStoneDataAsCSV, getStoneMasterItemsFromClient, StoneMasterQuery} from "../model/queries/ArStoneMasterDAO.ts";
@@ -55,6 +60,10 @@ const Stone: React.FC = () => {
         fetchData().then()
     }, []);
 
+    const transformSortColumn = (col: string): string => {
+        return  MapFormDataToStoneMasterColumns[col as keyof typeof MapFormDataToStoneMasterColumns];
+    }
+
     return (
         <>
             <Table columns={columns}
@@ -62,6 +71,7 @@ const Stone: React.FC = () => {
                    title="Stone Master"
                    isLoading={isLoading}
                    error={error}
+                   getSortColumn={(col) => transformSortColumn(col)}
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}
                    fetchDataAsCSV={getStoneDataAsCSV}
