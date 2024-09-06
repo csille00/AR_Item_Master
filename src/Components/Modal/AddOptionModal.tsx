@@ -1,35 +1,34 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from "../Util/Button.tsx";
-import {Option} from "../../Definitions/DropdownOption.ts";
-import {ArLoader} from "../Util/Loading.tsx";
 import {Error} from "../Util/Error.tsx";
 import {Modal} from "../Util/Modal.tsx";
 import LabeledInput from "../Util/LabeledInput.tsx";
-import {LabeledInputType} from "../../Definitions/enum.ts";
 import {Bounce, toast} from "react-toastify";
+import {GenericModalProps} from "../../Definitions/props.ts";
+import {FormColumn} from "../../Definitions/FormColumn.ts";
+import {AdminTableConfig} from "../../Definitions/FormConfig/adminConfig.ts";
 
-export interface AddOptionModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    title: string;
-    onAddOption: (option: Option) => Promise<void>;
+export interface AddOptionModalProps extends GenericModalProps {
+    onAddOption: (option: {[key: string]: any}) => Promise<void>;
+    selectedTable: string;
 }
 
-export const AddOptionModal: React.FC<AddOptionModalProps> = ({
-                                                                        isOpen,
-                                                                        onClose,
-                                                                        title,
-                                                                        onAddOption,
-                                                                    }) => {
-    const [newOption, setNewOption] = useState<Option | null>({description: ""});  // Initialize with the passed option
-    const [isLoading, setIsLoading] = useState(false);  // Set loading to false initially
+export function AddOptionModal({
+                                      isOpen,
+                                      onClose,
+                                      onAddOption,
+                                      selectedTable,
+                                  }: AddOptionModalProps): React.JSX.Element {
+    const [isLoading, setIsLoading] = useState(false);
+    const [formData, setFormData] = useState<{ [key: string]: any }>({});
+    const [columns, setColumns] = useState<FormColumn[]>([]);
     const [error, setError] = useState<string | null>(null);
 
-    const handleApply = async () => {
-        if (newOption) {
+    const handleSubmit = async () => {
+        if (formData) {
             try {
                 setIsLoading(true);
-                await onAddOption(newOption);
+                await onAddOption(formData);
                 toast.success('Success!', {
                     position: "top-right",
                     autoClose: 3000,
@@ -43,7 +42,7 @@ export const AddOptionModal: React.FC<AddOptionModalProps> = ({
                 });
             } catch (error) {
                 console.error((error as Error).message);
-                setError(`Failed to update ${newOption.description}. Please try again later.`);
+                setError(`Failed to update. Please try again later.`);
             } finally {
                 setIsLoading(false);
                 onClose();
@@ -51,46 +50,66 @@ export const AddOptionModal: React.FC<AddOptionModalProps> = ({
         }
     };
 
-    if(isLoading){
-        return <ArLoader/>
-    }
+    useEffect(() => {
+        const fetchFormConfig = async () => {
+            setIsLoading(true);
+            try {
+                const configObj = new AdminTableConfig()
+                const config = await configObj.getAdminTableConfig(selectedTable);
+                setColumns(config);
+            } catch (error) {
+                setError("Failed to fetch form config: " + (error as Error).message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    if(error){
-        return <Error message={error}/>
-    }
+        fetchFormConfig();
+    }, []);
 
-    if (!isOpen) {
-        return null;
-    }
+    const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        setFormData({
+            ...formData,
+            [label]: event.target.value
+        });
+    };
 
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title={"Edit"}
+            title={"Add"}
             width="max-w-sm"
+            noX={true}
+            isLoading={isLoading}
+            error={error}
             footer={
-                <Button text="Add" onClick={handleApply}
-                        style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white" />
+                <>
+                    <Button text="Add" onClick={handleSubmit}
+                            style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white" />
+                    <Button text="Cancel" onClick={onClose}
+                            style="bg-superlightgr text-sm text-argray py-1 rounded-md hover:bg-lightgr hover:text-white" />
+                </>
             }
         >
-            <div className="flex items-center justify-between m-4">
-                <label className="">
-                    <div className="">
-                        {title}
-                    </div>
-                </label>
-                <LabeledInput
-                    type={LabeledInputType.STRING}
-                    onChange={(e) => setNewOption({ ...newOption, description: e.target.value })}
-                    value={`${newOption?.description}`}
-                    placeholder={"New Description"}
-                    required={false}
-                    style=""
-                    boxStyle="p-2 rounded-lg border w-44"
-                />
+            <div className="flex flex-col m-4 space-y-4">
+                <form onSubmit={handleSubmit} className="">
+                    {columns.map((column, index) => (
+                        <div className="mb-4" key={index}>
+                            <LabeledInput
+                                label={column.label}
+                                type={column.type}
+                                value={formData[column.label] || ''}
+                                required={column.required}
+                                options={column.options}
+                                onChange={(e) => handleChange(column.label, e)}
+                                style="flex justify-between items-center"
+                                boxStyle="p-2 rounded-lg border w-36"
+                            />
+                        </div>
+                    ))}
+                </form>
             </div>
         </Modal>
     );
-};
-
+}

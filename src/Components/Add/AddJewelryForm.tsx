@@ -1,4 +1,3 @@
-import {getFormConfig} from "../../Definitions/FormConfig/jewelryFormConfig.ts";
 import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
 import {
     ArJewelryMasterColumns,
@@ -10,26 +9,15 @@ import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {insertIntoJewelryMaster} from "../../model/queries/ArJewelryMasterDAO.ts";
 import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
+import {JewelryFormConfig} from "../../Definitions/FormConfig/jewelryFormConfig.ts";
 
 const AddJewelryForm = () => {
 
+    const jewelryConfig = new JewelryFormConfig()
     const addJewelry = async (formData: {
         [key: string]: string | number
-    }, columns: FormColumn[]): Promise<boolean> => {
+    }, columns: FormColumn[]): Promise<string | null> => {
         // Ensure all required fields are filled out
-        for (const column of columns) {
-            if (column.required && (formData[column.label] === undefined || formData[column.label] === '')) {
-                alert(`${column.label} is required.`);
-                return false;
-            }
-            if (
-                column.type == LabeledInputType.NUMBER
-                && column.constraint
-                && (Number(formData[column.label]) < column.constraint.low || Number(formData[column.label]) > column.constraint.high)
-            ) {
-                alert(`${column.label} must be between ${column.constraint.low} and ${column.constraint.high}.`);
-            }
-        }
 
         let data: TablesInsert<'ar_jewelry_master'> = {};
         console.log('Form data: \n', formData)
@@ -58,17 +46,17 @@ const AddJewelryForm = () => {
 
         try {
             await insertIntoJewelryMaster(data);
-            return true;
+            return null;
         } catch (error) {
             console.error("Error inserting data:", error);
-            return false;
+            return error;
         }
     };
 
     return (
         <AddForm
             title="Add Jewelry"
-            fetchColumns={(type: string) => getFormConfig(type)}
+            fetchColumns={(type: string) => jewelryConfig.getFormConfig(type)}
             fetchProductTypes={getProductTypesFromClient}
             initialType={ProductTypeIds.ENG}
             typeValue={ArJewelryMasterColumns.TYPE}

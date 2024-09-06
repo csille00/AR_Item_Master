@@ -1,17 +1,24 @@
 import React from 'react';
 import Button from "../Util/Button.tsx";
 import {Modal} from "../Util/Modal.tsx";
+import {GenericModalProps} from "../../Definitions/props.ts";
 
-interface ModalProps {
-    isOpen: boolean;
-    onClose: () => void;
+interface ChangeViewModalProps extends GenericModalProps {
     columns: string[];
     allColumns: string[]
     setColumns: (columns: string[]) => void;
     initialColumns: string[]
 }
 
-export const ChangeViewModal: React.FC<ModalProps> = ({isOpen, onClose, columns, setColumns, initialColumns, allColumns}) => {
+export const ChangeViewModal: React.FC<ChangeViewModalProps> = ({
+                                                                    isOpen,
+                                                                    onClose,
+                                                                    label,
+                                                                    columns,
+                                                                    setColumns,
+                                                                    initialColumns,
+                                                                    allColumns
+                                                                }) => {
 
     const handleToggleColumn = (column: string) => {
         if (columns.includes(column)) {
@@ -33,19 +40,20 @@ export const ChangeViewModal: React.FC<ModalProps> = ({isOpen, onClose, columns,
         setColumns(initialColumns)
     }
 
-    if (!isOpen) return null;
-
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title="Column Filter"
+            title={label}
             width="max-w-xl"
             footer={
                 <>
-                    <Button text="Select All" onClick={handleSelectAll} style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white" />
-                    <Button text="Deselect All" onClick={handleDeselectAll} style="bg-lightgr text-sm text-white py-1 rounded-md hover:bg-argray hover:text-white" />
-                    <Button text="Reset Default" onClick={handleReset} style="text-sm border border-lightgr text-argray py-1 rounded-md hover:bg-lightgr hover:text-white" />
+                    <Button text="Select All" onClick={handleSelectAll}
+                            style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white"/>
+                    <Button text="Deselect All" onClick={handleDeselectAll}
+                            style="bg-lightgr text-sm text-white py-1 rounded-md hover:bg-argray hover:text-white"/>
+                    <Button text="Reset Default" onClick={handleReset}
+                            style="text-sm border border-lightgr text-argray py-1 rounded-md hover:bg-lightgr hover:text-white"/>
                 </>
             }
         >

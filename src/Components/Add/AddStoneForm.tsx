@@ -1,7 +1,6 @@
 import {AddForm} from "./AddForm.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {getStoneProductTypesFromClient} from "../../model/queries/StoneProductTypeDAO.ts";
-import {getStoneFormConfig} from "../../Definitions/FormConfig/stoneFormConfig.ts";
 import {
     ArStoneMasterColumns,
     LabeledInputType,
@@ -10,25 +9,11 @@ import {
 } from "../../Definitions/enum.ts";
 import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
 import {insertIntoStoneMaster} from "../../model/queries/ArStoneMasterDAO.ts";
+import {StoneFormConfig} from "../../Definitions/FormConfig/stoneFormConfig.ts";
 
 const AddStoneForm = () => {
-
-    const addStone = async (formData: { [key: string]: string | number }, columns: FormColumn[]): Promise<boolean> => {
-        // Ensure all required fields are filled out
-        for (const column of columns) {
-            if (column.required && (formData[column.label] === undefined || formData[column.label] === '')) {
-                alert(`${column.label} is required.`);
-                return false;
-            }
-
-            if (
-                column.type == LabeledInputType.NUMBER
-                && column.constraint
-                && (Number(formData[column.label]) < column.constraint.low || Number(formData[column.label]) > column.constraint.high)
-            ) {
-                alert(`${column.label} must be between ${column.constraint.low} and ${column.constraint.high}.`);
-            }
-        }
+    const stoneConfig = new StoneFormConfig()
+    const addStone = async (formData: { [key: string]: string | number }, columns: FormColumn[]): Promise<string | null> => {
 
         let data: TablesInsert<'ar_stone_master'> = {};
         // Iterate through formData keys to build the data object
@@ -37,7 +22,7 @@ const AddStoneForm = () => {
             const column = columns.find(it => it.label === key);
 
             //if the column type is number, cast data to number to avoid errors
-            if (column?.type == LabeledInputType.NUMBER) {
+            if (column?.type == LabeledInputType.NUMBER || column?.type == LabeledInputType.SELECT) {
                 dataToAssign = Number(dataToAssign)
             }
 
@@ -55,10 +40,10 @@ const AddStoneForm = () => {
 
         try {
             await insertIntoStoneMaster(data);
-            return true;
+            return null;
         } catch (error) {
             console.error("Error inserting data:", error);
-            return false;
+            return error;
         }
     };
 
@@ -66,7 +51,7 @@ const AddStoneForm = () => {
         <>
             <AddForm
                 title="Add Stone"
-                fetchColumns={(type: string) => getStoneFormConfig(type)}
+                fetchColumns={(type: string) => stoneConfig.getStoneFormConfig(type)}
                 fetchProductTypes={getStoneProductTypesFromClient}
                 initialType={StoneProductTypeIds.ELS}
                 typeValue={ArStoneMasterColumns.TYPE}

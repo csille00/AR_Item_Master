@@ -43,11 +43,12 @@ export type Database = {
           serial_number: number
           side_stones: number | null
           sku_number: string | null
-          st_cert_clarity: number | null
-          st_cert_color: number | null
           st_cert_cut: number | null
+          st_cert_number: number | null
           st_cert_type: number | null
+          st_clarity_grade: number | null
           st_color: number | null
+          st_color_grade: number | null
           st_cost: unknown | null
           st_ctw: number | null
           st_ctw_range: string | null
@@ -58,7 +59,7 @@ export type Database = {
           st_shape: number | null
           st_source: number | null
           st_table: string | null
-          st_type: string | null
+          st_type: number | null
           st_width: number | null
           status: string | null
           style_number: number | null
@@ -98,11 +99,12 @@ export type Database = {
           serial_number?: number
           side_stones?: number | null
           sku_number?: string | null
-          st_cert_clarity?: number | null
-          st_cert_color?: number | null
           st_cert_cut?: number | null
+          st_cert_number?: number | null
           st_cert_type?: number | null
+          st_clarity_grade?: number | null
           st_color?: number | null
+          st_color_grade?: number | null
           st_cost?: unknown | null
           st_ctw?: number | null
           st_ctw_range?: string | null
@@ -113,7 +115,7 @@ export type Database = {
           st_shape?: number | null
           st_source?: number | null
           st_table?: string | null
-          st_type?: string | null
+          st_type?: number | null
           st_width?: number | null
           status?: string | null
           style_number?: number | null
@@ -153,11 +155,12 @@ export type Database = {
           serial_number?: number
           side_stones?: number | null
           sku_number?: string | null
-          st_cert_clarity?: number | null
-          st_cert_color?: number | null
           st_cert_cut?: number | null
+          st_cert_number?: number | null
           st_cert_type?: number | null
+          st_clarity_grade?: number | null
           st_color?: number | null
+          st_color_grade?: number | null
           st_cost?: unknown | null
           st_ctw?: number | null
           st_ctw_range?: string | null
@@ -168,7 +171,7 @@ export type Database = {
           st_shape?: number | null
           st_source?: number | null
           st_table?: string | null
-          st_type?: string | null
+          st_type?: number | null
           st_width?: number | null
           status?: string | null
           style_number?: number | null
@@ -275,20 +278,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "ar_jewelry_master_st_cert_clarity_fkey"
-            columns: ["st_cert_clarity"]
-            isOneToOne: false
-            referencedRelation: "st_clarity_grade"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ar_jewelry_master_st_cert_color_fkey"
-            columns: ["st_cert_color"]
-            isOneToOne: false
-            referencedRelation: "st_color_grade"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "ar_jewelry_master_st_cert_cut_fkey"
             columns: ["st_cert_cut"]
             isOneToOne: false
@@ -300,6 +289,13 @@ export type Database = {
             columns: ["st_cert_type"]
             isOneToOne: false
             referencedRelation: "st_cert_type"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_jewelry_master_st_clarity_grade_fkey"
+            columns: ["st_clarity_grade"]
+            isOneToOne: false
+            referencedRelation: "st_color_grade"
             referencedColumns: ["id"]
           },
           {
@@ -349,7 +345,14 @@ export type Database = {
             columns: ["st_type"]
             isOneToOne: false
             referencedRelation: "st_type"
-            referencedColumns: ["st_type"]
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_st_color_grade"
+            columns: ["st_color_grade"]
+            isOneToOne: false
+            referencedRelation: "st_color_grade"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -359,7 +362,7 @@ export type Database = {
           cost: unknown | null
           date: string | null
           date_quantity_added: string | null
-          material_type_id: number | null
+          material_type: number | null
           memo: string | null
           msrp: unknown | null
           prod_name: string | null
@@ -367,12 +370,12 @@ export type Database = {
           refined_status: string | null
           serial_number: number
           sku_number: string | null
-          st_cert_clarity: number | null
-          st_cert_color: number | null
           st_cert_cut: number | null
           st_cert_num: string | null
           st_cert_type: number | null
+          st_clarity_grade: number | null
           st_color: number | null
+          st_color_grade: number | null
           st_cost: unknown | null
           st_ctw: number | null
           st_ctw_range: string | null
@@ -386,7 +389,7 @@ export type Database = {
           st_sku: string | null
           st_source: number | null
           st_table: string | null
-          st_type: string | null
+          st_type: number | null
           st_width: number | null
           style_number: string | null
         }
@@ -395,7 +398,7 @@ export type Database = {
           cost?: unknown | null
           date?: string | null
           date_quantity_added?: string | null
-          material_type_id?: number | null
+          material_type?: number | null
           memo?: string | null
           msrp?: unknown | null
           prod_name?: string | null
@@ -403,12 +406,12 @@ export type Database = {
           refined_status?: string | null
           serial_number?: number
           sku_number?: string | null
-          st_cert_clarity?: number | null
-          st_cert_color?: number | null
           st_cert_cut?: number | null
           st_cert_num?: string | null
           st_cert_type?: number | null
+          st_clarity_grade?: number | null
           st_color?: number | null
+          st_color_grade?: number | null
           st_cost?: unknown | null
           st_ctw?: number | null
           st_ctw_range?: string | null
@@ -422,7 +425,7 @@ export type Database = {
           st_sku?: string | null
           st_source?: number | null
           st_table?: string | null
-          st_type?: string | null
+          st_type?: number | null
           st_width?: number | null
           style_number?: string | null
         }
@@ -431,7 +434,7 @@ export type Database = {
           cost?: unknown | null
           date?: string | null
           date_quantity_added?: string | null
-          material_type_id?: number | null
+          material_type?: number | null
           memo?: string | null
           msrp?: unknown | null
           prod_name?: string | null
@@ -439,12 +442,12 @@ export type Database = {
           refined_status?: string | null
           serial_number?: number
           sku_number?: string | null
-          st_cert_clarity?: number | null
-          st_cert_color?: number | null
           st_cert_cut?: number | null
           st_cert_num?: string | null
           st_cert_type?: number | null
+          st_clarity_grade?: number | null
           st_color?: number | null
+          st_color_grade?: number | null
           st_cost?: unknown | null
           st_ctw?: number | null
           st_ctw_range?: string | null
@@ -458,14 +461,14 @@ export type Database = {
           st_sku?: string | null
           st_source?: number | null
           st_table?: string | null
-          st_type?: string | null
+          st_type?: number | null
           st_width?: number | null
           style_number?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "ar_stone_master_material_type_id_fkey"
-            columns: ["material_type_id"]
+            foreignKeyName: "ar_stone_master_material_type_fkey"
+            columns: ["material_type"]
             isOneToOne: false
             referencedRelation: "material_type"
             referencedColumns: ["id"]
@@ -476,20 +479,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "st_product_type"
             referencedColumns: ["prod_code"]
-          },
-          {
-            foreignKeyName: "ar_stone_master_st_cert_clarity_fkey"
-            columns: ["st_cert_color"]
-            isOneToOne: false
-            referencedRelation: "st_clarity_grade"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ar_stone_master_st_cert_color_fkey"
-            columns: ["st_cert_clarity"]
-            isOneToOne: false
-            referencedRelation: "st_color_grade"
-            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "ar_stone_master_st_cert_cut_fkey"
@@ -506,10 +495,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "ar_stone_master_st_clarity_grade_fkey"
+            columns: ["st_clarity_grade"]
+            isOneToOne: false
+            referencedRelation: "st_clarity_grade"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "ar_stone_master_st_color_fkey"
             columns: ["st_color"]
             isOneToOne: false
             referencedRelation: "st_color"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ar_stone_master_st_color_grade_fkey"
+            columns: ["st_color_grade"]
+            isOneToOne: false
+            referencedRelation: "st_color_grade"
             referencedColumns: ["id"]
           },
           {
@@ -552,7 +555,7 @@ export type Database = {
             columns: ["st_type"]
             isOneToOne: false
             referencedRelation: "st_type"
-            referencedColumns: ["st_type"]
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -981,6 +984,7 @@ export type Database = {
       }
       st_type: {
         Row: {
+          id: number
           mat_code: string | null
           mat_color: string | null
           mat_color_name: string | null
@@ -1025,6 +1029,7 @@ export type Database = {
           st_type: string
         }
         Insert: {
+          id?: number
           mat_code?: string | null
           mat_color?: string | null
           mat_color_name?: string | null
@@ -1069,6 +1074,7 @@ export type Database = {
           st_type: string
         }
         Update: {
+          id?: number
           mat_code?: string | null
           mat_color?: string | null
           mat_color_name?: string | null

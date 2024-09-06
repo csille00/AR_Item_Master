@@ -51,8 +51,8 @@ const createStoneMasterQuery = () => {
             st_origin(description),
             st_cert_type(description),
             st_cert_cut(description),
-            st_cert_color(description),
-            st_cert_clarity(description)
+            st_color_grade(description),
+            st_clarity_grade!ar_stone_master_st_clarity_grade_fkey(description)
         `);
 }
 
@@ -63,15 +63,12 @@ export async function getStoneMasterItemsFromClient(
 ): Promise<StoneMasterQuery | undefined> {
     // Apply filters
     const stoneMasterQuery = createStoneMasterQuery()
-    if(!filters.some(filter => filter.value == 'ALL')) {
-        filters.forEach(filter => {
-            const column = MapFormDataToStoneMasterColumns[filter.column as keyof typeof MapFormDataToStoneMasterColumns];
-            if (column) {
-                stoneMasterQuery.eq(column, filter.value);
-            }
-        });
-    }
-
+    filters.forEach(filter => {
+        const column = MapFormDataToStoneMasterColumns[filter.column as keyof typeof MapFormDataToStoneMasterColumns];
+        if (column && filter.value !== 'ALL') {
+            stoneMasterQuery.eq(column, filter.value);
+        }
+    });
     const {data, error} = await stoneMasterQuery
     console.log('data in dao: ', data)
 

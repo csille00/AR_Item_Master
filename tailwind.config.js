@@ -3,14 +3,15 @@ export default {
     content: ["./src/**/*.{js,jsx,ts,tsx}"],
     theme: {
         colors: {
-            argray: '#414043',
             current: 'currentColor',
-            red: '#ff5555',
+            white: '#FFFFFF',
+            superlightgr: '#F0F1F3',
             lightgr: '#BABCBE',
-            white: '#ffffff',
+            argray: '#414043',
             argold: '#A6947A',
             darkgold: '#7f6e55',
-            superlightgr: '#F0F1F3'
+            red: '#ff5555',
+            darkred: '#8B0000'
         },
     },
     plugins: [],

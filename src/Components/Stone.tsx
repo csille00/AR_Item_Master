@@ -1,14 +1,28 @@
 import React, {useEffect, useState} from "react";
 import Table from "../Components/Util/Table.tsx";
 import {FilterOption} from "../Definitions/FilterOption.ts";
-import {ArStoneMasterColumns} from "../Definitions/enum.ts";
+import {
+    ArStoneMasterColumns,
+    MapFormDataToJewelryMasterColumns,
+    MapFormDataToStoneMasterColumns,
+    StoneMasterColumnsMap
+} from "../Definitions/enum.ts";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
 import {getStoneDataAsCSV, getStoneMasterItemsFromClient, StoneMasterQuery} from "../model/queries/ArStoneMasterDAO.ts";
-import {StoneRow} from "./Util/StoneRow.tsx";
 import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
-import {ArLoader} from "./Util/Loading.tsx";
 import {Error} from "./Util/Error.tsx";
+import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
+import {Tables} from "../Definitions/generatedDefinitions.ts";
+import {getStSourceFromClient} from "../model/queries/StSourceDAO.ts";
+import {getStoneTypesOptionsFromClient} from "../model/queries/StoneTypeDAO.ts";
+import {getStoneColorFromClient} from "../model/queries/StoneColorDAO.ts";
+import {getStoneShapeFromClient} from "../model/queries/StoneShapeDAO.ts";
+import {getStoneCutOptionFromClient} from "../model/queries/StoneCutDAO.ts";
+import {getStoneOrientationFromClient} from "../model/queries/StoneOrientationDAO.ts";
+import {getCertTypesFromClient} from "../model/queries/STCertTypeDAO.ts";
+import {getColorGradeFromClient} from "../model/queries/StColorGradeDAO.ts";
+import {getCertClarityFromClient} from "../model/queries/StCertClarityDAO.ts";
 
 
 const Stone: React.FC = () => {
@@ -35,26 +49,19 @@ const Stone: React.FC = () => {
                 setStoneData(data);
             }
         } catch (error) {
+            console.log(error)
             setError('Error fetching items from the database: ' + (error as Error).message);
         } finally {
             setIsLoading(false);
         }
     };
 
-    // const handleClearFilters = () => {
-    //     setFilterOptions([])
-    // }
-
     useEffect(() => {
         fetchData().then()
     }, []);
 
-    if (isLoading) {
-        return <ArLoader/>;
-    }
-
-    if (error || !stoneData) {
-        return <Error message={error ?? ""}/>
+    const transformSortColumn = (col: string): string => {
+        return  MapFormDataToStoneMasterColumns[col as keyof typeof MapFormDataToStoneMasterColumns];
     }
 
     return (
@@ -62,16 +69,20 @@ const Stone: React.FC = () => {
             <Table columns={columns}
                    data={stoneData}
                    title="Stone Master"
+                   isLoading={isLoading}
+                   error={error}
+                   getSortColumn={(col) => transformSortColumn(col)}
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}
                    fetchDataAsCSV={getStoneDataAsCSV}
                    filename={"ar_stone_master.csv"}
             >
-                {(item, columns) => <StoneRow item={item} columns={columns}/>}
+                {(item, columns) => <ItemMasterRow<Tables<'ar_stone_master'>, StoneMasterColumnsMap> item={item} columns={columns} map={MapFormDataToStoneMasterColumns}/>}
             </Table>
             <ChangeViewModal
                 isOpen={isColumnModalOpen}
                 onClose={() => setColumnModalOpen(false)}
+                label="Column Filter"
                 columns={columns}
                 initialColumns={initialColumnState}
                 allColumns={Object.values(ArStoneMasterColumns)}
@@ -80,9 +91,22 @@ const Stone: React.FC = () => {
             <FilterModal
                 isOpen={isFilterModalOpen}
                 onClose={() => setFilterModalOpen(false)}
-                type={ArStoneMasterColumns.TYPE}
-                fetchProductTypes={getStoneProductTypesFromClient}
+                label={"Filter"}
+                fetchFilters={{
+                    'ST Product Type': getStoneProductTypesFromClient,
+                    'ST Source': getStSourceFromClient,
+                    'ST Type': getStoneTypesOptionsFromClient,
+                    'ST Color': getStoneColorFromClient,
+                    'ST Shape': getStoneShapeFromClient,
+                    'ST Cut': getStoneCutOptionFromClient,
+                    'ST Orientation': getStoneOrientationFromClient,
+                    'ST Origin': getStoneCutOptionFromClient,
+                    'ST Cert Type': getCertTypesFromClient,
+                    'ST Color Grade': getColorGradeFromClient,
+                    'ST Clarity Grade': getCertClarityFromClient
+                }}
                 setFilterOptions={setFilterOptions}
+                filterOptions={filterOptions}
                 onApplyFilters={fetchData}
             />
         </>

@@ -32,6 +32,7 @@ const createJewelryMasterQuery = () => {
             st_cost,
             st_ctw_range,
             st_table,
+            st_cert_number,
             age,
             gender,
             returnable,
@@ -59,8 +60,8 @@ const createJewelryMasterQuery = () => {
             st_origin(description),
             st_cert_type(description),
             st_cert_cut(description),
-            st_cert_color(description),
-            st_cert_clarity(description),
+            st_color_grade!fk_st_color_grade(description),
+            st_clarity_grade(description),
             metal_finish(description),
             metal_texture(description),
             band_style(description),
@@ -91,20 +92,19 @@ export async function getJewelryMasterPageFromClient(
     jewelryMasterQuery.range(start, end)
 
     // Apply filters
-    if(!filters.some(filter => filter.value == 'ALL')) {
-        filters.forEach(filter => {
-            const column = MapFormDataToJewelryMasterColumns[filter.column as keyof typeof MapFormDataToJewelryMasterColumns];
-            if (column) {
-                jewelryMasterQuery.eq(column, filter.value);
-            }
-        });
-    }
+    filters.forEach(filter => {
+        const column = MapFormDataToJewelryMasterColumns[filter.column as keyof typeof MapFormDataToJewelryMasterColumns];
+        if (column && filter.value !== 'ALL') {
+            jewelryMasterQuery.eq(column, filter.value);
+        }
+    });
 
     const {data, error} = await jewelryMasterQuery
 
     if (error) {
         throw error;
     }
+    console.log('in dao: ', data)
     return data as JewelryMasterQuery;
 }
 

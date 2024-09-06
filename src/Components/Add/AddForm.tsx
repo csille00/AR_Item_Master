@@ -4,7 +4,7 @@ import Button from "../Util/Button.tsx";
 import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
 import {LabeledInputType} from "../../Definitions/enum.ts";
-import {useNavigate} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {ArLoader} from "../Util/Loading.tsx";
 import {Bounce, toast, ToastContainer} from "react-toastify";
 import {Error} from "../Util/Error.tsx";
@@ -15,7 +15,7 @@ interface SharedFormProps {
     fetchProductTypes: () => Promise<Option[] | undefined>;
     initialType: string;
     typeValue: string
-    submitForm: (formData: { [key: string]: string | number }, columns: FormColumn[]) => Promise<boolean>;
+    submitForm: (formData: { [key: string]: string | number }, columns: FormColumn[]) => Promise<string | null>;
 }
 
 export const AddForm: React.FC<SharedFormProps> = ({
@@ -32,7 +32,6 @@ export const AddForm: React.FC<SharedFormProps> = ({
     const [formData, setFormData] = useState<{ [key: string]: string }>({[typeValue]: initialType});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const getProductTypes = async () => {
@@ -91,10 +90,24 @@ export const AddForm: React.FC<SharedFormProps> = ({
         if (!event) return;
         event.preventDefault();
         formData[typeValue] = type
-        const valid = await submitForm(formData, columns)
-        if (!valid) {
-            return
+
+        for (const column of columns) {
+            if (column.required && (formData[column.label] === undefined || formData[column.label] === '')) {
+                alert(`${column.label} is required.`);
+                return
+            }
+            if (
+                column.type == LabeledInputType.NUMBER
+                && column.constraint
+                && (Number(formData[column.label]) < column.constraint.low || Number(formData[column.label]) > column.constraint.high)
+            ) {
+                alert(`${column.label} must be between ${column.constraint.low} and ${column.constraint.high}.`);
+                return
+            }
         }
+
+        const error = await submitForm(formData, columns)
+        setError(error) //this function will return null on success, and an error string on error, which means I can just set the error to the result
         handleClear()
 
         toast.success('Success!', {
@@ -120,17 +133,21 @@ export const AddForm: React.FC<SharedFormProps> = ({
         setFormData(clearedData);
     };
 
+    const hoverClasses = (isActive: boolean): string =>
+        `border border-argray rounded text-center text-lg px-11 py-4 mx-3
+            ${isActive
+            ? 'bg-argray text-white hover:text-white'
+            : 'bg-superlightgr text-argray hover:text-argray'}`
+
     return (
         <>
-            <div className="mt-4">
-                <button onClick={() => navigate('/addJewelry')}
-                        className="bg-argray text-white hover:text-white rounded w-32 text-center mb-2 m-4">
+            <div className="m-12">
+                <NavLink to={'/addJewelry'} className={({isActive}) => (hoverClasses(isActive))}>
                     Jewelry
-                </button>
-                <button onClick={() => navigate('/addStone')}
-                        className="bg-superlightgr text-argray hover:text-argray border border-argray rounded w-32 text-center">
+                </NavLink>
+                <NavLink to={'/addStone'} className={({isActive}) => (hoverClasses(isActive))}>
                     Stone
-                </button>
+                </NavLink>
             </div>
             <div className="bg-white rounded-lg shadow-md p-4 mx-10 my-4">
                 <div className="flex justify-center px-10">

@@ -1,5 +1,6 @@
 import {getClient} from "../getClient.ts";
 import {Option} from "../../Definitions/DropdownOption.ts";
+import {Tables, TablesInsert, TablesUpdate} from "../../Definitions/generatedDefinitions.ts";
 
 const client = getClient()
 
@@ -27,5 +28,39 @@ export async function getStoneCutFromClient(): Promise<{id: number, cut: string,
     }
     if (data) {
         return data
+    }
+}
+
+export async function addStCut(item: TablesInsert<'st_cut'>): Promise<void> {
+    try {
+        await client
+            .from('st_cut')
+            .insert([item])
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export async function updateStCut(item: TablesUpdate<'st_cut'>): Promise<void> {
+    const {error} = await client
+        .from('st_cut')
+        .update(item)
+        .eq('id', item.id)
+    if (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export async function deleteStCut(item: Tables<'st_cut'>): Promise<void> {
+    try {
+        await client
+            .from('st_cut')
+            .delete()
+            .eq('id', item.id);
+    } catch (error) {
+        console.log(error);
+        throw error;
     }
 }
