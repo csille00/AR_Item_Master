@@ -4,7 +4,6 @@ import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
 import tableIcon from "../../assets/table.svg"
-import {ArJewelryMasterColumns} from "../../Definitions/enum.ts";
 
 export interface TableProps {
     title: string;
@@ -37,7 +36,7 @@ const Table = ({
     const handleSort = (column: string) => {
         //for now, only support the sorting of the data column.
         // It is set up to support the other ones, I just dont know how to properly sort them right now (8/05/24)
-        if (!(column == ArJewelryMasterColumns.DATE)) return
+        // if (!(column == ArJewelryMasterColumns.DATE)) return
         if (sortColumn === column) {
             // Toggle sort direction
             setSortDirection(prevDirection => prevDirection === 'asc' ? 'desc' : 'asc');
@@ -132,9 +131,25 @@ const Table = ({
                         <thead className="sticky top-0 bg-white">
                         <tr>
                             {columns.map((column, index) => (
-                                <th key={index} className="p-4 cursor-pointer" onClick={() => handleSort(column)}>
-                                    {column}
-                                    {sortColumn === column && (sortDirection === 'asc' ? ' ↑' : ' ↓')}
+                                <th key={index} className="p-4 cursor-pointer hover:underline" onClick={() => handleSort(column)}>
+                                    {sortColumn === column ? (
+                                        <div className="flex items-center">
+                                            {column}
+                                            {sortDirection === 'asc' ? (
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 pl-2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"/>
+                                                </svg>
+                                            ) : (
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 pl-2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18"/>
+                                                </svg>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <>{column}</>
+
+                                    )}
+
                                 </th>
                             ))}
                         </tr>
@@ -144,7 +159,7 @@ const Table = ({
                             <tr key={index}>
                                 {children ? children(item, columns) : null}
                                 <td>
-                                    <NavLink to={`/productDetails/1234`} className="">
+                                    <NavLink to={`/productDetails/${item.sku_number}`} className="">
                                         View More
                                     </NavLink>
                                 </td>

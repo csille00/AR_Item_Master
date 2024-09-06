@@ -91,3 +91,14 @@ export async function getStoneDataAsCSV(){
     }
     return data
 }
+
+export async function getStoneDataBySKU(sku: string){
+    const { data, error } = await client
+        .from('ar_stone_master')
+        .select()
+        .eq('sku_number', sku)
+    if(error){
+        throw error
+    }
+    return data
+}

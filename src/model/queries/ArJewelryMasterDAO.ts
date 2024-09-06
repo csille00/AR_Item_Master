@@ -118,3 +118,15 @@ export async function getJewelryDataAsCSV(){
     }
     return data
 }
+
+export async function getJewelryDataBySKU(sku: string){
+    const { data, error } = await client
+        .from('ar_jewelry_master')
+        .select()
+        .eq('sku_number', sku)
+    if(error){
+        throw error
+    }
+    return data
+}
+
