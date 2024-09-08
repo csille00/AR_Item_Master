@@ -94,8 +94,20 @@ export async function getStoneDataBySKU(sku: string){
         .from('ar_stone_master')
         .select()
         .eq('sku_number', sku)
+        .limit(1)
     if(error){
         throw error
     }
-    return data
+    return data ? data[0] : null
+}
+
+export async function editStoneMasterRow(sku: string, col: string, newVal: string | number) {
+    const {data, error} = await client
+        .from('ar_stone_master')
+        .update({[col]: newVal})
+        .eq('sku_number', sku)
+
+    if(error){
+        console.error("Error updating item: ", error)
+    }
 }

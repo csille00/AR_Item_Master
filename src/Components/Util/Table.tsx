@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {NavLink, useNavigate} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
@@ -41,6 +41,7 @@ const Table = ({
     const navigate = useNavigate();
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+    const pathVar = title.includes('Jewelry') ? "jewelry" : "stone"
 
     const handleSort = (column: string) => {
         if (sortColumn === column) {
@@ -177,9 +178,10 @@ const Table = ({
                             <tr key={index}>
                                 {children ? children(item, columns) : null}
                                 <td>
-                                    <NavLink to={`/productDetails/${item.sku_number}`} className="">
+
+                                    <Link to={`/productDetails/${pathVar}/${item.sku_number}`} state={{ item }}>
                                         View More
-                                    </NavLink>
+                                    </Link>
                                 </td>
                             </tr>
                         ))}
