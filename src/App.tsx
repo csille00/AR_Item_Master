@@ -25,7 +25,6 @@ function App() {
                         <Route path="admin" element={<Admin/>}/>
                         <Route path="productDetails/jewelry/:sku" element={<JewelryDetailsPage/>}/>
                         <Route path="productDetails/stone/:sku" element={<StoneDetailsPage/>}/>
-                        {/*<Route path="*" element={<NoPage />} />*/}
                     </Route>
                 </Route>
                 <Route path="*" element={<Authentication/>}/>

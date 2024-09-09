@@ -1,7 +1,7 @@
 import {getClient} from "../getClient.ts";
 import {FilterOption} from "../../Definitions/FilterOption.ts";
 import {MapFormDataToJewelryMasterColumns} from "../../Definitions/enum.ts";
-import {Tables, TablesInsert} from "../../Definitions/generatedDefinitions.ts";
+import {Tables, TablesInsert, TablesUpdate} from "../../Definitions/generatedDefinitions.ts";
 import {QueryData} from "@supabase/supabase-js";
 
 const client = getClient()
@@ -131,10 +131,10 @@ export async function getJewelryDataBySKU(sku: string): Promise<Tables<'ar_jewel
     return data ? data[0] : null
 }
 
-export async function editJewelryMasterRow(sku: string, col: string, newVal: string | number) {
-    const {data, error} = await client
+export async function editJewelryMasterRow(sku: string, row: TablesUpdate<'ar_jewelry_master'> ): Promise<void> {
+    const {error} = await client
         .from('ar_jewelry_master')
-        .update({[col]: newVal})
+        .update(row)
         .eq('sku_number', sku)
 
     if(error){

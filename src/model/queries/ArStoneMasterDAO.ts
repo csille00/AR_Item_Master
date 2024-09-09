@@ -1,7 +1,7 @@
 import {getClient} from "../getClient.ts";
 import {FilterOption} from "../../Definitions/FilterOption.ts";
 import {MapFormDataToStoneMasterColumns} from "../../Definitions/enum.ts";
-import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
+import {TablesInsert, TablesUpdate} from "../../Definitions/generatedDefinitions.ts";
 import {QueryData} from "@supabase/supabase-js";
 
 const client = getClient()
@@ -101,10 +101,20 @@ export async function getStoneDataBySKU(sku: string){
     return data ? data[0] : null
 }
 
-export async function editStoneMasterRow(sku: string, col: string, newVal: string | number) {
-    const {data, error} = await client
+export async function deleteStoneMasterRowBySKU(sku: string){
+    const {error} = await client
         .from('ar_stone_master')
-        .update({[col]: newVal})
+        .delete()
+        .eq('sku_number', sku)
+    if(error){
+        throw error
+    }
+}
+
+export async function editStoneMasterRow(sku: string, row: TablesUpdate<'ar_stone_master'> ): Promise<void> {
+    const {error} = await client
+        .from('ar_stone_master')
+        .update(row)
         .eq('sku_number', sku)
 
     if(error){

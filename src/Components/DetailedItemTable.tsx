@@ -1,98 +1,151 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Tables} from "../Definitions/generatedDefinitions.ts";
+import {FormColumn} from "../Definitions/FormColumn.ts";
+import {Error} from "./Util/Error.tsx";
+import {ArLoader} from "./Util/Loading.tsx";
+import LabeledInput from "./Util/LabeledInput.tsx";
+import {LabeledInputType} from "../Definitions/enum.ts";
+import Button from "./Util/Button.tsx";
 
 interface ItemTableProps {
+    title: string;
+    fetchColumns: () => Promise<FormColumn[]>
     itemSku: string;
-    fetchItem: (sku: string) => (sku) => Promise<Tables<"ar_jewelry_master"> | null>
-    onEdit: (sku: string, key: string, value: any) => Promise<void>;
+    fetchItem: (sku: string) => Promise<Tables<"ar_jewelry_master"> | null>
+    transformColumn: (col: string) => string
+    onSubmitEdit: (data: { [key: string]: string | number}, columns: FormColumn[]) => Promise<string | null>;
 }
 
-const ItemTable: React.FC<ItemTableProps> = ({ itemSku, fetchItem, onEdit }) => {
-    const [editingKey, setEditingKey] = useState<string | null>(null); // Track the currently edited key
+const ItemTable: React.FC<ItemTableProps> = ({title, fetchColumns, itemSku, fetchItem, transformColumn, onSubmitEdit}) => {
+    const [editingKey, setEditingKey] = useState<string | null>(null);
     const [editedValue, setEditedValue] = useState<string | number>("");
-    const [item, setItem] = useState<any>('');
+    const [columns, setColumns] = useState<FormColumn[]>([]);
+    const [item, setItem] = useState<any>(null);
+    const [formData, setFormData] = useState<{ [key: string]: string }>({});
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [nonce, setNonce] = useState(0);
 
+    // Fetch columns once or when fetchColumns changes
+    useEffect(() => {
+        const fetchFormConfig = async () => {
+            setIsLoading(true);
+            try {
+                const config = await fetchColumns();
+                setColumns(config);
+            } catch (error) {
+                setError("Failed to fetch form config: " + (error as Error).message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchFormConfig();
+    }, [fetchColumns]);
+
+    // Fetch item when itemSku changes
     useEffect(() => {
         const getItem = async () => {
-            const data = await fetchItem(itemSku)
-            if(data){
-                console.log(Object.keys(data))
-                setItem(data)
+            const data = await fetchItem(itemSku);
+            if (data) {
+                setItem(data);
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    ...Object.fromEntries(Object.entries(data))
+                }));
+                console.log("ITEM: ", data);
             }
-        }
-        getItem().then()
-    }, []);
+        };
+        getItem();
+    }, [itemSku, fetchItem, nonce]);
 
-    const handleEdit = async (key: string, value: any) => {
+    // Memoize the columns to avoid recalculating on every render
+    const memoizedColumns = useMemo(() => columns, [columns]);
+
+    const handleEdit = (key: string, value: any) => {
         setEditingKey(key);
         setEditedValue(value);
-        console.log("edited value", editedValue)
+
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [key]: value
+        }));
+        console.log("edited value", value, ' ', key);
+        console.log("form data: ", formData);
     };
 
     const handleSave = async () => {
+        setIsLoading(true);
         if (editingKey) {
-            await onEdit(item.sku_number, editingKey, editedValue);
-            setEditingKey(null); // Exit edit mode after saving
-            window.location.reload();
+            for (const column of memoizedColumns) {
+                const col = transformColumn(column.label)
+                if (
+                    column.type === LabeledInputType.NUMBER
+                    && column.constraint
+                    && (Number(formData[col] ?? 0) < column.constraint.low || Number(formData[col] ?? 0) > column.constraint.high)
+                ) {
+                    alert(`${column.label} must be between ${column.constraint.low} and ${column.constraint.high}.`);
+                    setIsLoading(false);
+                    return;
+                }
+            }
+
+            await onSubmitEdit(formData, memoizedColumns);
+            setEditingKey(null);
+            setNonce(prevNonce => prevNonce + 1);
         }
+        setIsLoading(false);
     };
 
-    const renderValue = (value: any) => {
-        // Handle different value types (e.g., nested objects, arrays)
-        if (typeof value === "object" && value !== null) {
-            return value.description || JSON.stringify(value);
-        }
-        return String(value);
-    };
+    const getFormDataValue = (column: string): string => {
+        const data = formData[transformColumn(column)] ?? ''
+        if(data.toString() === 'true') return 'Yes'
+        else if(data.toString() === 'false') return 'No'
+        else return data
+    }
+
+    if (isLoading) {
+        return <ArLoader />;
+    }
+
+    if (error) {
+        return <Error message={error} />;
+    }
+
+    const renderInput = (column: FormColumn): React.ReactElement => {
+        return (
+            <LabeledInput
+                label={column.label}
+                type={column.type}
+                value={getFormDataValue(column.label)}
+                required={false}
+                options={column.options}
+                onChange={(e) => handleEdit(transformColumn(column.label), e.target.value)}
+                style="flex justify-between items-center"
+                boxStyle="p-2 rounded-lg border w-36"
+            />
+        );
+    }
 
     return (
         <div className="mx-4 border border-lightgr rounded-lg mt-10 bg-white">
-            <table className="table-auto w-full text-left text-argray">
-                <thead className="bg-lightgray">
-                <tr>
-                    <th className="p-4">Key</th>
-                    <th className="p-4">Value</th>
-                    <th className="p-4">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {Object.keys(item).map((key) => (
-                    <tr key={key}>
-                        <td className="p-4 font-bold">{key}</td>
-                        <td className="p-4">
-                            {editingKey === key ? (
-                                <input
-                                    type="text"
-                                    className="border rounded p-2 w-full"
-                                    value={editedValue}
-                                    onChange={(e) => setEditedValue(e.target.value)}
-                                />
-                            ) : (
-                                renderValue(item[key])
-                            )}
-                        </td>
-                        <td className="p-4">
-                            {editingKey === key ? (
-                                <button
-                                    className="bg-argold text-white px-4 py-2 rounded"
-                                    onClick={handleSave}
-                                >
-                                    Save
-                                </button>
-                            ) : (
-                                <button
-                                    className="bg-lightgray text-argray px-4 py-2 rounded"
-                                    onClick={() => handleEdit(key, item[key])}
-                                >
-                                    Edit
-                                </button>
-                            )}
-                        </td>
-                    </tr>
+            <div className="flex justify-center px-10">
+                <h1 className="text-4xl font-medium py-4">{title}</h1>
+            </div>
+            <form onSubmit={handleSave} className="grid grid-cols-4">
+                {memoizedColumns.map((column, index) => (
+                    <div className="mb-4" key={index}>
+                        {renderInput(column)}
+                    </div>
                 ))}
-                </tbody>
-            </table>
+            </form>
+            <div className="flex justify-center my-4">
+                <Button text="Cancel" onClick={handleSave}
+                        style="bg-superlightgr rounded-lg text-argray hover:text-argray mx-2"/>
+                <Button text="Update Product" onClick={handleSave}
+                        style="bg-argold rounded-lg text-white hover:text-white mx-2"/>
+            </div>
         </div>
+
     );
 };
 
