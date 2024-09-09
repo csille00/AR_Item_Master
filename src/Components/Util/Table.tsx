@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {ReactEventHandler, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
@@ -41,6 +41,13 @@ const Table = ({
     const navigate = useNavigate();
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+    const [search, setSearch] = useState<string | null>(null);
+
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value);
+    };
+
+
 
     const handleSort = (column: string) => {
         if (sortColumn === column) {
@@ -60,6 +67,15 @@ const Table = ({
     };
 
     const sortedData = React.useMemo(() => {
+        if (search) {
+            data = data
+                .filter((item: any) => item !== null && item !== undefined) // Remove null/undefined
+                .filter((item: any) =>
+                    (item.prod_name && item.prod_name.toLowerCase().includes(search.toLowerCase())) ||
+                    (item.sku_number && item.sku_number.toLowerCase().includes(search.toLowerCase()))
+                );
+        }
+
         if (!sortColumn) return data;
 
         return [...data].sort((a, b) => {
@@ -76,7 +92,7 @@ const Table = ({
                 return sortDirection === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
             }
         });
-    }, [data, sortColumn, sortDirection]);
+    }, [data, sortColumn, sortDirection, search]);
 
     const download = async () => {
         if (!fetchDataAsCSV) return
@@ -108,14 +124,12 @@ const Table = ({
                         type="text"
                         placeholder="Search by name or SKU"
                         className="text-lightgr bg-superlightgr outline-none flex-grow text-right"
+                        onChange={handleSearch}
                     />
-                    {/*<button type="submit" className="text-lightgr text-sm ml-2">*/}
-                    {/*    Search*/}
-                    {/*</button>*/}
                 </form>
             </div>
             <div className={`mx-4 border border-lightgr rounded-lg mt-10 bg-white ${style ? style : ''}`}>
-                <div className="flex items-center justify-between p-4">
+            <div className="flex items-center justify-between p-4">
                     <h1 className="text-argray text-left my-8 text-4xl justify-start">{title}</h1>
                     <div className="flex justify-end items-center">
                         <Button
