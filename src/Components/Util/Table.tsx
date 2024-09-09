@@ -1,4 +1,4 @@
-import React, {ReactEventHandler, useState} from "react";
+import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
@@ -48,7 +48,6 @@ const Table = ({
     };
 
 
-
     const handleSort = (column: string) => {
         if (sortColumn === column) {
             // Toggle sort direction
@@ -61,8 +60,8 @@ const Table = ({
     };
 
     const getValueByPath = (obj) => {
-        if(obj === null) return ''
-        if(typeof obj !== 'object') return obj;
+        if (obj === null) return ''
+        if (typeof obj !== 'object') return obj;
         return Object.values(obj)[0]
     };
 
@@ -129,7 +128,7 @@ const Table = ({
                 </form>
             </div>
             <div className={`mx-4 border border-lightgr rounded-lg mt-10 bg-white ${style ? style : ''}`}>
-            <div className="flex items-center justify-between p-4">
+                <div className="flex items-center justify-between p-4">
                     <h1 className="text-argray text-left my-8 text-4xl justify-start">{title}</h1>
                     <div className="flex justify-end items-center">
                         <Button
