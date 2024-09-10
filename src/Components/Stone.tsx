@@ -23,6 +23,7 @@ import {getStoneOrientationFromClient} from "../model/queries/StoneOrientationDA
 import {getCertTypesFromClient} from "../model/queries/STCertTypeDAO.ts";
 import {getColorGradeFromClient} from "../model/queries/StColorGradeDAO.ts";
 import {getCertClarityFromClient} from "../model/queries/StCertClarityDAO.ts";
+import {DefaultStoneViews} from "../Definitions/DefaultStoneViews.ts";
 
 
 const Stone: React.FC = () => {
@@ -83,8 +84,8 @@ const Stone: React.FC = () => {
                 isOpen={isColumnModalOpen}
                 onClose={() => setColumnModalOpen(false)}
                 label="Column Filter"
+                rowGenerator={new DefaultStoneViews()}
                 columns={columns}
-                initialColumns={initialColumnState}
                 allColumns={Object.values(ArStoneMasterColumns)}
                 setColumns={setColumns}
             />

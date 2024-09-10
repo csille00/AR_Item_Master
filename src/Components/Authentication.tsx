@@ -19,7 +19,7 @@ const Authentication: React.FC = () => {
             setSession(session)
             // need page reload when user is logging in
             if (_event == 'SIGNED_IN') {
-                window.location.reload()
+                // window.location.reload()
             }
         })
 

@@ -41,6 +41,7 @@ import {getChainTypesFromClient} from "../model/queries/ChainTypeDAO.ts";
 import {getPendantTypeFromClient} from "../model/queries/PendantTypeDAO.ts";
 import {getEarringTypeFromClient} from "../model/queries/EarringTypeDAO.ts";
 import {getCharmTypeFromClient} from "../model/queries/CharmTypeDAO.ts";
+import {DefaultJewelryViews} from "../Definitions/DefaultJewelryViews.ts";
 
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
@@ -103,6 +104,7 @@ const Jewelry: React.FC = () => {
                 onClose={() => setColumnModalOpen(false)}
                 label="Column Filter"
                 columns={columns}
+                rowGenerator={new DefaultJewelryViews()}
                 allColumns={Object.values(ArJewelryMasterColumns)}
                 setColumns={setColumns}
             />
