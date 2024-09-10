@@ -53,29 +53,37 @@ const createStoneMasterQuery = () => {
             st_cert_cut(description),
             st_color_grade(description),
             st_clarity_grade!ar_stone_master_st_clarity_grade_fkey(description)
-        `);
+        `, {count: 'exact'});
 }
 
 export type StoneMasterQuery = QueryData<ReturnType<typeof createStoneMasterQuery>>;
 
 export async function getStoneMasterItemsFromClient(
+    page: number,
     filters: FilterOption[],
-): Promise<StoneMasterQuery | undefined> {
+    pageLength: number = 100
+) {
+
+    const start = (page - 1) * pageLength;
+    const end = start + pageLength - 1;
+
     // Apply filters
     const stoneMasterQuery = createStoneMasterQuery()
+    stoneMasterQuery.range(start, end)
+
     filters.forEach(filter => {
         const column = MapFormDataToStoneMasterColumns[filter.column as keyof typeof MapFormDataToStoneMasterColumns];
         if (column && filter.value !== 'ALL') {
             stoneMasterQuery.eq(column, filter.value);
         }
     });
-    const {data, error} = await stoneMasterQuery
+    const {data, error, count} = await stoneMasterQuery
     console.log('data in dao: ', data)
 
     if (error) {
         throw error;
     }
-    return data as StoneMasterQuery;
+    return {data: data as StoneMasterQuery, count: count};
 }
 
 export async function getStoneDataAsCSV(){

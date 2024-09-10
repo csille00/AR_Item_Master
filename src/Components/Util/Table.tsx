@@ -1,7 +1,5 @@
-import React, {useState} from "react";
-import {Link, NavLink, useNavigate} from "react-router-dom";
-import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useEffect, useMemo, useRef, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
@@ -9,14 +7,17 @@ import tableIcon from "../../assets/table.svg"
 import addIcon from "../../assets/addWhite.svg";
 import {Error} from "./Error.tsx";
 import {ArLoader} from "./Loading.tsx";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export interface TableProps {
     title: string;
     columns: string[];
-    data: any;
+    fetchData: (page: number) => Promise<{ data: any, count: number }>
     style?: string | null;
     error?: string | null;
     isLoading?: boolean
+    page: number,
+    setPage: (value: (((prevState: number) => number) | number)) => void
     getSortColumn: (column: string) => string
     setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,14 +26,15 @@ export interface TableProps {
     filename?: string
 }
 
-
 const Table = ({
                    title,
                    columns,
-                   data,
+                   fetchData,
                    style,
                    error,
                    isLoading,
+                   page,
+                   setPage,
                    getSortColumn,
                    setColumnModalOpen,
                    setFilterModalOpen,
@@ -44,28 +46,75 @@ const Table = ({
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const [search, setSearch] = useState<string | null>(null);
-    const [dataCount, setDataCount] = useState<number>(data ? data.length : 0)
+    const [dataCount, setDataCount] = useState<number>(0)
     const pathVar = title.includes('Jewelry') ? "jewelry" : "stone"
+    const [data, setData] = useState<any[]>([])
+    const [hasMore, setHasMore] = useState(true)
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        getMoreData();
+    }, [page]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (containerRef.current) {
+                const {scrollTop, scrollHeight, clientHeight} = containerRef.current;
+                if (scrollHeight - scrollTop <= clientHeight + 10) { // Add a small buffer
+                    if (hasMore) {
+                        setPage(prevPage => prevPage + 1)
+                    }
+                }
+            }
+        };
+
+        const container = containerRef.current;
+        if (container) {
+            container.addEventListener('scroll', handleScroll);
+        }
+
+        return () => {
+            if (container) {
+                container.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, [hasMore, setPage]);
+
+    const getMoreData = async () => {
+        try {
+            if (!hasMore) {
+                console.log('stopping')
+                return
+            }
+            const items = await fetchData(page);
+            setData(prevData => [...prevData, ...items.data]);
+            setDataCount(prevCount => prevCount + items.data.length);
+            setHasMore(items.data.length === 100);
+        } catch (error) {
+            // Handle errors here, e.g., set an error state
+        }
+    }
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
     };
 
-
     const handleSort = (column: string) => {
-        if (sortColumn === column) {
-            // Toggle sort direction
-            setSortDirection(prevDirection => prevDirection === 'asc' ? 'desc' : 'asc');
-        } else {
-            // Set new column and default to ascending
-            setSortColumn(column);
-            setSortDirection('asc');
-        }
+        setSortColumn(prevColumn =>
+            prevColumn === column
+                ? column
+                : column
+        );
+        setSortDirection(prevDirection =>
+            sortColumn === column
+                ? prevDirection === 'asc' ? 'desc' : 'asc'
+                : 'asc'
+        );
     };
 
-    useEffect(() => {
-        if(data) setDataCount(data.length)
-    }, [data]);
+    // useEffect(() => {
+    //     if (data) setDataCount(data.length)
+    // }, [data]);
 
     const getValueByPath = (obj) => {
         if (obj === null) return ''
@@ -73,21 +122,21 @@ const Table = ({
         return Object.values(obj)[0]
     };
 
-    const sortedData = React.useMemo(() => {
+    const sortedData = useMemo(() => {
+        let filteredData = data;
+
         if (search) {
-            data = data
-                .filter((item: any) => item !== null && item !== undefined) // Remove null/undefined
-                .filter((item: any) =>
-                    (item.prod_name && item.prod_name.toLowerCase().includes(search.toLowerCase())) ||
-                    (item.sku_number && item.sku_number.toLowerCase().includes(search.toLowerCase()))
+            filteredData = filteredData
+                .filter(item =>
+                    item.prod_name?.toLowerCase().includes(search.toLowerCase()) ||
+                    item.sku_number?.toLowerCase().includes(search.toLowerCase())
                 );
         }
 
-        if (!sortColumn) return data;
+        if (!sortColumn) return filteredData;
 
-        return [...data].sort((a, b) => {
+        return [...filteredData].sort((a, b) => {
             const col = getSortColumn(sortColumn);
-
             const aValue = getValueByPath(a[col]);
             const bValue = getValueByPath(b[col]);
 
@@ -99,7 +148,7 @@ const Table = ({
                 return sortDirection === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
             }
         });
-    }, [data, sortColumn, sortDirection, search]);
+    }, [data, sortColumn, sortDirection, search, getSortColumn]);
 
     const download = async () => {
         if (!fetchDataAsCSV) return
@@ -168,22 +217,30 @@ const Table = ({
                     </div>
                 </div>
                 {/*Added inline styling because tailwind height has limitations*/}
-                <div className="flex justify-center pb-6 px-4 overflow-y-scroll h-auto" style={{maxHeight: '44rem'}}>
+                <div ref={containerRef} className="flex justify-center pb-6 px-4 overflow-y-scroll h-auto"
+                     style={{maxHeight: '44rem'}}>
                     <table className="w-full text-left text-argray">
                         <thead className="sticky top-0 bg-white">
                         <tr>
                             {columns.map((column, index) => (
-                                <th key={index} className="p-4 cursor-pointer hover:underline" onClick={() => handleSort(column)}>
+                                <th key={index} className="p-4 cursor-pointer hover:underline"
+                                    onClick={() => handleSort(column)}>
                                     {sortColumn === column ? (
                                         <div className="flex items-center">
                                             {column}
                                             {sortDirection === 'asc' ? (
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 pl-2">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"/>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                     viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
+                                                     className="size-6 pl-2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                                          d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"/>
                                                 </svg>
                                             ) : (
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 pl-2">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18"/>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                     viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
+                                                     className="size-6 pl-2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                                          d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18"/>
                                                 </svg>
                                             )}
                                         </div>
@@ -201,7 +258,8 @@ const Table = ({
                             <tr key={index}>
                                 {children ? children(item, columns) : null}
                                 <td>
-                                    <Link to={`/productDetails/${pathVar}/${item.sku_number}`} state={{ item }} className="text-argold hover:text-argold hover:font-bold">
+                                    <Link to={`/productDetails/${pathVar}/${item.sku_number}`} state={{item}}
+                                          className="text-argold hover:text-argold hover:font-bold">
                                         View/Edit
                                     </Link>
                                 </td>

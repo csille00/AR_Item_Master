@@ -1,11 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Table from "../Components/Util/Table.tsx";
 import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
-import {
-    getJewelryDataAsCSV,
-    getJewelryMasterPageFromClient,
-    JewelryMasterQuery
-} from "../model/queries/ArJewelryMasterDAO.ts";
+import {getJewelryDataAsCSV, getJewelryMasterPageFromClient} from "../model/queries/ArJewelryMasterDAO.ts";
 import {
     ArJewelryMasterColumns,
     JewelryMasterColumnsMap,
@@ -46,9 +42,9 @@ import {DefaultJewelryViews} from "../Definitions/DefaultJewelryViews.ts";
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
     const [isColumnModalOpen, setColumnModalOpen] = useState<boolean>(false);
-    const [jewelryData, setJewelryData] = useState<JewelryMasterQuery>();
     const [filterOptions, setFilterOptions] = useState<FilterOption[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [page, setPage] = useState(1)
     const [error, setError] = useState<string | null>(null);
     const initialColumnsState = [
         ArJewelryMasterColumns.SKU,
@@ -60,23 +56,23 @@ const Jewelry: React.FC = () => {
     ]
     const [columns, setColumns] = useState<string[]>(initialColumnsState);
 
-    const fetchData = async () => {
-        setIsLoading(true);
+    const fetchData = async (page: number, filters: FilterOption[] = []): Promise<{ data: any, count: number }> => {
+        // setIsLoading(true);
         try {
-            const data = await getJewelryMasterPageFromClient(1, filterOptions); // Pass filters to the fetch function
-            if (data) {
-                setJewelryData(data);
+            const data = await getJewelryMasterPageFromClient(page, filterOptions); // Pass filters to the fetch function
+            if (data.data && data.count) {
+                return {data: data.data, count: data.count}
             }
         } catch (error) {
             setError('Error fetching items from the database: ' + (error as Error).message);
         } finally {
-            setIsLoading(false);
+            // setIsLoading(false);
         }
     };
 
-    useEffect(() => {
-        fetchData().then()
-    }, []);
+    // useEffect(() => {
+    //     fetchData().then()
+    // }, []);
 
     const transformSortColumn = (col: string): string => {
         return  MapFormDataToJewelryMasterColumns[col as keyof typeof MapFormDataToJewelryMasterColumns];
@@ -85,10 +81,12 @@ const Jewelry: React.FC = () => {
     return (
         <>
             <Table columns={columns}
-                   data={jewelryData}
                    title="Jewelry Master"
                    isLoading={isLoading}
+                   page={page}
+                   setPage={setPage}
                    error={error}
+                   fetchData={(page: number) => fetchData(page)}
                    getSortColumn={(column) => transformSortColumn(column)}
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}
@@ -140,7 +138,7 @@ const Jewelry: React.FC = () => {
                 }}
                 setFilterOptions={setFilterOptions}
                 filterOptions={filterOptions}
-                onApplyFilters={fetchData}
+                onApplyFilters={(filters) => fetchData(page, filters)}
             />
         </>
     );

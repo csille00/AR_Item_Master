@@ -74,7 +74,7 @@ const createJewelryMasterQuery = () => {
             earring_type(description),
             charm_type(description),
             ar_style(description)
-    `)
+    `, {count: 'exact'})
 }
 
 export type JewelryMasterQuery = QueryData<ReturnType<typeof createJewelryMasterQuery>>;
@@ -83,7 +83,7 @@ export async function getJewelryMasterPageFromClient(
     page: number,
     filters: FilterOption[],
     pageLength: number = 100
-): Promise<JewelryMasterQuery | undefined> {
+) {
     const start = (page - 1) * pageLength;
     const end = start + pageLength - 1;
 
@@ -99,12 +99,13 @@ export async function getJewelryMasterPageFromClient(
         }
     });
 
-    const {data, error} = await jewelryMasterQuery
+    const {data, error, count} = await jewelryMasterQuery
+    console.log('count: ', count)
 
     if (error) {
         throw error;
     }
-    return data as JewelryMasterQuery;
+    return { data: data as JewelryMasterQuery, count: count };
 }
 
 export async function getJewelryDataAsCSV(){

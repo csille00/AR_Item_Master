@@ -29,9 +29,9 @@ import {DefaultStoneViews} from "../Definitions/DefaultStoneViews.ts";
 const Stone: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
     const [isColumnModalOpen, setColumnModalOpen] = useState<boolean>(false);
-    const [stoneData, setStoneData] = useState<StoneMasterQuery>();
+    const [page, setPage] = useState(1)
     const [filterOptions, setFilterOptions] = useState<FilterOption[]>([])
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const initialColumnState = [
         ArStoneMasterColumns.SKU,
@@ -41,25 +41,24 @@ const Stone: React.FC = () => {
     ]
     const [columns, setColumns] = useState<string[]>(initialColumnState);
 
-    const fetchData = async (filters: FilterOption[] = []) => {
-        console.log('fetchData: ', filters)
-        setIsLoading(true);
+    const fetchData = async (page: number, filters: FilterOption[] = []) => {
+        // setIsLoading(true);
         try {
-            const data = await getStoneMasterItemsFromClient(filterOptions); // Pass filters to the fetch function
-            if (data) {
-                setStoneData(data);
+            const data = await getStoneMasterItemsFromClient(page, filterOptions); // Pass filters to the fetch function
+            if (data.data && data.count) {
+                return {data: data.data, count: data.count}
             }
         } catch (error) {
             console.log(error)
             setError('Error fetching items from the database: ' + (error as Error).message);
         } finally {
-            setIsLoading(false);
+            // setIsLoading(false);
         }
     };
 
-    useEffect(() => {
-        fetchData().then()
-    }, []);
+    // useEffect(() => {
+    //     fetchData().then()
+    // }, []);
 
     const transformSortColumn = (col: string): string => {
         return  MapFormDataToStoneMasterColumns[col as keyof typeof MapFormDataToStoneMasterColumns];
@@ -68,10 +67,12 @@ const Stone: React.FC = () => {
     return (
         <>
             <Table columns={columns}
-                   data={stoneData}
+                   fetchData={(page: number) => fetchData(page)}
                    title="Stone Master"
                    isLoading={isLoading}
                    error={error}
+                   page={page}
+                   setPage={setPage}
                    getSortColumn={(col) => transformSortColumn(col)}
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}
@@ -108,7 +109,7 @@ const Stone: React.FC = () => {
                 }}
                 setFilterOptions={setFilterOptions}
                 filterOptions={filterOptions}
-                onApplyFilters={fetchData}
+                onApplyFilters={(filters) => fetchData(page, filters)}
             />
         </>
     );
