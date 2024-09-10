@@ -89,6 +89,7 @@ export class JewelryFormConfig {
             new FormColumn(ArJewelryMasterColumns.METAL_TEXTURE, LabeledInputType.SELECT, true, await getMetalTexturesFromClient()),
         ]
     }
+
     getFormConfig = async (type: string): Promise<FormColumn[]> => {
         switch (type) {
             case ProductTypeIds.ENG:

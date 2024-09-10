@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from "../Util/Button.tsx";
 import {Modal} from "../Util/Modal.tsx";
 import {GenericModalProps} from "../../Definitions/props.ts";
+import LabeledInput from "../Util/LabeledInput.tsx";
+import {DefaultViews} from "../../Definitions/DefaultViews.ts";
+import {LabeledInputType} from "../../Definitions/enum.ts";
 
 interface ChangeViewModalProps extends GenericModalProps {
     columns: string[];
     allColumns: string[]
     setColumns: (columns: string[]) => void;
-    initialColumns: string[]
 }
 
 export const ChangeViewModal: React.FC<ChangeViewModalProps> = ({
@@ -16,9 +18,19 @@ export const ChangeViewModal: React.FC<ChangeViewModalProps> = ({
                                                                     label,
                                                                     columns,
                                                                     setColumns,
-                                                                    initialColumns,
                                                                     allColumns
                                                                 }) => {
+    const defaultRowViews = new DefaultViews().getDefaultRowViews();
+    const [defaultView, setDefaultView] = useState<string>(Object.keys(defaultRowViews)[0]); // Initialize with the first key
+
+    useEffect(() => {
+        const defaultColumns = defaultRowViews[defaultView]?.map(option => option.description) || [];
+
+        if (JSON.stringify(defaultColumns) !== JSON.stringify(columns)) {
+            setColumns(defaultColumns);
+        }
+    }, [defaultView, defaultRowViews, columns, setColumns]);
+
 
     const handleToggleColumn = (column: string) => {
         if (columns.includes(column)) {
@@ -37,8 +49,12 @@ export const ChangeViewModal: React.FC<ChangeViewModalProps> = ({
     };
 
     const handleReset = () => {
-        setColumns(initialColumns)
-    }
+        setDefaultView('default');
+    };
+
+    const handleDefaultViewChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setDefaultView(event.target.value);
+    };
 
     return (
         <Modal
@@ -49,28 +65,44 @@ export const ChangeViewModal: React.FC<ChangeViewModalProps> = ({
             footer={
                 <>
                     <Button text="Select All" onClick={handleSelectAll}
-                            style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white"/>
+                            style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white" />
                     <Button text="Deselect All" onClick={handleDeselectAll}
-                            style="bg-lightgr text-sm text-white py-1 rounded-md hover:bg-argray hover:text-white"/>
+                            style="bg-lightgr text-sm text-white py-1 rounded-md hover:bg-argray hover:text-white" />
                     <Button text="Reset Default" onClick={handleReset}
-                            style="text-sm border border-lightgr text-argray py-1 rounded-md hover:bg-lightgr hover:text-white"/>
+                            style="text-sm border border-lightgr text-argray py-1 rounded-md hover:bg-lightgr hover:text-white" />
                 </>
             }
         >
-            <form className="grid grid-cols-3 gap-1">
-                {allColumns.map((column, index) => (
-                    <div key={index} className="text-left pl-6">
-                        <input
-                            type="checkbox"
-                            checked={columns.includes(column)}
-                            onChange={() => handleToggleColumn(column)}
-                        />
-                        <label className="ml-2">{column}</label>
-                    </div>
-                ))}
+            <form className="flex flex-col items-center">
+                {/* Dropdown container */}
+                <div className="mb-4">
+                    <LabeledInput
+                        label="Default Views"
+                        type={LabeledInputType.SELECT}
+                        required={false}
+                        value={defaultView}
+                        onChange={handleDefaultViewChange}
+                        options={Object.keys(defaultRowViews).map(key => ({ id: key, description: key }))}
+                        style="flex justify-between items-center"
+                        boxStyle="p-2 rounded-lg border w-36"
+                    />
+                </div>
+
+                {/* Checkboxes container */}
+                <div className="grid grid-cols-3 gap-1">
+                    {allColumns.map((column, index) => (
+                        <div key={index} className="text-left pl-6">
+                            <input
+                                type="checkbox"
+                                checked={columns.includes(column)}
+                                onChange={() => handleToggleColumn(column)}
+                            />
+                            <label className="ml-2">{column}</label>
+                        </div>
+                    ))}
+                </div>
             </form>
+
         </Modal>
     );
 };
-
-// export default FilterModal;
