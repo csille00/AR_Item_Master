@@ -6,17 +6,26 @@ import {ArLoader} from "./Util/Loading.tsx";
 import LabeledInput from "./Util/LabeledInput.tsx";
 import {LabeledInputType} from "../Definitions/enum.ts";
 import Button from "./Util/Button.tsx";
+import {useNavigate} from "react-router-dom";
+import backIcon from "../assets/back.svg";
 
 interface ItemTableProps {
-    title: string;
     fetchColumns: () => Promise<FormColumn[]>
     itemSku: string;
     fetchItem: (sku: string) => Promise<Tables<"ar_jewelry_master"> | null>
     transformColumn: (col: string) => string
-    onSubmitEdit: (data: { [key: string]: string | number}, columns: FormColumn[]) => Promise<string | null>;
+    onSubmitEdit: (data: { [key: string]: string | number }, columns: FormColumn[]) => Promise<string | null>;
+    breakPattern: number[];
 }
 
-const ItemTable: React.FC<ItemTableProps> = ({title, fetchColumns, itemSku, fetchItem, transformColumn, onSubmitEdit}) => {
+const ItemTable: React.FC<ItemTableProps> = ({
+                                                 fetchColumns,
+                                                 itemSku,
+                                                 fetchItem,
+                                                 transformColumn,
+                                                 onSubmitEdit,
+                                                 breakPattern
+                                             }) => {
     const [editingKey, setEditingKey] = useState<string | null>(null);
     const [editedValue, setEditedValue] = useState<string | number>("");
     const [columns, setColumns] = useState<FormColumn[]>([]);
@@ -25,6 +34,7 @@ const ItemTable: React.FC<ItemTableProps> = ({title, fetchColumns, itemSku, fetc
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [nonce, setNonce] = useState(0);
+    const navigate = useNavigate();
 
     // Fetch columns once or when fetchColumns changes
     useEffect(() => {
@@ -98,17 +108,17 @@ const ItemTable: React.FC<ItemTableProps> = ({title, fetchColumns, itemSku, fetc
 
     const getFormDataValue = (column: string): string => {
         const data = formData[transformColumn(column)] ?? ''
-        if(data.toString() === 'true') return 'Yes'
-        else if(data.toString() === 'false') return 'No'
+        if (data.toString() === 'true') return 'Yes'
+        else if (data.toString() === 'false') return 'No'
         else return data
     }
 
     if (isLoading) {
-        return <ArLoader />;
+        return <ArLoader/>;
     }
 
     if (error) {
-        return <Error message={error} />;
+        return <Error message={error}/>;
     }
 
     const renderInput = (column: FormColumn): React.ReactElement => {
@@ -120,29 +130,49 @@ const ItemTable: React.FC<ItemTableProps> = ({title, fetchColumns, itemSku, fetc
                 required={false}
                 options={column.options}
                 onChange={(e) => handleEdit(transformColumn(column.label), e.target.value)}
-                style="flex justify-between items-center"
+                style="flex justify-end items-center"
                 boxStyle="p-2 rounded-lg border w-36"
             />
         );
     }
 
+    const determineBreak = (index: number, breakPattern: number[]) => {
+        if (breakPattern.includes(index + 1)) {
+            return <div className="col-span-full mb-10"></div> // Empty div to create space
+        }
+    }
+
     return (
-        <div className="mx-4 border border-lightgr rounded-lg mt-10 bg-white">
-            <div className="flex justify-center px-10">
-                <h1 className="text-4xl font-medium py-4">{title}</h1>
+        <div className="mx-6 border border-lightgr rounded-lg mt-10 bg-white">
+            <div className="flex justify-start ml-2 my-2">
+                <Button
+                    onClick={() => navigate(-1)}
+                    icon={backIcon}
+                    style="mt-4"
+                />
             </div>
-            <form onSubmit={handleSave} className="grid grid-cols-4">
-                {memoizedColumns.map((column, index) => (
-                    <div className="mb-4" key={index}>
-                        {renderInput(column)}
-                    </div>
-                ))}
-            </form>
-            <div className="flex justify-center my-4">
-                <Button text="Cancel" onClick={handleSave}
-                        style="bg-superlightgr rounded-lg text-argray hover:text-argray mx-2"/>
-                <Button text="Update Product" onClick={handleSave}
-                        style="bg-argold rounded-lg text-white hover:text-white mx-2"/>
+            <div className="flex justify-between mb-6 mx-6">
+                <div className="col">
+                    <h1 className="text-4xl font-medium text-argray my-4">{item.prod_name}</h1>
+                </div>
+                <div className="col flex my-2">
+                    <Button text="Reset" onClick={handleSave}
+                            style="bg-superlightgr rounded-lg text-argray hover:text-argray mx-4"/>
+                    <Button text="Update Product" onClick={handleSave}
+                            style="bg-argold rounded-lg text-white hover:text-white mx-2"/>
+                </div>
+            </div>
+            <div className="flex justify-center items-center">
+                <form onSubmit={handleSave} className="grid grid-cols-4">
+                    {memoizedColumns.map((column, index) => (
+                        <>
+                            <div className="mb-3 mr-4" key={index}>
+                                {renderInput(column)}
+                            </div>
+                            {determineBreak(index, breakPattern)}
+                        </>
+                    ))}
+                </form>
             </div>
         </div>
 

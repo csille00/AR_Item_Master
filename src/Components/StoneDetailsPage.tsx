@@ -60,9 +60,9 @@ const StoneDetailsPage = () => {
             itemSku={sku as string}
             onSubmitEdit={(data, columns) => updateStoneMasterItem(data, columns)}
             fetchItem={(sku) => getStoneDataBySKU(sku)}
-            title={`Edit ${sku}`}
             transformColumn={(col) => transformSortColumn(col)}
             fetchColumns={() => config.getAllColumns()}
+            breakPattern={[2]}
         />
     );
 };

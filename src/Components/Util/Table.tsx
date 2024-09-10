@@ -178,9 +178,8 @@ const Table = ({
                             <tr key={index}>
                                 {children ? children(item, columns) : null}
                                 <td>
-
-                                    <Link to={`/productDetails/${pathVar}/${item.sku_number}`} state={{ item }}>
-                                        View More
+                                    <Link to={`/productDetails/${pathVar}/${item.sku_number}`} state={{ item }} className="text-argold hover:text-argold hover:font-bold">
+                                        View/Edit
                                     </Link>
                                 </td>
                             </tr>

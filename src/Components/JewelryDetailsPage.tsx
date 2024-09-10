@@ -59,9 +59,9 @@ const JewelryDetailsPage = () => {
             itemSku={sku as string}
             onSubmitEdit={(data, columns) => updateJewelryItem(data, columns)}
             fetchItem={(sku) => getJewelryDataBySKU(sku)}
-            title={`Edit ${sku}`}
             transformColumn={(col) => transformSortColumn(col)}
             fetchColumns={() => config.getAllColumns()}
+            breakPattern={[4, 19, 26]}
         />
     );
 };
