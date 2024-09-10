@@ -104,7 +104,6 @@ export async function getJewelryMasterPageFromClient(
     if (error) {
         throw error;
     }
-    console.log('in dao: ', data)
     return data as JewelryMasterQuery;
 }
 
