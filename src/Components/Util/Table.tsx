@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
 import downloadIcon from "../../assets/download.svg"
@@ -43,6 +43,7 @@ const Table = ({
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const [search, setSearch] = useState<string | null>(null);
     const [dataCount, setDataCount] = useState<number>(data ? data.length : 0)
+    const pathVar = title.includes('Jewelry') ? "jewelry" : "stone"
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
@@ -170,9 +171,25 @@ const Table = ({
                         <thead className="sticky top-0 bg-white">
                         <tr>
                             {columns.map((column, index) => (
-                                <th key={index} className="p-4 cursor-pointer" onClick={() => handleSort(column)}>
-                                    {column}
-                                    {sortColumn === column && (sortDirection === 'asc' ? ' ↑' : ' ↓')}
+                                <th key={index} className="p-4 cursor-pointer hover:underline" onClick={() => handleSort(column)}>
+                                    {sortColumn === column ? (
+                                        <div className="flex items-center">
+                                            {column}
+                                            {sortDirection === 'asc' ? (
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 pl-2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"/>
+                                                </svg>
+                                            ) : (
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 pl-2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18"/>
+                                                </svg>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <>{column}</>
+
+                                    )}
+
                                 </th>
                             ))}
                         </tr>
@@ -181,6 +198,11 @@ const Table = ({
                         {sortedData.map((item: any, index: React.Key | null | undefined) => (
                             <tr key={index}>
                                 {children ? children(item, columns) : null}
+                                <td>
+                                    <Link to={`/productDetails/${pathVar}/${item.sku_number}`} state={{ item }} className="text-argold hover:text-argold hover:font-bold">
+                                        View/Edit
+                                    </Link>
+                                </td>
                             </tr>
                         ))}
                         </tbody>

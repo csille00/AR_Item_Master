@@ -5,7 +5,7 @@ const client = getClient()
 
 export async function getCharmTypeFromClient(): Promise<Option[] | undefined> {
     const {data, error} = await client
-        .from("st_color")
+        .from("charm_type")
         .select('id,description');
     if (error) {
         throw error;
