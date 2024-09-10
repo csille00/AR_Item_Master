@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
@@ -42,6 +42,7 @@ const Table = ({
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const [search, setSearch] = useState<string | null>(null);
+    const [dataCount, setDataCount] = useState<number>(data ? data.length : 0)
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
@@ -58,6 +59,10 @@ const Table = ({
             setSortDirection('asc');
         }
     };
+
+    useEffect(() => {
+        if(data) setDataCount(data.length)
+    }, [data]);
 
     const getValueByPath = (obj) => {
         if (obj === null) return ''
@@ -129,7 +134,10 @@ const Table = ({
             </div>
             <div className={`mx-4 border border-lightgr rounded-lg mt-10 bg-white ${style ? style : ''}`}>
                 <div className="flex items-center justify-between p-4">
-                    <h1 className="text-argray text-left my-8 text-4xl justify-start">{title}</h1>
+                    <div className="flex items-end">
+                        <h1 className="text-argray text-4xl">{title}</h1>
+                        <p className="text-lightgr ml-4 text-xl">{dataCount}</p>
+                    </div>
                     <div className="flex justify-end items-center">
                         <Button
                             icon={addIcon as SVGElement}
