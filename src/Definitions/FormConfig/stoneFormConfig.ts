@@ -68,6 +68,11 @@ export class StoneFormConfig {
         }
     }
 
+    getAllColumns = async (): Promise<FormColumn[]> => {
+        await this.initializeStoneTypeRows()
+        return this.baseRows
+    }
+
     private getEngagementStoneRows = (): FormColumn[] => {
         return this.baseRows;
     }
