@@ -82,14 +82,8 @@ export type JewelryMasterQuery = QueryData<ReturnType<typeof createJewelryMaster
 export async function getJewelryMasterPageFromClient(
     page: number,
     filters: FilterOption[],
-    pageLength: number = 100
 ): Promise<JewelryMasterQuery | undefined> {
-    const start = (page - 1) * pageLength;
-    const end = start + pageLength - 1;
-
     const jewelryMasterQuery = createJewelryMasterQuery()
-
-    jewelryMasterQuery.range(start, end)
 
     // Apply filters
     filters.forEach(filter => {
@@ -104,7 +98,6 @@ export async function getJewelryMasterPageFromClient(
     if (error) {
         throw error;
     }
-    console.log('in dao: ', data)
     return data as JewelryMasterQuery;
 }
 

@@ -41,7 +41,6 @@ import {getChainTypesFromClient} from "../model/queries/ChainTypeDAO.ts";
 import {getPendantTypeFromClient} from "../model/queries/PendantTypeDAO.ts";
 import {getEarringTypeFromClient} from "../model/queries/EarringTypeDAO.ts";
 import {getCharmTypeFromClient} from "../model/queries/CharmTypeDAO.ts";
-import {JewelryFormConfig} from "../Definitions/FormConfig/jewelryFormConfig.ts";
 
 const Jewelry: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
@@ -60,8 +59,7 @@ const Jewelry: React.FC = () => {
     ]
     const [columns, setColumns] = useState<string[]>(initialColumnsState);
 
-    const fetchData = async (filters: FilterOption[] = []) => {
-        console.log('fetchData: ', filters)
+    const fetchData = async () => {
         setIsLoading(true);
         try {
             const data = await getJewelryMasterPageFromClient(1, filterOptions); // Pass filters to the fetch function
@@ -105,7 +103,6 @@ const Jewelry: React.FC = () => {
                 onClose={() => setColumnModalOpen(false)}
                 label="Column Filter"
                 columns={columns}
-                initialColumns={initialColumnsState}
                 allColumns={Object.values(ArJewelryMasterColumns)}
                 setColumns={setColumns}
             />
