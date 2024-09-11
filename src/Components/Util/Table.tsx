@@ -13,6 +13,8 @@ export interface TableProps {
     title: string;
     columns: string[];
     fetchData: (page: number) => Promise<{ data: any, count: number }>
+    data: any[]
+    setData: (value: (((prevState: any[]) => any[]) | any[])) => void
     style?: string | null;
     error?: string | null;
     isLoading?: boolean
@@ -30,6 +32,8 @@ const Table = ({
                    title,
                    columns,
                    fetchData,
+                   data,
+                   setData,
                    style,
                    error,
                    isLoading,
@@ -48,7 +52,6 @@ const Table = ({
     const [search, setSearch] = useState<string | null>(null);
     const [dataCount, setDataCount] = useState<number>(0)
     const pathVar = title.includes('Jewelry') ? "jewelry" : "stone"
-    const [data, setData] = useState<any[]>([])
     const [hasMore, setHasMore] = useState(true)
     const containerRef = useRef<HTMLDivElement | null>(null);
 

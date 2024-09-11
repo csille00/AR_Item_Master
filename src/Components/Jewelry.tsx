@@ -45,6 +45,7 @@ const Jewelry: React.FC = () => {
     const [filterOptions, setFilterOptions] = useState<FilterOption[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [page, setPage] = useState(1)
+    const [data, setData] = useState<any[]>([])
     const [error, setError] = useState<string | null>(null);
     const initialColumnsState = [
         ArJewelryMasterColumns.SKU,
@@ -87,6 +88,8 @@ const Jewelry: React.FC = () => {
                    setPage={setPage}
                    error={error}
                    fetchData={(page: number) => fetchData(page)}
+                   data={data}
+                   setData={setData}
                    getSortColumn={(column) => transformSortColumn(column)}
                    setColumnModalOpen={setColumnModalOpen}
                    setFilterModalOpen={setFilterModalOpen}

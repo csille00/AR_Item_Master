@@ -30,6 +30,7 @@ const Stone: React.FC = () => {
     const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
     const [isColumnModalOpen, setColumnModalOpen] = useState<boolean>(false);
     const [page, setPage] = useState(1)
+    const [data, setData] = useState<any[]>([])
     const [filterOptions, setFilterOptions] = useState<FilterOption[]>([])
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -68,6 +69,8 @@ const Stone: React.FC = () => {
         <>
             <Table columns={columns}
                    fetchData={(page: number) => fetchData(page)}
+                   data={data}
+                   setData={setData}
                    title="Stone Master"
                    isLoading={isLoading}
                    error={error}
