@@ -17,7 +17,7 @@ export interface TableProps {
         payload?: any
     }) => ItemMasterState>) => void
     title: string;
-    fetchData: () => Promise<void>
+    fetchData: (sortChange: boolean, resetPage: boolean) => Promise<void>
     style?: string | null;
     getSortColumn: (column: string) => string
     fetchDataAsCSV?: () => Promise<string>;
@@ -37,8 +37,6 @@ const Table = ({
                    filename
                }: TableProps) => {
     const navigate = useNavigate();
-    const [sortColumn, setSortColumn] = useState<string | null>(null);
-    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const [search, setSearch] = useState<string | null>(null);
     const pathVar = title.includes('Jewelry') ? "jewelry" : "stone"
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -48,8 +46,6 @@ const Table = ({
         dispatch: dispatch,
         fetchData: fetchData,
         setSearch: setSearch,
-        setSortColumn: setSortColumn,
-        setSortDirection: setSortDirection,
         getSortColumn: getSortColumn,
         fetchDataAsCSV: fetchDataAsCSV
     }
@@ -57,7 +53,11 @@ const Table = ({
     const presenter = useMemo(() => new TablePresenter(listener), [listener])
 
     useEffect(() => {
-        presenter.getMoreData();
+        presenter.getMoreData(true, true)
+    }, [state.sortColumn, state.sortDirection]);
+
+    useEffect(() => {
+        presenter.getMoreData(false, false);
     }, [state.page]);
 
     useEffect(() => {
@@ -76,9 +76,8 @@ const Table = ({
     }, [state.hasMore]);
 
     const sortedData = useMemo(() => {
-        let filteredData = presenter.getFilteredData(state.data, search);
-        return presenter.getSortedData(filteredData, sortColumn, sortDirection)
-    }, [state.data, sortColumn, sortDirection, search, getSortColumn]);
+        return presenter.getFilteredData(state.data, search);
+    }, [state.data, search]);
 
     if (state.error) {
         return <Error message={state.error}/>
@@ -140,11 +139,11 @@ const Table = ({
                         <tr>
                             {state.columns.map((column, index) => (
                                 <th key={index} className="p-4 cursor-pointer hover:underline"
-                                    onClick={() => presenter.handleSort(column, sortColumn)}>
-                                    {sortColumn === column ? (
+                                    onClick={() => presenter.handleSort(column, state.sortColumn)}>
+                                    {state.sortColumn === getSortColumn(column) ? (
                                         <div className="flex items-center">
                                             {column}
-                                            {sortDirection === 'asc' ? (
+                                            {state.sortDirection === 'asc' ? (
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                      viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
                                                      className="size-6 pl-2">

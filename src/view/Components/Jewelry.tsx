@@ -55,7 +55,7 @@ const Jewelry: React.FC = () => {
                 state={state}
                 dispatch={dispatch}
                 title="Jewelry Master"
-                fetchData={() => presenter.fetchJewelryData()}
+                fetchData={(sortChange: boolean, resetPage: boolean) => presenter.fetchJewelryData(sortChange, resetPage)}
                 getSortColumn={(column) => MapFormDataToJewelryMasterColumns[column as keyof typeof MapFormDataToJewelryMasterColumns]}
                 fetchDataAsCSV={getJewelryDataAsCSV}
                 filename={'ar_jewelry_master.csv'}

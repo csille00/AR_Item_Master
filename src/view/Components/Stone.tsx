@@ -19,6 +19,7 @@ import {getCertClarityFromClient} from "../../model/queries/StCertClarityDAO.ts"
 import {DefaultStoneViews} from "../../Definitions/DefaultStoneViews.ts";
 import {ACTIONS, initialState, itemMasterReducer, ItemMasterView} from "../../presenter/ItemMasterPresenter.ts";
 import {StonePresenter} from "../../presenter/StonePresenter.ts";
+import {getStoneOriginFromClient} from "../../model/queries/StoneOriginDAO.ts";
 
 const Stone: React.FC = () => {
     const [state, dispatch] = useReducer(itemMasterReducer, initialState, (initialState: typeof initialState) => initialState);
@@ -35,8 +36,8 @@ const Stone: React.FC = () => {
             <Table
                 state={state}
                 dispatch={dispatch}
-                fetchData={() => presenter.fetchStoneData()}
                 title="Stone Master"
+                fetchData={(sortChange: boolean, resetPage: boolean) => presenter.fetchStoneData(sortChange, resetPage)}
                 getSortColumn={(col) => MapFormDataToStoneMasterColumns[col as keyof typeof MapFormDataToStoneMasterColumns]}
                 fetchDataAsCSV={getStoneDataAsCSV}
                 filename={"ar_stone_master.csv"}
@@ -67,7 +68,7 @@ const Stone: React.FC = () => {
                     'ST Shape': getStoneShapeFromClient,
                     'ST Cut': getStoneCutOptionFromClient,
                     'ST Orientation': getStoneOrientationFromClient,
-                    'ST Origin': getStoneCutOptionFromClient,
+                    'ST Origin': getStoneOriginFromClient,
                     'ST Cert Type': getCertTypesFromClient,
                     'ST Color Grade': getColorGradeFromClient,
                     'ST Clarity Grade': getCertClarityFromClient

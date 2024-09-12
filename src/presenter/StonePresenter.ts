@@ -6,7 +6,7 @@ export class StonePresenter extends ItemMasterPresenter {
         return super.view as ItemMasterView
     }
 
-    async fetchStoneData(resetPage: boolean = false) {
-        await this.fetchData(getStoneMasterItemsFromClient, resetPage);
+    async fetchStoneData(sortChange: boolean, resetPage: boolean = false) {
+        await this.fetchData(getStoneMasterItemsFromClient, sortChange, resetPage);
     }
 }

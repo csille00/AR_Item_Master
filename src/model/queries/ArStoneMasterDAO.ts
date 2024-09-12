@@ -63,24 +63,36 @@ export type StoneMasterQuery = QueryData<ReturnType<typeof createStoneMasterQuer
 export async function getStoneMasterItemsFromClient(
     page: number,
     filters: FilterOption[],
+    sortColumn?: string,
+    sortDirection?: 'asc' | 'desc',
     pageLength: number = PAGE_NUMBER
 ): Promise<{ data: any[], count: number }> {
-
     const start = (page - 1) * pageLength;
     const end = start + pageLength - 1;
 
-    // Apply filters
+    // Create query
     const stoneMasterQuery = createStoneMasterQuery()
+
+    //Apply pagination
     stoneMasterQuery.range(start, end)
 
+    // Apply filters
     filters.forEach(filter => {
         const column = MapFormDataToStoneMasterColumns[filter.column as keyof typeof MapFormDataToStoneMasterColumns];
         if (column && filter.value !== 'ALL') {
             stoneMasterQuery.eq(column, filter.value);
         }
     });
+
+    // Apply sorting if sortColumn and sortDirection are provided
+    if (sortColumn && sortDirection) {
+        if (sortColumn) {
+            stoneMasterQuery.order(sortColumn, { ascending: sortDirection === 'asc' });
+        }
+    }
+
+    // Execute query
     const {data, error, count} = await stoneMasterQuery
-    console.log('data in dao: ', data)
 
     if (error) {
         throw error;

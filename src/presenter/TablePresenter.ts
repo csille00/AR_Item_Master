@@ -3,10 +3,8 @@ import {ACTIONS, ItemMasterView} from "./ItemMasterPresenter.ts";
 import React, {MutableRefObject} from "react";
 
 export interface TableView extends ItemMasterView {
-    fetchData: () => Promise<void>,
+    fetchData: (sortChange: boolean, resetPage: boolean) => Promise<void>,
     setSearch: (value: (((prevState: string) => string) | string)) => void
-    setSortColumn: (value: (((prevState: string) => string) | string)) => void
-    setSortDirection: (value: (((prevState: ("asc" | "desc")) => ("asc" | "desc")) | "asc" | "desc")) => void
     getSortColumn: (column: string) => string
     fetchDataAsCSV: () => Promise<string>
 }
@@ -17,14 +15,13 @@ export class TablePresenter extends Presenter<TableView> {
         return super.view as TableView
     }
 
-    getMoreData = async () => {
+    getMoreData = async (resetPage: boolean, sortChange: boolean = false ) => {
         try {
             if (!this.view.state.hasMore) {
                 console.log('stopping')
                 return
             }
-            const items = await this.view.fetchData();
-            if (!items) return
+            await this.view.fetchData(sortChange, resetPage);
         } catch (error) {
             this.view.dispatch({type: ACTIONS.SET_ERROR, payload: error})
         }
@@ -35,16 +32,8 @@ export class TablePresenter extends Presenter<TableView> {
     };
 
     handleSort = (column: string, curSortColumn: string) => {
-        this.view.setSortColumn(prevColumn =>
-            prevColumn === column
-                ? column
-                : column
-        );
-        this.view.setSortDirection(prevDirection =>
-            curSortColumn === column
-                ? prevDirection === 'asc' ? 'desc' : 'asc'
-                : 'asc'
-        );
+        this.view.dispatch({type: ACTIONS.SET_SORT_COLUMN, payload: this.view.getSortColumn(column)})
+        this.view.dispatch({type: ACTIONS.TOGGLE_SORT_DIRECTION, payload: curSortColumn})
     };
 
     download = async (filename: string) => {
@@ -84,20 +73,20 @@ export class TablePresenter extends Presenter<TableView> {
         );
     }
 
-    getSortedData(data: any[], sortColumn: string, sortDirection: "asc" | "desc") {
-        if (!sortColumn) return data;
+    getSortedData(data: any[]) {
+        if (!this.view.state.sortColumn) return data;
 
         return [...data].sort((a, b) => {
-            const col = this.view.getSortColumn(sortColumn);
+            const col = this.view.getSortColumn(this.view.state.sortColumn);
             const aValue = this.getValueByPath(a[col]);
             const bValue = this.getValueByPath(b[col]);
 
             if (typeof aValue === 'number' && typeof bValue === 'number') {
-                return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+                return this.view.state.sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
             } else {
                 const aStr = String(aValue);
                 const bStr = String(bValue);
-                return sortDirection === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
+                return this.view.state.sortDirection === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
             }
         });
     }

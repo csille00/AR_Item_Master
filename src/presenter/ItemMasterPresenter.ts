@@ -9,6 +9,8 @@ export enum ACTIONS {
     TOGGLE_FILTER_MODAL,
     TOGGLE_COLUMN_MODAL,
     SET_FILTER_OPTIONS,
+    SET_SORT_COLUMN,
+    TOGGLE_SORT_DIRECTION,
     SET_LOADING,
     SET_DATA,
     SET_HAS_MORE,
@@ -23,6 +25,9 @@ export interface ItemMasterState {
     isFilterModalOpen: boolean;
     isColumnModalOpen: boolean;
     filterOptions: FilterOption[];
+    sortDirection: 'asc' | 'desc';
+    sortColumn: string | null,
+    search: string | null,
     isLoading: boolean;
     data: any[];
     hasMore: boolean;
@@ -36,6 +41,9 @@ export const initialState: ItemMasterState = {
     isFilterModalOpen: false,
     isColumnModalOpen: false,
     filterOptions: [],
+    sortDirection: 'asc',
+    sortColumn: null,
+    search: null,
     isLoading: false,
     data: [],
     hasMore: true,
@@ -56,6 +64,17 @@ export const itemMasterReducer = (state: ItemMasterState, action: {
             return {...state, isColumnModalOpen: !state.isColumnModalOpen};
         case ACTIONS.SET_FILTER_OPTIONS:
             return {...state, filterOptions: action.payload};
+        case ACTIONS.SET_SORT_COLUMN:
+            return {...state, sortColumn: action.payload};
+        case ACTIONS.TOGGLE_SORT_DIRECTION:
+            return {
+                ...state,
+                sortDirection:
+                    action.payload === state.sortColumn
+                        ? state.sortDirection === 'asc'
+                            ? 'desc' : 'asc'
+                        : 'asc'
+            };
         case ACTIONS.SET_LOADING:
             return {...state, isLoading: action.payload};
         case ACTIONS.SET_DATA:
@@ -89,12 +108,26 @@ export class ItemMasterPresenter extends Presenter<ItemMasterView> {
     }
 
     protected fetchData = async (
-        fetchFunction: (pageToFetch: number, filterOptions: FilterOption[]) => Promise<{ data: any[], count: number }>,
-        resetPage: boolean = false
+        fetchFunction: (
+            pageToFetch: number,
+            filterOptions: FilterOption[],
+            sortColumn?: string,
+            sortDirection?: 'asc' | 'desc'
+        ) => Promise<{ data: any[], count: number }>,
+        sortChange: boolean,
+        resetPage: boolean = false,
     ): Promise<void> => {
         try {
             const pageToFetch = resetPage ? 1 : this.view.state.page;
-            const result = await fetchFunction(pageToFetch, this.view.state.filterOptions);
+
+            // Call fetchFunction with or without sortColumn/sortDirection based on their presence
+            const result = await fetchFunction(
+                pageToFetch,
+                this.view.state.filterOptions,
+                this.view.state.sortColumn? this.view.state.sortColumn : undefined,
+                this.view.state.sortDirection? this.view.state.sortDirection : undefined,
+            );
+
             if (result) {
                 this.view.dispatch({
                     type: ACTIONS.SET_DATA,

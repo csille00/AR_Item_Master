@@ -83,14 +83,18 @@ export type JewelryMasterQuery = QueryData<ReturnType<typeof createJewelryMaster
 export async function getJewelryMasterPageFromClient(
     page: number,
     filters: FilterOption[],
+    sortColumn?: string,
+    sortDirection?: 'asc' | 'desc',
     pageLength: number = PAGE_NUMBER
 ) {
     const start = (page - 1) * pageLength;
     const end = start + pageLength - 1;
 
-    const jewelryMasterQuery = createJewelryMasterQuery()
+    // Create query
+    const jewelryMasterQuery = createJewelryMasterQuery();
 
-    jewelryMasterQuery.range(start, end)
+    // Apply pagination
+    jewelryMasterQuery.range(start, end);
 
     // Apply filters
     filters.forEach(filter => {
@@ -100,13 +104,20 @@ export async function getJewelryMasterPageFromClient(
         }
     });
 
-    const {data, error, count} = await jewelryMasterQuery
-    console.log('count: ', count)
+    // Apply sorting if sortColumn and sortDirection are provided
+    if (sortColumn && sortDirection) {
+        if (sortColumn) {
+            jewelryMasterQuery.order(sortColumn, { ascending: sortDirection === 'asc' });
+        }
+    }
+
+    // Execute query
+    const { data, error, count } = await jewelryMasterQuery;
 
     if (error) {
         throw error;
     }
-    return {data: data as JewelryMasterQuery, count: count};
+    return { data: data as JewelryMasterQuery, count: count };
 }
 
 export async function getJewelryDataAsCSV() {
