@@ -111,7 +111,7 @@ export const reducer = (state: State, action: { type: ACTIONS; payload?: any }):
 const Jewelry: React.FC = () => {
     const [state, dispatch] = useReducer(reducer, initialState, (initialState: typeof initialState) => initialState);
 
-    const fetchData = async (resetPage: boolean = false): Promise<{ data: any, count: number } | void> => {
+    const fetchData = async (resetPage: boolean = false): Promise<void> => {
         try {
             const pageToFetch = resetPage ? 1 : state.page;
             const result = await getJewelryMasterPageFromClient(pageToFetch, state.filterOptions);
@@ -124,7 +124,6 @@ const Jewelry: React.FC = () => {
                     type: ACTIONS.SET_HAS_MORE,
                     payload: result.data.length === 100,
                 });
-                return {data: result.data, count: result.count};
             }
         } catch (error) {
             dispatch({

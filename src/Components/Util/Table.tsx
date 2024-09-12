@@ -28,7 +28,7 @@ export interface TableProps {
     state: State,
     dispatch: (value: ReducerAction<(state: State, action: { type: ACTIONS, payload?: any }) => State>) => void
     title: string;
-    fetchData: () => Promise<{ data: any, count: number }>
+    fetchData: () => Promise<void>
     style?: string | null;
     getSortColumn: (column: string) => string
     fetchDataAsCSV?: () => Promise<string>;
@@ -91,7 +91,7 @@ const Table = ({
             const items = await fetchData();
             if (!items) return
         } catch (error) {
-            // Handle errors here, e.g., set an error state
+            dispatch({type: ACTIONS.SET_ERROR, payload: error})
         }
     }
 

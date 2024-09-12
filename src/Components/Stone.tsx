@@ -24,7 +24,7 @@ import {ACTIONS, initialState, reducer} from "./Jewelry.tsx";
 const Stone: React.FC = () => {
     const [state, dispatch] = useReducer(reducer, initialState, (initialState: typeof initialState) => initialState);
 
-    const fetchData = async (resetPage: boolean = false): Promise<{ data: any, count: number }> => {
+    const fetchData = async (resetPage: boolean = false): Promise<void> => {
         try {
             const pageToFetch = resetPage ? 1 : state.page
             const result = await getStoneMasterItemsFromClient(pageToFetch, state.filterOptions); // Pass filters to the fetch function
@@ -37,7 +37,6 @@ const Stone: React.FC = () => {
                     type: ACTIONS.SET_HAS_MORE,
                     payload: result.data.length === 100,
                 });
-                return {data: result.data, count: result.count};
             }
         } catch (error) {
             dispatch({
@@ -45,7 +44,7 @@ const Stone: React.FC = () => {
                 payload: 'Error fetching items from the database: ' + (error as Error).message,
             });
         }
-    };
+    }
 
     return (
         <>
