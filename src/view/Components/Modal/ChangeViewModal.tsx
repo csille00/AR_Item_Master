@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Button from "../Util/Button.tsx";
 import {Modal} from "../Util/Modal.tsx";
 import {GenericModalProps} from "../../../Definitions/props.ts";
@@ -22,19 +22,23 @@ export const ChangeViewModal: React.FC<ChangeViewModalProps> = ({
                                                                     rowGenerator,
                                                                     allColumns
                                                                 }) => {
-    const rowOptions = rowGenerator.rowOptions
+    const rowOptions = rowGenerator.rowOptions;
     const [defaultView, setDefaultView] = useState<string>(Object.keys(rowOptions)[0]); // Initialize with the first key
+    const isManualChange = useRef(false); // Track manual changes
 
     useEffect(() => {
-        const defaultColumns = rowOptions[defaultView]?.map(option => option.description) || [];
-
-        if (JSON.stringify(defaultColumns) !== JSON.stringify(columns)) {
-            setColumns(defaultColumns);
+        if (!isManualChange.current) {
+            const defaultColumns = rowOptions[defaultView]?.map(option => option.description) || [];
+            if (JSON.stringify(defaultColumns) !== JSON.stringify(columns)) {
+                setColumns(defaultColumns);
+            }
         }
+        // Reset the manual change flag after setting the columns
+        isManualChange.current = false;
     }, [defaultView, rowOptions, columns, setColumns]);
 
-
     const handleToggleColumn = (column: string) => {
+        isManualChange.current = true; // Mark this as a manual change
         if (columns.includes(column)) {
             setColumns(columns.filter(c => c !== column));
         } else {
@@ -43,19 +47,13 @@ export const ChangeViewModal: React.FC<ChangeViewModalProps> = ({
     };
 
     const handleSelectAll = () => {
+        isManualChange.current = true; // Mark this as a manual change
         setColumns(allColumns);
     };
 
     const handleDeselectAll = () => {
+        isManualChange.current = true; // Mark this as a manual change
         setColumns([]);
-    };
-
-    const handleReset = () => {
-        setDefaultView('default');
-    };
-
-    const handleDefaultViewChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setDefaultView(event.target.value);
     };
 
     return (
@@ -70,7 +68,7 @@ export const ChangeViewModal: React.FC<ChangeViewModalProps> = ({
                             style="bg-argold text-sm text-white px-2 py-1 rounded-md hover:bg-darkgold hover:text-white"/>
                     <Button text="Deselect All" onClick={handleDeselectAll}
                             style="bg-lightgr text-sm text-white py-1 rounded-md hover:bg-argray hover:text-white"/>
-                    <Button text="Reset Default" onClick={handleReset}
+                    <Button text="Reset Default" onClick={() => setDefaultView(Object.keys(rowOptions)[0])}
                             style="text-sm border border-lightgr text-argray py-1 rounded-md hover:bg-lightgr hover:text-white"/>
                 </>
             }
@@ -83,7 +81,7 @@ export const ChangeViewModal: React.FC<ChangeViewModalProps> = ({
                         type={LabeledInputType.SELECT}
                         required={false}
                         value={defaultView}
-                        onChange={handleDefaultViewChange}
+                        onChange={(event) => setDefaultView(event.target.value)}
                         options={Object.keys(rowOptions).map(key => ({id: key, description: key}))}
                         style="flex justify-between items-center"
                         boxStyle="p-2 rounded-lg border w-36"
@@ -104,7 +102,6 @@ export const ChangeViewModal: React.FC<ChangeViewModalProps> = ({
                     ))}
                 </div>
             </form>
-
         </Modal>
     );
 };
