@@ -7,14 +7,27 @@ import tableIcon from "../../assets/table.svg"
 import addIcon from "../../assets/addWhite.svg";
 import {Error} from "./Error.tsx";
 import {ArLoader} from "./Loading.tsx";
-import InfiniteScroll from "react-infinite-scroll-component";
+
+const debounce = (func: (...args: any[]) => void, wait: number) => {
+    let timeout: number;
+
+    return (...args: any[]) => {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+};
 
 export interface TableProps {
     title: string;
     columns: string[];
-    fetchData: (page: number) => Promise<{ data: any, count: number }>
+    fetchData: () => Promise<{ data: any, count: number }>
     data: any[]
-    setData: (value: (((prevState: any[]) => any[]) | any[])) => void
+    hasMore: boolean
     style?: string | null;
     error?: string | null;
     isLoading?: boolean
@@ -33,7 +46,7 @@ const Table = ({
                    columns,
                    fetchData,
                    data,
-                   setData,
+                   hasMore,
                    style,
                    error,
                    isLoading,
@@ -50,9 +63,7 @@ const Table = ({
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const [search, setSearch] = useState<string | null>(null);
-    const [dataCount, setDataCount] = useState<number>(0)
     const pathVar = title.includes('Jewelry') ? "jewelry" : "stone"
-    const [hasMore, setHasMore] = useState(true)
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -60,7 +71,7 @@ const Table = ({
     }, [page]);
 
     useEffect(() => {
-        const handleScroll = () => {
+        const handleScroll = debounce(() => {
             if (containerRef.current) {
                 const {scrollTop, scrollHeight, clientHeight} = containerRef.current;
                 if (scrollHeight - scrollTop <= clientHeight + 10) { // Add a small buffer
@@ -69,7 +80,7 @@ const Table = ({
                     }
                 }
             }
-        };
+        }, 200);
 
         const container = containerRef.current;
         if (container) {
@@ -81,7 +92,7 @@ const Table = ({
                 container.removeEventListener('scroll', handleScroll);
             }
         };
-    }, [hasMore, setPage]);
+    }, [hasMore]);
 
     const getMoreData = async () => {
         try {
@@ -89,10 +100,8 @@ const Table = ({
                 console.log('stopping')
                 return
             }
-            const items = await fetchData(page);
-            setData(prevData => [...prevData, ...items.data]);
-            setDataCount(prevCount => prevCount + items.data.length);
-            setHasMore(items.data.length === 100);
+            const items = await fetchData();
+            if (!items) return
         } catch (error) {
             // Handle errors here, e.g., set an error state
         }
@@ -114,10 +123,6 @@ const Table = ({
                 : 'asc'
         );
     };
-
-    // useEffect(() => {
-    //     if (data) setDataCount(data.length)
-    // }, [data]);
 
     const getValueByPath = (obj) => {
         if (obj === null) return ''
@@ -191,7 +196,7 @@ const Table = ({
                 <div className="flex items-center justify-between p-4">
                     <div className="flex items-end">
                         <h1 className="text-argray text-4xl">{title}</h1>
-                        <p className="text-lightgr ml-4 text-xl">{dataCount}</p>
+                        <p className="text-lightgr ml-4 text-xl">{data.length}</p>
                     </div>
                     <div className="flex justify-end items-center">
                         <Button
