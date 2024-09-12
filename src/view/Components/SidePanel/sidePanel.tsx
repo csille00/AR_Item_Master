@@ -37,7 +37,7 @@ const SidePanel = ({client}) => {
             </div>
             <div className="">
                 <NavLink
-                    to={"/public"}
+                    to={"/"}
                     className={({isActive}) => (hoverClasses(isActive))}
                 >
                     {({isActive}) => (

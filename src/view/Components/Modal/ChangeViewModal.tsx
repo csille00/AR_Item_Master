@@ -35,7 +35,7 @@ export const ChangeViewModal: React.FC<ChangeViewModalProps> = ({
         }
         // Reset the manual change flag after setting the columns
         isManualChange.current = false;
-    }, [defaultView, rowOptions, columns, setColumns]);
+    }, [defaultView, columns]);
 
     const handleToggleColumn = (column: string) => {
         isManualChange.current = true; // Mark this as a manual change
