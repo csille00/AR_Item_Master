@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, {ReducerAction, useEffect, useMemo, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
 import filterIcon from "../../assets/filter.svg"
@@ -7,6 +7,8 @@ import tableIcon from "../../assets/table.svg"
 import addIcon from "../../assets/addWhite.svg";
 import {Error} from "./Error.tsx";
 import {ArLoader} from "./Loading.tsx";
+import {ACTIONS, State} from "../Jewelry.tsx";
+
 
 const debounce = (func: (...args: any[]) => void, wait: number) => {
     let timeout: number;
@@ -23,38 +25,24 @@ const debounce = (func: (...args: any[]) => void, wait: number) => {
 };
 
 export interface TableProps {
+    state: State,
+    dispatch: (value: ReducerAction<(state: State, action: { type: ACTIONS, payload?: any }) => State>) => void
     title: string;
-    columns: string[];
     fetchData: () => Promise<{ data: any, count: number }>
-    data: any[]
-    hasMore: boolean
     style?: string | null;
-    error?: string | null;
-    isLoading?: boolean
-    page: number,
-    setPage: (value: (((prevState: number) => number) | number)) => void
     getSortColumn: (column: string) => string
-    setColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     fetchDataAsCSV?: () => Promise<string>;
     children?: (item: any, columns: string[]) => React.JSX.Element;
     filename?: string
 }
 
 const Table = ({
+                   state,
+                   dispatch,
                    title,
-                   columns,
                    fetchData,
-                   data,
-                   hasMore,
                    style,
-                   error,
-                   isLoading,
-                   page,
-                   setPage,
                    getSortColumn,
-                   setColumnModalOpen,
-                   setFilterModalOpen,
                    fetchDataAsCSV,
                    children,
                    filename
@@ -68,19 +56,19 @@ const Table = ({
 
     useEffect(() => {
         getMoreData();
-    }, [page]);
+    }, [state.page]);
 
     useEffect(() => {
         const handleScroll = debounce(() => {
             if (containerRef.current) {
                 const {scrollTop, scrollHeight, clientHeight} = containerRef.current;
                 if (scrollHeight - scrollTop <= clientHeight + 10) { // Add a small buffer
-                    if (hasMore) {
-                        setPage(prevPage => prevPage + 1)
+                    if (state.hasMore) {
+                        dispatch({type: ACTIONS.INCREMENT_PAGE})
                     }
                 }
             }
-        }, 200);
+        }, 100);
 
         const container = containerRef.current;
         if (container) {
@@ -92,11 +80,11 @@ const Table = ({
                 container.removeEventListener('scroll', handleScroll);
             }
         };
-    }, [hasMore]);
+    }, [state.hasMore]);
 
     const getMoreData = async () => {
         try {
-            if (!hasMore) {
+            if (!state.hasMore) {
                 console.log('stopping')
                 return
             }
@@ -131,7 +119,7 @@ const Table = ({
     };
 
     const sortedData = useMemo(() => {
-        let filteredData = data;
+        let filteredData = state.data;
 
         if (search) {
             filteredData = filteredData
@@ -156,7 +144,7 @@ const Table = ({
                 return sortDirection === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
             }
         });
-    }, [data, sortColumn, sortDirection, search, getSortColumn]);
+    }, [state.data, sortColumn, sortDirection, search, getSortColumn]);
 
     const download = async () => {
         if (!fetchDataAsCSV) return
@@ -172,11 +160,11 @@ const Table = ({
         window.URL.revokeObjectURL(url);
     }
 
-    if (error) {
-        return <Error message={error}/>
+    if (state.error) {
+        return <Error message={state.error}/>
     }
 
-    if (isLoading) {
+    if (state.isLoading) {
         return <ArLoader/>;
     }
 
@@ -196,7 +184,7 @@ const Table = ({
                 <div className="flex items-center justify-between p-4">
                     <div className="flex items-end">
                         <h1 className="text-argray text-4xl">{title}</h1>
-                        <p className="text-lightgr ml-4 text-xl">{data.length}</p>
+                        <p className="text-lightgr ml-4 text-xl">{state.data.length}</p>
                     </div>
                     <div className="flex justify-end items-center">
                         <Button
@@ -207,13 +195,13 @@ const Table = ({
                         <Button
                             icon={filterIcon as SVGElement}
                             text="Filter"
-                            onClick={() => setFilterModalOpen(true)}
+                            onClick={() => dispatch({type: ACTIONS.TOGGLE_FILTER_MODAL})}
                             style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
                             icon={tableIcon as SVGElement}
                             text="Change View"
-                            onClick={() => setColumnModalOpen(true)}
+                            onClick={() => dispatch({type: ACTIONS.TOGGLE_COLUMN_MODAL})}
                             style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
@@ -230,7 +218,7 @@ const Table = ({
                     <table className="w-full text-left text-argray">
                         <thead className="sticky top-0 bg-white">
                         <tr>
-                            {columns.map((column, index) => (
+                            {state.columns.map((column, index) => (
                                 <th key={index} className="p-4 cursor-pointer hover:underline"
                                     onClick={() => handleSort(column)}>
                                     {sortColumn === column ? (
@@ -264,7 +252,7 @@ const Table = ({
                         <tbody>
                         {sortedData.map((item: any, index: React.Key | null | undefined) => (
                             <tr key={index}>
-                                {children ? children(item, columns) : null}
+                                {children ? children(item, state.columns) : null}
                                 <td>
                                     <Link to={`/productDetails/${pathVar}/${item.sku_number}`} state={{item}}
                                           className="text-argold hover:text-argold hover:font-bold">

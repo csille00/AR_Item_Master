@@ -1,6 +1,5 @@
-import React, {useState} from "react";
+import React, {useReducer} from "react";
 import Table from "../Components/Util/Table.tsx";
-import {FilterOption} from "../Definitions/FilterOption.ts";
 import {ArStoneMasterColumns, MapFormDataToStoneMasterColumns, StoneMasterColumnsMap} from "../Definitions/enum.ts";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
@@ -19,74 +18,63 @@ import {getCertTypesFromClient} from "../model/queries/STCertTypeDAO.ts";
 import {getColorGradeFromClient} from "../model/queries/StColorGradeDAO.ts";
 import {getCertClarityFromClient} from "../model/queries/StCertClarityDAO.ts";
 import {DefaultStoneViews} from "../Definitions/DefaultStoneViews.ts";
+import {ACTIONS, initialState, reducer} from "./Jewelry.tsx";
 
 
 const Stone: React.FC = () => {
-    const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
-    const [isColumnModalOpen, setColumnModalOpen] = useState<boolean>(false);
-    const [filterOptions, setFilterOptions] = useState<FilterOption[]>([])
-    const [isLoading, setIsLoading] = useState(false);
-    const [data, setData] = useState<any[]>([])
-    const [hasMore, setHasMore] = useState(true)
-    const [page, setPage] = useState(1)
-    const [error, setError] = useState<string | null>(null);
-    const [columns, setColumns] = useState<string[]>([]);
+    const [state, dispatch] = useReducer(reducer, initialState, (initialState: typeof initialState) => initialState);
 
     const fetchData = async (resetPage: boolean = false): Promise<{ data: any, count: number }> => {
         try {
-            const pageToFetch = resetPage ? 1 : page
-            const result = await getStoneMasterItemsFromClient(pageToFetch, filterOptions); // Pass filters to the fetch function
-            if (result.data && result.count) {
-                if (resetPage) {
-                    setData(result.data)
-                } else {
-                    setData(prevData => [...prevData, ...result.data])
-                }
-                if (result.data.length !== 100) setHasMore(false)
-                else {
-                    setHasMore(true)
-                }
-                return {data: result.data, count: result.count}
+            const pageToFetch = resetPage ? 1 : state.page
+            const result = await getStoneMasterItemsFromClient(pageToFetch, state.filterOptions); // Pass filters to the fetch function
+            if (result && result.data && result.count) {
+                dispatch({
+                    type: ACTIONS.SET_DATA,
+                    payload: resetPage ? result.data : [...state.data, ...result.data],
+                });
+                dispatch({
+                    type: ACTIONS.SET_HAS_MORE,
+                    payload: result.data.length === 100,
+                });
+                return {data: result.data, count: result.count};
             }
         } catch (error) {
-            console.log(error)
-            setError('Error fetching items from the database: ' + (error as Error).message);
+            dispatch({
+                type: ACTIONS.SET_ERROR,
+                payload: 'Error fetching items from the database: ' + (error as Error).message,
+            });
         }
     };
 
     return (
         <>
-            <Table columns={columns}
-                   fetchData={() => fetchData()}
-                   data={data}
-                   title="Stone Master"
-                   isLoading={isLoading}
-                   hasMore={hasMore}
-                   error={error}
-                   page={page}
-                   setPage={setPage}
-                   getSortColumn={(col) => MapFormDataToStoneMasterColumns[col as keyof typeof MapFormDataToStoneMasterColumns]}
-                   setColumnModalOpen={setColumnModalOpen}
-                   setFilterModalOpen={setFilterModalOpen}
-                   fetchDataAsCSV={getStoneDataAsCSV}
-                   filename={"ar_stone_master.csv"}
+            <Table
+                state={state}
+                dispatch={dispatch}
+                fetchData={() => fetchData()}
+                title="Stone Master"
+                getSortColumn={(col) => MapFormDataToStoneMasterColumns[col as keyof typeof MapFormDataToStoneMasterColumns]}
+                fetchDataAsCSV={getStoneDataAsCSV}
+                filename={"ar_stone_master.csv"}
             >
                 {(item, columns) => <ItemMasterRow<Tables<'ar_stone_master'>, StoneMasterColumnsMap> item={item}
                                                                                                      columns={columns}
                                                                                                      map={MapFormDataToStoneMasterColumns}/>}
             </Table>
             <ChangeViewModal
-                isOpen={isColumnModalOpen}
-                onClose={() => setColumnModalOpen(false)}
+                isOpen={state.isColumnModalOpen}
+                onClose={() => dispatch({type: ACTIONS.TOGGLE_COLUMN_MODAL, payload: false})}
                 label="Column Filter"
+                columns={state.columns}
                 rowGenerator={new DefaultStoneViews()}
-                columns={columns}
                 allColumns={Object.values(ArStoneMasterColumns)}
-                setColumns={setColumns}
+                setColumns={(columns) => dispatch({type: ACTIONS.SET_COLUMNS, payload: columns})}
             />
+
             <FilterModal
-                isOpen={isFilterModalOpen}
-                onClose={() => setFilterModalOpen(false)}
+                isOpen={state.isFilterModalOpen}
+                onClose={() => dispatch({type: ACTIONS.TOGGLE_FILTER_MODAL, payload: false})}
                 label={"Filter"}
                 fetchFilters={{
                     'ST Product Type': getStoneProductTypesFromClient,
@@ -101,8 +89,8 @@ const Stone: React.FC = () => {
                     'ST Color Grade': getColorGradeFromClient,
                     'ST Clarity Grade': getCertClarityFromClient
                 }}
-                setFilterOptions={setFilterOptions}
-                filterOptions={filterOptions}
+                setFilterOptions={(options) => dispatch({type: ACTIONS.SET_FILTER_OPTIONS, payload: options})}
+                filterOptions={state.filterOptions}
                 onApplyFilters={() => fetchData(true)}
             />
         </>
