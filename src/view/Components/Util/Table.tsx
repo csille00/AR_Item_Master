@@ -1,28 +1,14 @@
 import React, {ReducerAction, useEffect, useMemo, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Button from "./Button.tsx";
-import filterIcon from "../../assets/filter.svg"
-import downloadIcon from "../../assets/download.svg"
-import tableIcon from "../../assets/table.svg"
-import addIcon from "../../assets/addWhite.svg";
+import filterIcon from "../../../assets/filter.svg"
+import downloadIcon from "../../../assets/download.svg"
+import tableIcon from "../../../assets/table.svg"
+import addIcon from "../../../assets/addWhite.svg";
 import {Error} from "./Error.tsx";
 import {ArLoader} from "./Loading.tsx";
-import {ACTIONS, ItemMasterState} from "../../presenter/ItemMasterPresenter.ts";
-
-
-const debounce = (func: (...args: any[]) => void, wait: number) => {
-    let timeout: number;
-
-    return (...args: any[]) => {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-};
+import {ACTIONS, ItemMasterState} from "../../../presenter/ItemMasterPresenter.ts";
+import {TablePresenter, TableView} from "../../../presenter/TablePresenter.ts";
 
 export interface TableProps {
     state: ItemMasterState,
@@ -57,111 +43,42 @@ const Table = ({
     const pathVar = title.includes('Jewelry') ? "jewelry" : "stone"
     const containerRef = useRef<HTMLDivElement | null>(null);
 
+    const listener: TableView = {
+        state: state,
+        dispatch: dispatch,
+        fetchData: fetchData,
+        setSearch: setSearch,
+        setSortColumn: setSortColumn,
+        setSortDirection: setSortDirection,
+        getSortColumn: getSortColumn,
+        fetchDataAsCSV: fetchDataAsCSV
+    }
+
+    const presenter = useMemo(() => new TablePresenter(listener), [listener])
+
     useEffect(() => {
-        getMoreData();
+        presenter.getMoreData();
     }, [state.page]);
 
     useEffect(() => {
-        const handleScroll = debounce(() => {
-            if (containerRef.current) {
-                const {scrollTop, scrollHeight, clientHeight} = containerRef.current;
-                if (scrollHeight - scrollTop <= clientHeight + 10) { // Add a small buffer
-                    if (state.hasMore) {
-                        dispatch({type: ACTIONS.INCREMENT_PAGE})
-                    }
-                }
-            }
-        }, 100);
+        presenter.handleScroll(containerRef)
 
         const container = containerRef.current;
         if (container) {
-            container.addEventListener('scroll', handleScroll);
+            container.addEventListener('scroll', presenter.handleScroll(containerRef));
         }
 
         return () => {
             if (container) {
-                container.removeEventListener('scroll', handleScroll);
+                container.removeEventListener('scroll', presenter.handleScroll(containerRef));
             }
         };
     }, [state.hasMore]);
 
-    const getMoreData = async () => {
-        try {
-            if (!state.hasMore) {
-                console.log('stopping')
-                return
-            }
-            const items = await fetchData();
-            if (!items) return
-        } catch (error) {
-            dispatch({type: ACTIONS.SET_ERROR, payload: error})
-        }
-    }
-
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearch(event.target.value);
-    };
-
-    const handleSort = (column: string) => {
-        setSortColumn(prevColumn =>
-            prevColumn === column
-                ? column
-                : column
-        );
-        setSortDirection(prevDirection =>
-            sortColumn === column
-                ? prevDirection === 'asc' ? 'desc' : 'asc'
-                : 'asc'
-        );
-    };
-
-    const getValueByPath = (obj) => {
-        if (obj === null) return ''
-        if (typeof obj !== 'object') return obj;
-        return Object.values(obj)[0]
-    };
-
     const sortedData = useMemo(() => {
-        let filteredData = state.data;
-
-        if (search) {
-            filteredData = filteredData
-                .filter(item =>
-                    item.prod_name?.toLowerCase().includes(search.toLowerCase()) ||
-                    item.sku_number?.toLowerCase().includes(search.toLowerCase())
-                );
-        }
-
-        if (!sortColumn) return filteredData;
-
-        return [...filteredData].sort((a, b) => {
-            const col = getSortColumn(sortColumn);
-            const aValue = getValueByPath(a[col]);
-            const bValue = getValueByPath(b[col]);
-
-            if (typeof aValue === 'number' && typeof bValue === 'number') {
-                return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
-            } else {
-                const aStr = String(aValue);
-                const bStr = String(bValue);
-                return sortDirection === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
-            }
-        });
+        let filteredData = presenter.getFilteredData(state.data, search);
+        return presenter.getSortedData(filteredData, sortColumn, sortDirection)
     }, [state.data, sortColumn, sortDirection, search, getSortColumn]);
-
-    const download = async () => {
-        if (!fetchDataAsCSV) return
-        const data = await fetchDataAsCSV()
-        const blob = new Blob([data], {type: 'text/csv'});
-        const url = window.URL.createObjectURL(blob);
-        // Create a link element
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename ?? "data.csv";
-
-        a.click();
-        window.URL.revokeObjectURL(url);
-    }
 
     if (state.error) {
         return <Error message={state.error}/>
@@ -179,7 +96,7 @@ const Table = ({
                         type="text"
                         placeholder="Search by name or SKU"
                         className="text-lightgr bg-superlightgr outline-none flex-grow text-right"
-                        onChange={handleSearch}
+                        onChange={presenter.handleSearch}
                     />
                 </form>
             </div>
@@ -210,7 +127,7 @@ const Table = ({
                         <Button
                             icon={downloadIcon as SVGElement}
                             text="Download"
-                            onClick={download}
+                            onClick={() => presenter.download(filename)}
                             style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                     </div>
@@ -223,7 +140,7 @@ const Table = ({
                         <tr>
                             {state.columns.map((column, index) => (
                                 <th key={index} className="p-4 cursor-pointer hover:underline"
-                                    onClick={() => handleSort(column)}>
+                                    onClick={() => presenter.handleSort(column, sortColumn)}>
                                     {sortColumn === column ? (
                                         <div className="flex items-center">
                                             {column}
