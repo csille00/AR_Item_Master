@@ -7,7 +7,7 @@ import tableIcon from "../../assets/table.svg"
 import addIcon from "../../assets/addWhite.svg";
 import {Error} from "./Error.tsx";
 import {ArLoader} from "./Loading.tsx";
-import {ACTIONS, State} from "../Jewelry.tsx";
+import {ACTIONS, ItemMasterState} from "../../presenter/ItemMasterPresenter.ts";
 
 
 const debounce = (func: (...args: any[]) => void, wait: number) => {
@@ -25,8 +25,11 @@ const debounce = (func: (...args: any[]) => void, wait: number) => {
 };
 
 export interface TableProps {
-    state: State,
-    dispatch: (value: ReducerAction<(state: State, action: { type: ACTIONS, payload?: any }) => State>) => void
+    state: ItemMasterState,
+    dispatch: (value: ReducerAction<(state: ItemMasterState, action: {
+        type: ACTIONS,
+        payload?: any
+    }) => ItemMasterState>) => void
     title: string;
     fetchData: () => Promise<void>
     style?: string | null;

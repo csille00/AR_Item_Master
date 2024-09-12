@@ -1,11 +1,10 @@
-import React, {useReducer} from "react";
+import React, {useMemo, useReducer} from "react";
 import Table from "../Components/Util/Table.tsx";
 import {ArStoneMasterColumns, MapFormDataToStoneMasterColumns, StoneMasterColumnsMap} from "../Definitions/enum.ts";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
-import {getStoneDataAsCSV, getStoneMasterItemsFromClient} from "../model/queries/ArStoneMasterDAO.ts";
+import {getStoneDataAsCSV} from "../model/queries/ArStoneMasterDAO.ts";
 import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
-import {Error} from "./Util/Error.tsx";
 import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
 import {Tables} from "../Definitions/generatedDefinitions.ts";
 import {getStSourceFromClient} from "../model/queries/StSourceDAO.ts";
@@ -18,40 +17,25 @@ import {getCertTypesFromClient} from "../model/queries/STCertTypeDAO.ts";
 import {getColorGradeFromClient} from "../model/queries/StColorGradeDAO.ts";
 import {getCertClarityFromClient} from "../model/queries/StCertClarityDAO.ts";
 import {DefaultStoneViews} from "../Definitions/DefaultStoneViews.ts";
-import {ACTIONS, initialState, reducer} from "./Jewelry.tsx";
-
+import {ACTIONS, initialState, ItemMasterView, reducer} from "../presenter/ItemMasterPresenter.ts";
+import {StonePresenter} from "../presenter/StonePresenter.ts";
 
 const Stone: React.FC = () => {
     const [state, dispatch] = useReducer(reducer, initialState, (initialState: typeof initialState) => initialState);
 
-    const fetchData = async (resetPage: boolean = false): Promise<void> => {
-        try {
-            const pageToFetch = resetPage ? 1 : state.page
-            const result = await getStoneMasterItemsFromClient(pageToFetch, state.filterOptions); // Pass filters to the fetch function
-            if (result && result.data && result.count) {
-                dispatch({
-                    type: ACTIONS.SET_DATA,
-                    payload: resetPage ? result.data : [...state.data, ...result.data],
-                });
-                dispatch({
-                    type: ACTIONS.SET_HAS_MORE,
-                    payload: result.data.length === 100,
-                });
-            }
-        } catch (error) {
-            dispatch({
-                type: ACTIONS.SET_ERROR,
-                payload: 'Error fetching items from the database: ' + (error as Error).message,
-            });
-        }
+    const listener: ItemMasterView = {
+        state: state,
+        dispatch: dispatch
     }
+
+    const presenter = useMemo(() => new StonePresenter(listener), [listener]);
 
     return (
         <>
             <Table
                 state={state}
                 dispatch={dispatch}
-                fetchData={() => fetchData()}
+                fetchData={() => presenter.fetchStoneData()}
                 title="Stone Master"
                 getSortColumn={(col) => MapFormDataToStoneMasterColumns[col as keyof typeof MapFormDataToStoneMasterColumns]}
                 fetchDataAsCSV={getStoneDataAsCSV}
@@ -90,7 +74,7 @@ const Stone: React.FC = () => {
                 }}
                 setFilterOptions={(options) => dispatch({type: ACTIONS.SET_FILTER_OPTIONS, payload: options})}
                 filterOptions={state.filterOptions}
-                onApplyFilters={() => fetchData(true)}
+                onApplyFilters={() => presenter.fetchStoneData(true)}
             />
         </>
     );

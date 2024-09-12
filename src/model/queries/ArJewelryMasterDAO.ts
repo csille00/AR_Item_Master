@@ -3,6 +3,7 @@ import {FilterOption} from "../../Definitions/FilterOption.ts";
 import {MapFormDataToJewelryMasterColumns} from "../../Definitions/enum.ts";
 import {Tables, TablesInsert, TablesUpdate} from "../../Definitions/generatedDefinitions.ts";
 import {QueryData} from "@supabase/supabase-js";
+import {PAGE_NUMBER} from "../../presenter/ItemMasterPresenter.ts";
 
 const client = getClient()
 
@@ -82,7 +83,7 @@ export type JewelryMasterQuery = QueryData<ReturnType<typeof createJewelryMaster
 export async function getJewelryMasterPageFromClient(
     page: number,
     filters: FilterOption[],
-    pageLength: number = 100
+    pageLength: number = PAGE_NUMBER
 ) {
     const start = (page - 1) * pageLength;
     const end = start + pageLength - 1;
@@ -105,39 +106,39 @@ export async function getJewelryMasterPageFromClient(
     if (error) {
         throw error;
     }
-    return { data: data as JewelryMasterQuery, count: count };
+    return {data: data as JewelryMasterQuery, count: count};
 }
 
-export async function getJewelryDataAsCSV(){
-    const { data, error } = await client
+export async function getJewelryDataAsCSV() {
+    const {data, error} = await client
         .from('ar_jewelry_master')
         .select()
         .csv()
-    if(error){
+    if (error) {
         throw error
     }
     return data
 }
 
 export async function getJewelryDataBySKU(sku: string): Promise<Tables<'ar_jewelry_master'> | null> {
-    const { data, error } = await client
+    const {data, error} = await client
         .from('ar_jewelry_master')
         .select()
         .eq('sku_number', sku)
         .limit(1)
-    if(error){
+    if (error) {
         throw error
     }
     return data ? data[0] : null
 }
 
-export async function editJewelryMasterRow(sku: string, row: TablesUpdate<'ar_jewelry_master'> ): Promise<void> {
+export async function editJewelryMasterRow(sku: string, row: TablesUpdate<'ar_jewelry_master'>): Promise<void> {
     const {error} = await client
         .from('ar_jewelry_master')
         .update(row)
         .eq('sku_number', sku)
 
-    if(error){
+    if (error) {
         console.error("Error updating item: ", error)
     }
 }
