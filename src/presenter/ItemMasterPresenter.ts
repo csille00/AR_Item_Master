@@ -95,7 +95,7 @@ export class ItemMasterPresenter extends Presenter<ItemMasterView> {
         try {
             const pageToFetch = resetPage ? 1 : this.view.state.page;
             const result = await fetchFunction(pageToFetch, this.view.state.filterOptions);
-            if (result && result.data && result.count) {
+            if (result) {
                 this.view.dispatch({
                     type: ACTIONS.SET_DATA,
                     payload: resetPage ? result.data : [...this.view.state.data, ...result.data],
