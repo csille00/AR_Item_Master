@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import Button from "../Util/Button.tsx";
-import {FilterOption} from "../../Definitions/FilterOption.ts";
-import {Option} from "../../Definitions/DropdownOption.ts";
-import {Error} from "../Util/Error.tsx";
+import {FilterOption} from "../../../Definitions/FilterOption.ts";
+import {Option} from "../../../Definitions/DropdownOption.ts";
 import {Modal} from "../Util/Modal.tsx";
-import {GenericModalProps} from "../../Definitions/props.ts";
+import {GenericModalProps} from "../../../Definitions/props.ts";
+import {FilterModalPresenter, FilterModalView} from "../../../presenter/FilterModalPresenter.ts";
 
 interface FilterModalProps extends GenericModalProps {
     filterOptions: FilterOption[];
@@ -26,36 +26,21 @@ export const FilterModal: React.FC<FilterModalProps> = ({
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const listener: FilterModalView = {
+        setFilterOptionsMap: setFilterOptionsMap,
+        setIsLoading: setIsLoading,
+        setError: setError,
+        onApplyFilters: onApplyFilters,
+        onClose: onClose,
+        setFilterOptions: setFilterOptions,
+        fetchFilters: fetchFilters
+    }
+
+    const presenter = useMemo(() => new FilterModalPresenter(listener), [listener]);
+
     useEffect(() => {
-        const getFilterOptions = async () => {
-            setIsLoading(true);
-            try {
-                const filterDataPromises = Object.keys(fetchFilters).map(async (filterKey) => {
-                    const data = await fetchFilters[filterKey]();
-                    if (data) {
-                        return {key: filterKey, options: data};
-                    }
-                    return {key: filterKey, options: []};
-                });
-
-                const resolvedFilters = await Promise.all(filterDataPromises);
-                const optionsMap = resolvedFilters.reduce((acc, {key, options}) => {
-                    acc[key] = options;
-                    return acc;
-                }, {} as { [key: string]: Option[] });
-
-                setFilterOptionsMap(optionsMap);
-            } catch (error) {
-                console.error("Failed to fetch filter options:", error);
-                setError("Failed to fetch filter options: " + (error as Error).message);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        if (isOpen) {
-            setIsLoading(true)
-            getFilterOptions().then(() => setIsLoading(false))
+        if (!isOpen) {
+            presenter.getFilterOptions().then(() => setIsLoading(false))
         }
     }, [isOpen, fetchFilters]);
 
@@ -64,31 +49,8 @@ export const FilterModal: React.FC<FilterModalProps> = ({
         onClose();
     };
 
-    function upsert<T>(array: T[], item: T, predicate: (existingItem: T) => boolean): T[] {
-        const index = array.findIndex(predicate);
-
-        if (index > -1) {
-            // Item found, replace it
-            array[index] = item;
-        } else {
-            // Item not found, add it
-            array.push(item);
-        }
-
-        return array;
-    }
-
-    const handleChange = (label: string, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const option = new FilterOption(label, event.target.value);
-        setFilterOptions(upsert(filterOptions, option, (o) => o.column === label));
-        console.log(filterOptions)
-    };
-
     const clearAllFilters = () => {
-        for (let i = 0; i < filterOptions.length; i++) {
-            const newOption = new FilterOption(filterOptions[i].column, 'ALL')
-            setFilterOptions(upsert(filterOptions, newOption, (o) => o.column === filterOptions[i].column))
-        }
+        presenter.clearAllFilters(filterOptions)
         handleApply()
     }
 
@@ -138,7 +100,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
                             <select
                                 className="p-2 rounded-lg border"
                                 name={`select-${filterKey}`}
-                                onChange={(e) => handleChange(filterKey, e)}
+                                onChange={(e) => presenter.handleChange(filterKey, filterOptions, e)}
                             >
                                 <option key="disabled" disabled={true} value="">
                                     --
