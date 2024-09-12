@@ -1,11 +1,11 @@
 import React from "react";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {TablesUpdate} from "../Definitions/generatedDefinitions.ts";
+import {TablesUpdate} from "../../Definitions/generatedDefinitions.ts";
 import DetailedItemTable from "./DetailedItemTable.tsx";
-import {editJewelryMasterRow, getJewelryDataBySKU} from "../model/queries/ArJewelryMasterDAO.ts";
-import {JewelryFormConfig} from "../Definitions/FormConfig/jewelryFormConfig.ts";
-import {LabeledInputType, MapFormDataToJewelryMasterColumns} from "../Definitions/enum.ts";
-import {FormColumn} from "../Definitions/FormColumn.ts";
+import {editJewelryMasterRow, getJewelryDataBySKU} from "../../model/queries/ArJewelryMasterDAO.ts";
+import {JewelryFormConfig} from "../../Definitions/FormConfig/jewelryFormConfig.ts";
+import {LabeledInputType, MapFormDataToJewelryMasterColumns} from "../../Definitions/enum.ts";
+import {FormColumn} from "../../Definitions/FormColumn.ts";
 
 const JewelryDetailsPage = () => {
     const {sku} = useParams();

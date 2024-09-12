@@ -1,5 +1,5 @@
 import {Presenter, View} from "./Presenter.ts";
-import {Error} from "../Components/Util/Error.tsx";
+import {Error} from "../view/Components/Util/Error.tsx";
 import {FilterOption} from "../Definitions/FilterOption.ts";
 import {ReducerAction} from "react";
 
@@ -45,7 +45,10 @@ export const initialState: ItemMasterState = {
 };
 
 // Reducer function
-export const reducer = (state: ItemMasterState, action: { type: ACTIONS; payload?: any }): ItemMasterState => {
+export const itemMasterReducer = (state: ItemMasterState, action: {
+    type: ACTIONS;
+    payload?: any
+}): ItemMasterState => {
     switch (action.type) {
         case ACTIONS.TOGGLE_FILTER_MODAL:
             return {...state, isFilterModalOpen: !state.isFilterModalOpen};

@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import {Outlet} from "react-router-dom";
 import useClient from "../hooks/useClient.tsx";
 import {useEffect, useState} from "react";
 import Authentication from "./Authentication.tsx";
@@ -13,9 +13,9 @@ const AuthProtectedRoute = () => {
         })
     })
     if (!isAuthenticated) {
-        return <Authentication />;
+        return <Authentication/>;
     }
-    return <Outlet />;
+    return <Outlet/>;
 };
 
 export default AuthProtectedRoute;

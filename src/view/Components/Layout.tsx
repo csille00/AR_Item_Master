@@ -9,7 +9,7 @@ const Layout = () => {
         <>
             <div className="grid grid-cols-6 h-screen w-screen">
                 <div className="col-span-1">
-                    <SidePanel client={client} />
+                    <SidePanel client={client}/>
                 </div>
                 <div className="col-span-5 bg-superlightgr">
                     <Outlet/>

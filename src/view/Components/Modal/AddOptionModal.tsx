@@ -4,21 +4,21 @@ import {Error} from "../Util/Error.tsx";
 import {Modal} from "../Util/Modal.tsx";
 import LabeledInput from "../Util/LabeledInput.tsx";
 import {Bounce, toast} from "react-toastify";
-import {GenericModalProps} from "../../Definitions/props.ts";
-import {FormColumn} from "../../Definitions/FormColumn.ts";
-import {AdminTableConfig} from "../../Definitions/FormConfig/adminConfig.ts";
+import {GenericModalProps} from "../../../Definitions/props.ts";
+import {FormColumn} from "../../../Definitions/FormColumn.ts";
+import {AdminTableConfig} from "../../../Definitions/FormConfig/adminConfig.ts";
 
 export interface AddOptionModalProps extends GenericModalProps {
-    onAddOption: (option: {[key: string]: any}) => Promise<void>;
+    onAddOption: (option: { [key: string]: any }) => Promise<void>;
     selectedTable: string;
 }
 
 export function AddOptionModal({
-                                      isOpen,
-                                      onClose,
-                                      onAddOption,
-                                      selectedTable,
-                                  }: AddOptionModalProps): React.JSX.Element {
+                                   isOpen,
+                                   onClose,
+                                   onAddOption,
+                                   selectedTable,
+                               }: AddOptionModalProps): React.JSX.Element {
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState<{ [key: string]: any }>({});
     const [columns, setColumns] = useState<FormColumn[]>([]);
@@ -86,9 +86,9 @@ export function AddOptionModal({
             footer={
                 <>
                     <Button text="Add" onClick={handleSubmit}
-                            style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white" />
+                            style="bg-argold text-sm text-white py-1 rounded-md hover:bg-darkgold hover:text-white"/>
                     <Button text="Cancel" onClick={onClose}
-                            style="bg-superlightgr text-sm text-argray py-1 rounded-md hover:bg-lightgr hover:text-white" />
+                            style="bg-superlightgr text-sm text-argray py-1 rounded-md hover:bg-lightgr hover:text-white"/>
                 </>
             }
         >

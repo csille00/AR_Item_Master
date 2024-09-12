@@ -1,10 +1,10 @@
-import '../index.css'
+import '../../index.css'
 import React, {SetStateAction, useEffect, useState} from 'react'
 import {Auth} from '@supabase/auth-ui-react'
 import {ThemeSupa} from '@supabase/auth-ui-shared'
 import {Session} from "@supabase/supabase-js";
 import useClient from "../hooks/useClient.tsx";
-import logoSrc from "../assets/Logo.png"
+import logoSrc from "../../assets/Logo.png"
 
 const Authentication: React.FC = () => {
     const client = useClient()

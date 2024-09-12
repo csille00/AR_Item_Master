@@ -1,13 +1,13 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {Tables} from "../Definitions/generatedDefinitions.ts";
-import {FormColumn} from "../Definitions/FormColumn.ts";
+import {Tables} from "../../Definitions/generatedDefinitions.ts";
+import {FormColumn} from "../../Definitions/FormColumn.ts";
 import {Error} from "./Util/Error.tsx";
 import {ArLoader} from "./Util/Loading.tsx";
 import LabeledInput from "./Util/LabeledInput.tsx";
-import {LabeledInputType} from "../Definitions/enum.ts";
+import {LabeledInputType} from "../../Definitions/enum.ts";
 import Button from "./Util/Button.tsx";
 import {useNavigate} from "react-router-dom";
-import backIcon from "../assets/back.svg";
+import backIcon from "../../assets/back.svg";
 
 interface ItemTableProps {
     fetchColumns: () => Promise<FormColumn[]>

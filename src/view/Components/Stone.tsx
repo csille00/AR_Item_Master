@@ -1,27 +1,27 @@
 import React, {useMemo, useReducer} from "react";
-import Table from "../Components/Util/Table.tsx";
-import {ArStoneMasterColumns, MapFormDataToStoneMasterColumns, StoneMasterColumnsMap} from "../Definitions/enum.ts";
+import Table from "./Util/Table.tsx";
+import {ArStoneMasterColumns, MapFormDataToStoneMasterColumns, StoneMasterColumnsMap} from "../../Definitions/enum.ts";
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
-import {getStoneDataAsCSV} from "../model/queries/ArStoneMasterDAO.ts";
-import {getStoneProductTypesFromClient} from "../model/queries/StoneProductTypeDAO.ts";
+import {getStoneDataAsCSV} from "../../model/queries/ArStoneMasterDAO.ts";
+import {getStoneProductTypesFromClient} from "../../model/queries/StoneProductTypeDAO.ts";
 import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
-import {Tables} from "../Definitions/generatedDefinitions.ts";
-import {getStSourceFromClient} from "../model/queries/StSourceDAO.ts";
-import {getStoneTypesOptionsFromClient} from "../model/queries/StoneTypeDAO.ts";
-import {getStoneColorFromClient} from "../model/queries/StoneColorDAO.ts";
-import {getStoneShapeFromClient} from "../model/queries/StoneShapeDAO.ts";
-import {getStoneCutOptionFromClient} from "../model/queries/StoneCutDAO.ts";
-import {getStoneOrientationFromClient} from "../model/queries/StoneOrientationDAO.ts";
-import {getCertTypesFromClient} from "../model/queries/STCertTypeDAO.ts";
-import {getColorGradeFromClient} from "../model/queries/StColorGradeDAO.ts";
-import {getCertClarityFromClient} from "../model/queries/StCertClarityDAO.ts";
-import {DefaultStoneViews} from "../Definitions/DefaultStoneViews.ts";
-import {ACTIONS, initialState, ItemMasterView, reducer} from "../presenter/ItemMasterPresenter.ts";
-import {StonePresenter} from "../presenter/StonePresenter.ts";
+import {Tables} from "../../Definitions/generatedDefinitions.ts";
+import {getStSourceFromClient} from "../../model/queries/StSourceDAO.ts";
+import {getStoneTypesOptionsFromClient} from "../../model/queries/StoneTypeDAO.ts";
+import {getStoneColorFromClient} from "../../model/queries/StoneColorDAO.ts";
+import {getStoneShapeFromClient} from "../../model/queries/StoneShapeDAO.ts";
+import {getStoneCutOptionFromClient} from "../../model/queries/StoneCutDAO.ts";
+import {getStoneOrientationFromClient} from "../../model/queries/StoneOrientationDAO.ts";
+import {getCertTypesFromClient} from "../../model/queries/STCertTypeDAO.ts";
+import {getColorGradeFromClient} from "../../model/queries/StColorGradeDAO.ts";
+import {getCertClarityFromClient} from "../../model/queries/StCertClarityDAO.ts";
+import {DefaultStoneViews} from "../../Definitions/DefaultStoneViews.ts";
+import {ACTIONS, initialState, itemMasterReducer, ItemMasterView} from "../../presenter/ItemMasterPresenter.ts";
+import {StonePresenter} from "../../presenter/StonePresenter.ts";
 
 const Stone: React.FC = () => {
-    const [state, dispatch] = useReducer(reducer, initialState, (initialState: typeof initialState) => initialState);
+    const [state, dispatch] = useReducer(itemMasterReducer, initialState, (initialState: typeof initialState) => initialState);
 
     const listener: ItemMasterView = {
         state: state,

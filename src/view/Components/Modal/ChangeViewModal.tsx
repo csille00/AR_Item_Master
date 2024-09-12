@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import Button from "../Util/Button.tsx";
 import {Modal} from "../Util/Modal.tsx";
-import {GenericModalProps} from "../../Definitions/props.ts";
+import {GenericModalProps} from "../../../Definitions/props.ts";
 import LabeledInput from "../Util/LabeledInput.tsx";
-import {DefaultJewelryViews} from "../../Definitions/DefaultJewelryViews.ts";
-import {LabeledInputType} from "../../Definitions/enum.ts";
-import {DefaultViews} from "../../Definitions/DefaultViews.ts";
+import {LabeledInputType} from "../../../Definitions/enum.ts";
+import {DefaultViews} from "../../../Definitions/DefaultViews.ts";
 
 interface ChangeViewModalProps extends GenericModalProps {
     columns: string[];

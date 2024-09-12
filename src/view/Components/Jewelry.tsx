@@ -1,46 +1,46 @@
 import React, {useMemo, useReducer} from "react";
-import Table from "../Components/Util/Table.tsx";
+import Table from "./Util/Table.tsx";
 import {ItemMasterRow} from "./Util/ItemMasterRow.tsx";
-import {getJewelryDataAsCSV} from "../model/queries/ArJewelryMasterDAO.ts";
+import {getJewelryDataAsCSV} from "../../model/queries/ArJewelryMasterDAO.ts";
 import {
     ArJewelryMasterColumns,
     JewelryMasterColumnsMap,
     MapFormDataToJewelryMasterColumns
-} from "../Definitions/enum.ts";
-import {getProductTypesFromClient} from "../model/queries/ProductTypeDAO.ts";
+} from "../../Definitions/enum.ts";
+import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
 import 'react-toastify/dist/ReactToastify.css';
 import {ChangeViewModal} from "./Modal/ChangeViewModal.tsx";
 import {FilterModal} from "./Modal/FilterModal.tsx";
-import {Tables} from "../Definitions/generatedDefinitions.ts";
-import {getStoneTypesOptionsFromClient} from "../model/queries/StoneTypeDAO.ts";
-import {getStSourceFromClient} from "../model/queries/StSourceDAO.ts";
-import {getStoneColorFromClient} from "../model/queries/StoneColorDAO.ts";
-import {getStoneShapeFromClient} from "../model/queries/StoneShapeDAO.ts";
-import {getStoneCutOptionFromClient} from "../model/queries/StoneCutDAO.ts";
-import {getStoneOrientationFromClient} from "../model/queries/StoneOrientationDAO.ts";
-import {getStoneOriginFromClient} from "../model/queries/StoneOriginDAO.ts";
-import {getCertTypesFromClient} from "../model/queries/STCertTypeDAO.ts";
-import {getStCertCutFromClient} from "../model/queries/STCertCutDAO.ts";
-import {getColorGradeFromClient} from "../model/queries/StColorGradeDAO.ts";
-import {getCertClarityFromClient} from "../model/queries/StCertClarityDAO.ts";
-import {getStylesFromClient} from "../model/queries/ArStyleDAO.ts";
-import {getMetalTypeFromClient} from "../model/queries/MetalTypeDAO.ts";
-import {getMetalFinishesClient} from "../model/queries/MetalFinishDAO.ts";
-import {getMetalTexturesFromClient} from "../model/queries/MetalTextureDAO.ts";
-import {getBandStyleFromClient} from "../model/queries/BandStyleDAO.ts";
-import {getBandWidthFromClient} from "../model/queries/BandWidthDAO.ts";
-import {getSettingsFromClient} from "../model/queries/JewelrySettingDAO.ts";
-import {getSideStonesFromClient} from "../model/queries/SideStonesDAO.ts";
-import {getChainTypesFromClient} from "../model/queries/ChainTypeDAO.ts";
-import {getPendantTypeFromClient} from "../model/queries/PendantTypeDAO.ts";
-import {getEarringTypeFromClient} from "../model/queries/EarringTypeDAO.ts";
-import {getCharmTypeFromClient} from "../model/queries/CharmTypeDAO.ts";
-import {DefaultJewelryViews} from "../Definitions/DefaultJewelryViews.ts";
-import {ACTIONS, initialState, ItemMasterView, reducer} from "../presenter/ItemMasterPresenter.ts";
-import {JewelryPresenter} from "../presenter/JewelryPresenter.ts";
+import {Tables} from "../../Definitions/generatedDefinitions.ts";
+import {getStoneTypesOptionsFromClient} from "../../model/queries/StoneTypeDAO.ts";
+import {getStSourceFromClient} from "../../model/queries/StSourceDAO.ts";
+import {getStoneColorFromClient} from "../../model/queries/StoneColorDAO.ts";
+import {getStoneShapeFromClient} from "../../model/queries/StoneShapeDAO.ts";
+import {getStoneCutOptionFromClient} from "../../model/queries/StoneCutDAO.ts";
+import {getStoneOrientationFromClient} from "../../model/queries/StoneOrientationDAO.ts";
+import {getStoneOriginFromClient} from "../../model/queries/StoneOriginDAO.ts";
+import {getCertTypesFromClient} from "../../model/queries/STCertTypeDAO.ts";
+import {getStCertCutFromClient} from "../../model/queries/STCertCutDAO.ts";
+import {getColorGradeFromClient} from "../../model/queries/StColorGradeDAO.ts";
+import {getCertClarityFromClient} from "../../model/queries/StCertClarityDAO.ts";
+import {getStylesFromClient} from "../../model/queries/ArStyleDAO.ts";
+import {getMetalTypeFromClient} from "../../model/queries/MetalTypeDAO.ts";
+import {getMetalFinishesClient} from "../../model/queries/MetalFinishDAO.ts";
+import {getMetalTexturesFromClient} from "../../model/queries/MetalTextureDAO.ts";
+import {getBandStyleFromClient} from "../../model/queries/BandStyleDAO.ts";
+import {getBandWidthFromClient} from "../../model/queries/BandWidthDAO.ts";
+import {getSettingsFromClient} from "../../model/queries/JewelrySettingDAO.ts";
+import {getSideStonesFromClient} from "../../model/queries/SideStonesDAO.ts";
+import {getChainTypesFromClient} from "../../model/queries/ChainTypeDAO.ts";
+import {getPendantTypeFromClient} from "../../model/queries/PendantTypeDAO.ts";
+import {getEarringTypeFromClient} from "../../model/queries/EarringTypeDAO.ts";
+import {getCharmTypeFromClient} from "../../model/queries/CharmTypeDAO.ts";
+import {DefaultJewelryViews} from "../../Definitions/DefaultJewelryViews.ts";
+import {ACTIONS, initialState, itemMasterReducer, ItemMasterView} from "../../presenter/ItemMasterPresenter.ts";
+import {JewelryPresenter} from "../../presenter/JewelryPresenter.ts";
 
 const Jewelry: React.FC = () => {
-    const [state, dispatch] = useReducer(reducer, initialState, (initialState: typeof initialState) => initialState);
+    const [state, dispatch] = useReducer(itemMasterReducer, initialState, (initialState: typeof initialState) => initialState);
 
     const listener: ItemMasterView = {
         state: state,

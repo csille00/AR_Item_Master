@@ -1,15 +1,16 @@
-import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
+import {getProductTypesFromClient} from "../../../model/queries/ProductTypeDAO.ts";
 import {
     ArJewelryMasterColumns,
     LabeledInputType,
-    MapFormDataToJewelryMasterColumns, ProductTypeIds,
+    MapFormDataToJewelryMasterColumns,
+    ProductTypeIds,
     Status
-} from "../../Definitions/enum.ts";
+} from "../../../Definitions/enum.ts";
 import {AddForm} from "./AddForm.tsx";
-import {FormColumn} from "../../Definitions/FormColumn.ts";
-import {insertIntoJewelryMaster} from "../../model/queries/ArJewelryMasterDAO.ts";
-import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
-import {JewelryFormConfig} from "../../Definitions/FormConfig/jewelryFormConfig.ts";
+import {FormColumn} from "../../../Definitions/FormColumn.ts";
+import {insertIntoJewelryMaster} from "../../../model/queries/ArJewelryMasterDAO.ts";
+import {TablesInsert} from "../../../Definitions/generatedDefinitions.ts";
+import {JewelryFormConfig} from "../../../Definitions/FormConfig/jewelryFormConfig.ts";
 
 const AddJewelryForm = () => {
 

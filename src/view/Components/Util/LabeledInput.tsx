@@ -1,6 +1,6 @@
 import React from "react";
-import {LabeledInputType} from "../../Definitions/enum.ts";
-import {Option} from "../../Definitions/DropdownOption.ts";
+import {LabeledInputType} from "../../../Definitions/enum.ts";
+import {Option} from "../../../Definitions/DropdownOption.ts";
 
 interface LabeledInputProps {
     label?: string;
@@ -14,13 +14,23 @@ interface LabeledInputProps {
     onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, label?: string) => void;
 }
 
-const LabeledInput: React.FC<LabeledInputProps> = ({ label, type, placeholder = null, style = null, boxStyle = null, value, required, options, onChange }) => {
+const LabeledInput: React.FC<LabeledInputProps> = ({
+                                                       label,
+                                                       type,
+                                                       placeholder = null,
+                                                       style = null,
+                                                       boxStyle = null,
+                                                       value,
+                                                       required,
+                                                       options,
+                                                       onChange
+                                                   }) => {
 
     const labeledInput = `py-2 ${style ?? ''}`;
     const inputBox = `${boxStyle ?? ''}`;
 
     return (
-        <div  className={labeledInput}>
+        <div className={labeledInput}>
             {label && (
                 <label>
                     <div className="inline mx-4">

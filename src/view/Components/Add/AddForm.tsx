@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import LabeledInput from "../Util/LabeledInput.tsx";
 import Button from "../Util/Button.tsx";
-import {FormColumn} from "../../Definitions/FormColumn.ts";
-import {Option} from "../../Definitions/DropdownOption.ts";
-import {LabeledInputType} from "../../Definitions/enum.ts";
+import {FormColumn} from "../../../Definitions/FormColumn.ts";
+import {Option} from "../../../Definitions/DropdownOption.ts";
+import {LabeledInputType} from "../../../Definitions/enum.ts";
 import {NavLink} from "react-router-dom";
 import {ArLoader} from "../Util/Loading.tsx";
 import {Bounce, toast, ToastContainer} from "react-toastify";

@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import Button from "../Util/Button.tsx";
-import {Option} from "../../Definitions/DropdownOption.ts";
+import {Option} from "../../../Definitions/DropdownOption.ts";
 import {Error} from "../Util/Error.tsx";
 import {Modal} from "../Util/Modal.tsx";
-import {GenericModalProps} from "../../Definitions/props.ts";
+import {GenericModalProps} from "../../../Definitions/props.ts";
 
 export interface DeleteConfirmModalProps extends GenericModalProps {
     option: Option;

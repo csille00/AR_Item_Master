@@ -3,13 +3,13 @@ import Button from "../Util/Button.tsx";
 import {Error} from "../Util/Error.tsx";
 import {Modal} from "../Util/Modal.tsx";
 import LabeledInput from "../Util/LabeledInput.tsx";
-import {LabeledInputType} from "../../Definitions/enum.ts";
+import {LabeledInputType} from "../../../Definitions/enum.ts";
 import {Bounce, toast} from "react-toastify";
-import {GenericModalProps} from "../../Definitions/props.ts";
+import {GenericModalProps} from "../../../Definitions/props.ts";
 
 export interface ChangeOptionModalProps extends GenericModalProps {
-    option: {[key: string]: any};
-    onUpdateOption: (option: {[key: string]: any}) => Promise<void>;
+    option: { [key: string]: any };
+    onUpdateOption: (option: { [key: string]: any }) => Promise<void>;
 }
 
 export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
@@ -18,7 +18,7 @@ export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
                                                                       option,
                                                                       onUpdateOption,
                                                                   }) => {
-    const [newOption, setNewOption] = useState<{[key: string]: any}>(option);  // Initialize with the passed option
+    const [newOption, setNewOption] = useState<{ [key: string]: any }>(option);  // Initialize with the passed option
     const [isLoading, setIsLoading] = useState(false);  // Set loading to false initially
     const [error, setError] = useState<string | null>(null);
 
@@ -64,7 +64,10 @@ export const EditOptionModal: React.FC<ChangeOptionModalProps> = ({
             <LabeledInput
                 label={key.toUpperCase()}
                 type={type}
-                onChange={(e) => setNewOption({ ...newOption, [key]: type === LabeledInputType.NUMBER ? Number(e.target.value) : e.target.value })}
+                onChange={(e) => setNewOption({
+                    ...newOption,
+                    [key]: type === LabeledInputType.NUMBER ? Number(e.target.value) : e.target.value
+                })}
                 value={type === LabeledInputType.NUMBER ? newOption[key] : `${newOption[key]}`}
                 placeholder={`Enter ${key}`}
                 required={false}

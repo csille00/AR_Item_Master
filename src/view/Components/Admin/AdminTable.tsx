@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../Util/Button.tsx";
-import addIcon from "../../assets/addWhite.svg";
+import addIcon from "../../../assets/addWhite.svg";
 
 export interface AdminTableProps {
     title: string;
@@ -28,13 +28,13 @@ export const AdminTable = ({title, data, setAddOptionModalOpen, style, children}
                 <div className="flex justify-center pb-6 px-4 overflow-y-scroll h-auto" style={{maxHeight: '44rem'}}>
                     <table className="w-full text-left text-argray">
                         <thead className="sticky top-0 bg-white">
-                            <tr>
-                                {columns.map((column, index) => (
-                                    <th key={index} className="p-4 cursor-pointer">
-                                        {column}
-                                    </th>
-                                ))}
-                            </tr>
+                        <tr>
+                            {columns.map((column, index) => (
+                                <th key={index} className="p-4 cursor-pointer">
+                                    {column}
+                                </th>
+                            ))}
+                        </tr>
                         </thead>
                         <tbody>
                         {data.map((item: any) => (

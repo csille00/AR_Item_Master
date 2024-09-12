@@ -21,11 +21,25 @@ export class Presenter<ViewType extends View> {
         return this._view as ViewType;
     }
 
+    protected debounce = (func: (...args: any[]) => void, wait: number) => {
+        let timeout: number;
+
+        return (...args: any[]) => {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    };
+
     protected async doFailureReportingOperation(operation: () => Promise<void>, operationDescription: string) {
         try {
             await operation()
         } catch (error) {
-            this.view.displayErrorMessage(`Failed to ${operationDescription} because of exception: ${(error as Error).message}`)
+            // this.view.displayErrorMessage(`Failed to ${operationDescription} because of exception: ${(error as Error).message}`)
             console.log(error)
         }
     }

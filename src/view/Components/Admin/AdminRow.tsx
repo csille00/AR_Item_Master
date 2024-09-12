@@ -1,7 +1,7 @@
 import React from "react";
-import editIcon from "../../assets/edit.svg";
-import deleteIcon from "../../assets/delete.svg";
-import {Option} from "../../Definitions/DropdownOption.ts";
+import editIcon from "../../../assets/edit.svg";
+import deleteIcon from "../../../assets/delete.svg";
+import {Option} from "../../../Definitions/DropdownOption.ts";
 import Button from "../Util/Button.tsx";
 
 interface AdminRowProps {
@@ -11,7 +11,7 @@ interface AdminRowProps {
     onDelete: (item: Option) => Promise<void>
 }
 
-export const AdminRow: React.FC<AdminRowProps> = ({ item, columns, onEdit, onDelete }): React.ReactElement => {
+export const AdminRow: React.FC<AdminRowProps> = ({item, columns, onEdit, onDelete}): React.ReactElement => {
     return (
         <tr>
             {columns.map((column, index) => (

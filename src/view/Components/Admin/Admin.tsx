@@ -1,39 +1,39 @@
 import {useEffect, useState} from "react";
 import {Error} from "../Util/Error.tsx";
 import {ArLoader} from "../Util/Loading.tsx";
-import {getStylesFromClient} from "../../model/queries/ArStyleDAO.ts";
-import {Option} from "../../Definitions/DropdownOption.ts";
+import {getStylesFromClient} from "../../../model/queries/ArStyleDAO.ts";
+import {Option} from "../../../Definitions/DropdownOption.ts";
 import {AdminTable} from "./AdminTable.tsx";
-import {getBandStyleFromClient} from "../../model/queries/BandStyleDAO.ts";
-import {getBandWidthFromClient} from "../../model/queries/BandWidthDAO.ts";
-import {AdminTables} from "../../Definitions/enum.ts";
-import {getChainTypesFromClient} from "../../model/queries/ChainTypeDAO.ts";
-import {getCharmTypeFromClient} from "../../model/queries/CharmTypeDAO.ts";
-import {getEarringTypeFromClient} from "../../model/queries/EarringTypeDAO.ts";
-import {getSettingsFromClient} from "../../model/queries/JewelrySettingDAO.ts";
-import {addMaterialType, getMetalTypeFromClient, updateMaterialType} from "../../model/queries/MetalTypeDAO.ts";
-import {getMetalFinishesClient} from "../../model/queries/MetalFinishDAO.ts";
-import {getMetalTexturesFromClient} from "../../model/queries/MetalTextureDAO.ts";
-import {getPendantTypeFromClient} from "../../model/queries/PendantTypeDAO.ts";
-import {getProductTypesFromClient} from "../../model/queries/ProductTypeDAO.ts";
-import {getSideStonesFromClient} from "../../model/queries/SideStonesDAO.ts";
-import {getStCertCutFromClient} from "../../model/queries/STCertCutDAO.ts";
-import {getCertClarityFromClient} from "../../model/queries/StCertClarityDAO.ts";
-import {getStoneColorFromClient} from "../../model/queries/StoneColorDAO.ts";
-import {addStCut, getStoneCutFromClient, updateStCut} from "../../model/queries/StoneCutDAO.ts";
-import {getStoneOrientationFromClient} from "../../model/queries/StoneOrientationDAO.ts";
-import {getStoneOriginFromClient} from "../../model/queries/StoneOriginDAO.ts";
-import {getStoneProductTypesFromClient} from "../../model/queries/StoneProductTypeDAO.ts";
-import {getStoneShapeFromClient} from "../../model/queries/StoneShapeDAO.ts";
-import {getStSourceFromClient} from "../../model/queries/StSourceDAO.ts";
-import {addStType, getStoneTypesFromClient, updateStType} from "../../model/queries/StoneTypeDAO.ts";
+import {getBandStyleFromClient} from "../../../model/queries/BandStyleDAO.ts";
+import {getBandWidthFromClient} from "../../../model/queries/BandWidthDAO.ts";
+import {AdminTables} from "../../../Definitions/enum.ts";
+import {getChainTypesFromClient} from "../../../model/queries/ChainTypeDAO.ts";
+import {getCharmTypeFromClient} from "../../../model/queries/CharmTypeDAO.ts";
+import {getEarringTypeFromClient} from "../../../model/queries/EarringTypeDAO.ts";
+import {getSettingsFromClient} from "../../../model/queries/JewelrySettingDAO.ts";
+import {addMaterialType, getMetalTypeFromClient, updateMaterialType} from "../../../model/queries/MetalTypeDAO.ts";
+import {getMetalFinishesClient} from "../../../model/queries/MetalFinishDAO.ts";
+import {getMetalTexturesFromClient} from "../../../model/queries/MetalTextureDAO.ts";
+import {getPendantTypeFromClient} from "../../../model/queries/PendantTypeDAO.ts";
+import {getProductTypesFromClient} from "../../../model/queries/ProductTypeDAO.ts";
+import {getSideStonesFromClient} from "../../../model/queries/SideStonesDAO.ts";
+import {getStCertCutFromClient} from "../../../model/queries/STCertCutDAO.ts";
+import {getCertClarityFromClient} from "../../../model/queries/StCertClarityDAO.ts";
+import {getStoneColorFromClient} from "../../../model/queries/StoneColorDAO.ts";
+import {addStCut, getStoneCutFromClient, updateStCut} from "../../../model/queries/StoneCutDAO.ts";
+import {getStoneOrientationFromClient} from "../../../model/queries/StoneOrientationDAO.ts";
+import {getStoneOriginFromClient} from "../../../model/queries/StoneOriginDAO.ts";
+import {getStoneProductTypesFromClient} from "../../../model/queries/StoneProductTypeDAO.ts";
+import {getStoneShapeFromClient} from "../../../model/queries/StoneShapeDAO.ts";
+import {getStSourceFromClient} from "../../../model/queries/StSourceDAO.ts";
+import {addStType, getStoneTypesFromClient, updateStType} from "../../../model/queries/StoneTypeDAO.ts";
 import {AdminRow} from "./AdminRow.tsx";
-import {addOption, deleteOption, getOptionsFromClient, updateOption} from "../../model/queries/BaseDAO.ts";
+import {addOption, deleteOption, getOptionsFromClient, updateOption} from "../../../model/queries/BaseDAO.ts";
 import {AddOptionModal} from "../Modal/AddOptionModal.tsx";
 import {EditOptionModal} from "../Modal/EditOptionModal.tsx";
 import {DeleteConfirmModal} from "../Modal/DeleteConfirmModal.tsx";
-import {addCTWRange, getCTWRangeFromClient, updateCTWRange} from "../../model/queries/CTWRangeDAO.ts";
-import {Tables, TablesUpdate} from "../../Definitions/generatedDefinitions.ts";
+import {addCTWRange, getCTWRangeFromClient, updateCTWRange} from "../../../model/queries/CTWRangeDAO.ts";
+import {Tables, TablesUpdate} from "../../../Definitions/generatedDefinitions.ts";
 
 const Admin = () => {
     const [tableData, setTableData] = useState<any[]>();
@@ -126,15 +126,20 @@ const Admin = () => {
             console.log(selectedTable.toLowerCase().replace(/ /g, "_"))
 
             switch (selectedTable) {
-                case AdminTables.CTW_RANGE: await updateCTWRange(updatedOption as TablesUpdate<'ctw_range'>);
+                case AdminTables.CTW_RANGE:
+                    await updateCTWRange(updatedOption as TablesUpdate<'ctw_range'>);
                     break;
-                case AdminTables.MATERIAL_TYPE: await updateMaterialType(updatedOption as TablesUpdate<'material_type'>);
+                case AdminTables.MATERIAL_TYPE:
+                    await updateMaterialType(updatedOption as TablesUpdate<'material_type'>);
                     break;
-                case AdminTables.ST_CUT: await updateStCut(updatedOption as TablesUpdate<'ctw_cut'>);
+                case AdminTables.ST_CUT:
+                    await updateStCut(updatedOption as TablesUpdate<'ctw_cut'>);
                     break;
-                case AdminTables.ST_TYPE: await updateStType(updatedOption as TablesUpdate<'st_type'>);
+                case AdminTables.ST_TYPE:
+                    await updateStType(updatedOption as TablesUpdate<'st_type'>);
                     break;
-                default: await updateOption(selectedTable.toLowerCase().replace(/ /g, "_"), updatedOption as Option)
+                default:
+                    await updateOption(selectedTable.toLowerCase().replace(/ /g, "_"), updatedOption as Option)
             }
 
             setNonce(nonce + 1); // Reload data after update
@@ -150,15 +155,20 @@ const Admin = () => {
             console.log("option to add: ", option)
 
             switch (selectedTable) {
-                case AdminTables.CTW_RANGE: await addCTWRange(option as Tables<'ctw_range'>);
+                case AdminTables.CTW_RANGE:
+                    await addCTWRange(option as Tables<'ctw_range'>);
                     break;
-                case AdminTables.MATERIAL_TYPE: await addMaterialType(option as Tables<'material_type'>);
+                case AdminTables.MATERIAL_TYPE:
+                    await addMaterialType(option as Tables<'material_type'>);
                     break;
-                case AdminTables.ST_CUT: await addStCut(option as Tables<'ctw_cut'>);
+                case AdminTables.ST_CUT:
+                    await addStCut(option as Tables<'ctw_cut'>);
                     break;
-                case AdminTables.ST_TYPE: await addStType(option as Tables<'st_type'>);
+                case AdminTables.ST_TYPE:
+                    await addStType(option as Tables<'st_type'>);
                     break;
-                default: await addOption(selectedTable.toLowerCase().replace(/ /g, "_"), option as Option)
+                default:
+                    await addOption(selectedTable.toLowerCase().replace(/ /g, "_"), option as Option)
             }
 
             await addOption(selectedTable.toLowerCase().replace(/ /g, '_'), option)

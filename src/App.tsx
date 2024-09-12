@@ -1,16 +1,15 @@
 import './App.css'
-import Authentication from "./Components/Authentication.tsx";
+import Authentication from "./view/Components/Authentication.tsx";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Jewelry from "./Components/Jewelry.tsx";
-import Layout from "./Components/Layout.tsx";
-import Stone from "./Components/Stone.tsx";
-import Admin from "./Components/Admin/Admin.tsx";
-import AddJewelryForm from "./Components/Add/AddJewelryForm.tsx";
-import AddStoneForm from "./Components/Add/AddStoneForm.tsx";
-import AuthProtectedRoute from "./Components/AuthProtectedRoute.tsx";
-import ProductDetails from "./Components/JewelryDetailsPage.tsx";
-import JewelryDetailsPage from "./Components/JewelryDetailsPage.tsx";
-import StoneDetailsPage from "./Components/StoneDetailsPage.tsx";
+import Jewelry from "./view/Components/Jewelry.tsx";
+import Layout from "./view/Components/Layout.tsx";
+import Stone from "./view/Components/Stone.tsx";
+import Admin from "./view/Components/Admin/Admin.tsx";
+import AddJewelryForm from "./view/Components/Add/AddJewelryForm.tsx";
+import AddStoneForm from "./view/Components/Add/AddStoneForm.tsx";
+import AuthProtectedRoute from "./view/Components/AuthProtectedRoute.tsx";
+import JewelryDetailsPage from "./view/Components/JewelryDetailsPage.tsx";
+import StoneDetailsPage from "./view/Components/StoneDetailsPage.tsx";
 
 function App() {
     return (

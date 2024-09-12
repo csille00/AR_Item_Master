@@ -1,19 +1,21 @@
 import {AddForm} from "./AddForm.tsx";
-import {FormColumn} from "../../Definitions/FormColumn.ts";
-import {getStoneProductTypesFromClient} from "../../model/queries/StoneProductTypeDAO.ts";
+import {FormColumn} from "../../../Definitions/FormColumn.ts";
+import {getStoneProductTypesFromClient} from "../../../model/queries/StoneProductTypeDAO.ts";
 import {
     ArStoneMasterColumns,
     LabeledInputType,
     MapFormDataToStoneMasterColumns,
     StoneProductTypeIds,
-} from "../../Definitions/enum.ts";
-import {TablesInsert} from "../../Definitions/generatedDefinitions.ts";
-import {insertIntoStoneMaster} from "../../model/queries/ArStoneMasterDAO.ts";
-import {StoneFormConfig} from "../../Definitions/FormConfig/stoneFormConfig.ts";
+} from "../../../Definitions/enum.ts";
+import {TablesInsert} from "../../../Definitions/generatedDefinitions.ts";
+import {insertIntoStoneMaster} from "../../../model/queries/ArStoneMasterDAO.ts";
+import {StoneFormConfig} from "../../../Definitions/FormConfig/stoneFormConfig.ts";
 
 const AddStoneForm = () => {
     const stoneConfig = new StoneFormConfig()
-    const addStone = async (formData: { [key: string]: string | number }, columns: FormColumn[]): Promise<string | null> => {
+    const addStone = async (formData: {
+        [key: string]: string | number
+    }, columns: FormColumn[]): Promise<string | null> => {
 
         let data: TablesInsert<'ar_stone_master'> = {};
         // Iterate through formData keys to build the data object

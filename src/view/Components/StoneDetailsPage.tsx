@@ -1,12 +1,11 @@
-import React, {useState} from "react";
+import React from "react";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {Tables, TablesUpdate} from "../Definitions/generatedDefinitions.ts";
+import {TablesUpdate} from "../../Definitions/generatedDefinitions.ts";
 import DetailedItemTable from "./DetailedItemTable.tsx";
-import {editJewelryMasterRow, getJewelryDataBySKU} from "../model/queries/ArJewelryMasterDAO.ts";
-import {editStoneMasterRow, getStoneDataBySKU} from "../model/queries/ArStoneMasterDAO.ts";
-import {StoneFormConfig} from "../Definitions/FormConfig/stoneFormConfig.ts";
-import {LabeledInputType, MapFormDataToStoneMasterColumns} from "../Definitions/enum.ts";
-import {FormColumn} from "../Definitions/FormColumn.ts";
+import {editStoneMasterRow, getStoneDataBySKU} from "../../model/queries/ArStoneMasterDAO.ts";
+import {StoneFormConfig} from "../../Definitions/FormConfig/stoneFormConfig.ts";
+import {LabeledInputType, MapFormDataToStoneMasterColumns} from "../../Definitions/enum.ts";
+import {FormColumn} from "../../Definitions/FormColumn.ts";
 
 const StoneDetailsPage = () => {
     const {sku} = useParams();
