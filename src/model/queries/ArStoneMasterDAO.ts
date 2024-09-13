@@ -63,6 +63,7 @@ export type StoneMasterQuery = QueryData<ReturnType<typeof createStoneMasterQuer
 export async function getStoneMasterItemsFromClient(
     page: number,
     filters: FilterOption[],
+    searchString?: string,
     sortColumn?: string,
     sortDirection?: 'asc' | 'desc',
     pageLength: number = PAGE_NUMBER
@@ -89,6 +90,11 @@ export async function getStoneMasterItemsFromClient(
         if (sortColumn) {
             stoneMasterQuery.order(sortColumn, { ascending: sortDirection === 'asc' });
         }
+    }
+
+    // Apply search by `prod_name` or `sku_number` if `searchString` is provided
+    if (searchString) {
+        stoneMasterQuery.or(`prod_name.ilike.%${searchString}%,sku_number.ilike.%${searchString}%`);
     }
 
     // Execute query

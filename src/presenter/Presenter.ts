@@ -21,7 +21,7 @@ export class Presenter<ViewType extends View> {
         return this._view as ViewType;
     }
 
-    protected debounce = (func: (...args: any[]) => void, wait: number) => {
+    debounce = (func: (...args: any[]) => void, wait: number) => {
         let timeout: number;
 
         return (...args: any[]) => {

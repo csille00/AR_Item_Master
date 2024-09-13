@@ -6,7 +6,7 @@ export class JewelryPresenter extends ItemMasterPresenter {
         return super.view as ItemMasterView
     }
 
-    async fetchJewelryData(sortChange: boolean, resetPage: boolean = false) {
-        await this.fetchData(getJewelryMasterPageFromClient, sortChange, resetPage);
+    async fetchJewelryData(searchString, sortChange: boolean, resetPage: boolean = false) {
+        await this.fetchData(getJewelryMasterPageFromClient, searchString, sortChange, resetPage);
     }
 }

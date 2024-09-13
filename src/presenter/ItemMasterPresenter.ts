@@ -11,6 +11,8 @@ export enum ACTIONS {
     SET_FILTER_OPTIONS,
     SET_SORT_COLUMN,
     TOGGLE_SORT_DIRECTION,
+    SET_INTERNAL_PAGE_RESET,
+    SET_SEARCH,
     SET_LOADING,
     SET_DATA,
     SET_HAS_MORE,
@@ -32,6 +34,7 @@ export interface ItemMasterState {
     data: any[];
     hasMore: boolean;
     page: number;
+    internalPageReset: boolean; //semaphore to prevent race condition
     error: string | null;
     columns: string[];
 }
@@ -48,6 +51,7 @@ export const initialState: ItemMasterState = {
     data: [],
     hasMore: true,
     page: 1,
+    internalPageReset: false,
     error: null,
     columns: [],
 };
@@ -75,6 +79,8 @@ export const itemMasterReducer = (state: ItemMasterState, action: {
                             ? 'desc' : 'asc'
                         : 'asc'
             };
+        case ACTIONS.SET_SEARCH:
+            return {...state, search: action.payload}
         case ACTIONS.SET_LOADING:
             return {...state, isLoading: action.payload};
         case ACTIONS.SET_DATA:
@@ -83,8 +89,10 @@ export const itemMasterReducer = (state: ItemMasterState, action: {
             return {...state, hasMore: action.payload};
         case ACTIONS.SET_PAGE:
             return {...state, page: action.payload};
+        case ACTIONS.SET_INTERNAL_PAGE_RESET:
+            return {...state, internalPageReset: action.payload}
         case ACTIONS.INCREMENT_PAGE:
-            return {...state, page: state.page + 1}
+            return {...state, page: state.hasMore ? state.page + 1 : state.page}
         case ACTIONS.SET_ERROR:
             return {...state, error: action.payload};
         case ACTIONS.SET_COLUMNS:
@@ -111,9 +119,11 @@ export class ItemMasterPresenter extends Presenter<ItemMasterView> {
         fetchFunction: (
             pageToFetch: number,
             filterOptions: FilterOption[],
+            searchString?: string,
             sortColumn?: string,
             sortDirection?: 'asc' | 'desc'
         ) => Promise<{ data: any[], count: number }>,
+        searchString: string,
         sortChange: boolean,
         resetPage: boolean = false,
     ): Promise<void> => {
@@ -124,6 +134,7 @@ export class ItemMasterPresenter extends Presenter<ItemMasterView> {
             const result = await fetchFunction(
                 pageToFetch,
                 this.view.state.filterOptions,
+                this.view.state.search ? this.view.state.search : undefined,
                 this.view.state.sortColumn? this.view.state.sortColumn : undefined,
                 this.view.state.sortDirection? this.view.state.sortDirection : undefined,
             );

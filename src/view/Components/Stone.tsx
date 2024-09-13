@@ -37,7 +37,7 @@ const Stone: React.FC = () => {
                 state={state}
                 dispatch={dispatch}
                 title="Stone Master"
-                fetchData={(sortChange: boolean, resetPage: boolean) => presenter.fetchStoneData(sortChange, resetPage)}
+                fetchData={(searchString: string, sortChange: boolean, resetPage: boolean) => presenter.fetchStoneData(searchString, sortChange, resetPage)}
                 getSortColumn={(col) => MapFormDataToStoneMasterColumns[col as keyof typeof MapFormDataToStoneMasterColumns]}
                 fetchDataAsCSV={getStoneDataAsCSV}
                 filename={"ar_stone_master.csv"}
@@ -75,7 +75,7 @@ const Stone: React.FC = () => {
                 }}
                 setFilterOptions={(options) => dispatch({type: ACTIONS.SET_FILTER_OPTIONS, payload: options})}
                 filterOptions={state.filterOptions}
-                onApplyFilters={() => presenter.fetchStoneData(true)}
+                onApplyFilters={() => presenter.fetchStoneData(state.search, false, true)}
             />
         </>
     );

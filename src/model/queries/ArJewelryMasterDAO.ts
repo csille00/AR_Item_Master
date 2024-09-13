@@ -83,12 +83,13 @@ export type JewelryMasterQuery = QueryData<ReturnType<typeof createJewelryMaster
 export async function getJewelryMasterPageFromClient(
     page: number,
     filters: FilterOption[],
+    searchString?: string,
     sortColumn?: string,
     sortDirection?: 'asc' | 'desc',
     pageLength: number = PAGE_NUMBER
 ) {
-    const start = (page - 1) * pageLength;
-    const end = start + pageLength - 1;
+    let start = (page - 1) * pageLength;
+    let end = start + pageLength - 1;
 
     // Create query
     const jewelryMasterQuery = createJewelryMasterQuery();
@@ -104,6 +105,11 @@ export async function getJewelryMasterPageFromClient(
         }
     });
 
+    // Apply search by `prod_name` or `sku_number` if `searchString` is provided
+    if (searchString) {
+        jewelryMasterQuery.or(`prod_name.ilike.%${searchString}%,sku_number.ilike.%${searchString}%`);
+    }
+
     // Apply sorting if sortColumn and sortDirection are provided
     if (sortColumn && sortDirection) {
         if (sortColumn) {
@@ -113,7 +119,7 @@ export async function getJewelryMasterPageFromClient(
 
     // Execute query
     const { data, error, count } = await jewelryMasterQuery;
-
+    console.log('data in dao: ', data)
     if (error) {
         throw error;
     }

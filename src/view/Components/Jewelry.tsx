@@ -55,7 +55,7 @@ const Jewelry: React.FC = () => {
                 state={state}
                 dispatch={dispatch}
                 title="Jewelry Master"
-                fetchData={(sortChange: boolean, resetPage: boolean) => presenter.fetchJewelryData(sortChange, resetPage)}
+                fetchData={(searchString: string, sortChange: boolean, resetPage: boolean) => presenter.fetchJewelryData(searchString, sortChange, resetPage)}
                 getSortColumn={(column) => MapFormDataToJewelryMasterColumns[column as keyof typeof MapFormDataToJewelryMasterColumns]}
                 fetchDataAsCSV={getJewelryDataAsCSV}
                 filename={'ar_jewelry_master.csv'}
@@ -105,7 +105,7 @@ const Jewelry: React.FC = () => {
                 }}
                 setFilterOptions={(options) => dispatch({type: ACTIONS.SET_FILTER_OPTIONS, payload: options})}
                 filterOptions={state.filterOptions}
-                onApplyFilters={() => presenter.fetchJewelryData(true)}
+                onApplyFilters={() => presenter.fetchJewelryData(state.search, false, true)}
             />
         </>
     );

@@ -1,10 +1,9 @@
 import {Presenter} from "./Presenter.ts";
 import {ACTIONS, ItemMasterView} from "./ItemMasterPresenter.ts";
-import React, {MutableRefObject} from "react";
+import {MutableRefObject} from "react";
 
 export interface TableView extends ItemMasterView {
-    fetchData: (sortChange: boolean, resetPage: boolean) => Promise<void>,
-    setSearch: (value: (((prevState: string) => string) | string)) => void
+    fetchData: (searchString: string, sortChange: boolean, resetPage: boolean) => Promise<void>,
     getSortColumn: (column: string) => string
     fetchDataAsCSV: () => Promise<string>
 }
@@ -15,20 +14,22 @@ export class TablePresenter extends Presenter<TableView> {
         return super.view as TableView
     }
 
-    getMoreData = async (resetPage: boolean, sortChange: boolean = false ) => {
+    getMoreData = async (searchString: string, resetPage: boolean = false, sortChange: boolean = false) => {
         try {
-            if (!this.view.state.hasMore) {
-                console.log('stopping')
-                return
+            if (resetPage) {
+                // Set the flag to true before resetting the page
+                this.view.dispatch({type: ACTIONS.SET_INTERNAL_PAGE_RESET, payload: true})
+                this.view.dispatch({ type: ACTIONS.SET_PAGE, payload: 1 });
             }
-            await this.view.fetchData(sortChange, resetPage);
+            if (!this.view.state.hasMore && !resetPage) {
+                console.log('stopping');
+                return;
+            }
+            await this.view.fetchData(searchString, sortChange, resetPage);
+            this.view.dispatch({type: ACTIONS.SET_INTERNAL_PAGE_RESET, payload: false})
         } catch (error) {
-            this.view.dispatch({type: ACTIONS.SET_ERROR, payload: error})
+            this.view.dispatch({ type: ACTIONS.SET_ERROR, payload: error });
         }
-    }
-
-    handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.view.setSearch(event.target.value);
     };
 
     handleSort = (column: string, curSortColumn: string) => {
@@ -55,7 +56,7 @@ export class TablePresenter extends Presenter<TableView> {
         return this.debounce(() => {
             if (containerRef.current) {
                 const {scrollTop, scrollHeight, clientHeight} = containerRef.current;
-                if (scrollHeight - scrollTop <= clientHeight + 10) { // Add a small buffer
+                if (scrollHeight - scrollTop <= clientHeight) { // Add a small buffer
                     if (this.view.state.hasMore) {
                         this.view.dispatch({type: ACTIONS.INCREMENT_PAGE});
                     }
@@ -63,38 +64,4 @@ export class TablePresenter extends Presenter<TableView> {
             }
         }, 100)
     }
-
-    getFilteredData(data: any[], search: string) {
-        if (!search) return data;
-
-        return data.filter(item =>
-            item.prod_name?.toLowerCase().includes(search.toLowerCase()) ||
-            item.sku_number?.toLowerCase().includes(search.toLowerCase())
-        );
-    }
-
-    getSortedData(data: any[]) {
-        if (!this.view.state.sortColumn) return data;
-
-        return [...data].sort((a, b) => {
-            const col = this.view.getSortColumn(this.view.state.sortColumn);
-            const aValue = this.getValueByPath(a[col]);
-            const bValue = this.getValueByPath(b[col]);
-
-            if (typeof aValue === 'number' && typeof bValue === 'number') {
-                return this.view.state.sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
-            } else {
-                const aStr = String(aValue);
-                const bStr = String(bValue);
-                return this.view.state.sortDirection === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
-            }
-        });
-    }
-
-    private getValueByPath = (obj: any) => {
-        if (obj === null) return '';
-        if (typeof obj !== 'object') return obj;
-        return Object.values(obj)[0];
-    };
-
 }
