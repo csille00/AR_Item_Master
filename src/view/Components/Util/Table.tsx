@@ -135,7 +135,7 @@ const Table = ({
                         />
                     </div>
                 </div>
-                <div ref={containerRef} className="flex justify-center pb-6 px-4 overflow-y-scroll h-auto" style={{ maxHeight: '44rem' }}>
+                <div ref={containerRef} className="flex justify-start pb-6 px-4 overflow-y-scroll h-auto" style={{ maxHeight: 'calc(100vh - 208px)'}}>
                     <table className="w-full text-left text-argray">
                         <thead className="sticky top-0 bg-white">
                         <tr>
