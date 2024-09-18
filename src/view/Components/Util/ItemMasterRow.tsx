@@ -14,7 +14,6 @@ function getNestedValue<U>(item: any, column: U, map) {
         const nestedPropertyMap: Map<string, string> = new Map<string, string>();
         nestedPropertyMap.set('st_cut', 'cut')
         nestedPropertyMap.set('st_type', 'st_type')
-        nestedPropertyMap.set('product_type', 'product_type')
 
         const normalizedColumn = column.trim().toLowerCase().replace(/ /g, '_');
         const containsKey = nestedPropertyMap.has(normalizedColumn)///nestedPropertyMap[normalizedColumn as keyof typeof nestedPropertyMap];
