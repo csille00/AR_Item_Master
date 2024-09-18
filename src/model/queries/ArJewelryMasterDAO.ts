@@ -3,6 +3,7 @@ import {FilterOption} from "../../Definitions/FilterOption.ts";
 import {MapFormDataToJewelryMasterColumns} from "../../Definitions/enum.ts";
 import {Tables, TablesInsert, TablesUpdate} from "../../Definitions/generatedDefinitions.ts";
 import {QueryData} from "@supabase/supabase-js";
+import {PAGE_NUMBER} from "../../presenter/ItemMasterPresenter.ts";
 
 const client = getClient()
 
@@ -74,7 +75,7 @@ const createJewelryMasterQuery = () => {
             earring_type(description),
             charm_type(description),
             ar_style(description)
-    `)
+    `, {count: 'exact'})
 }
 
 export type JewelryMasterQuery = QueryData<ReturnType<typeof createJewelryMasterQuery>>;
@@ -82,14 +83,19 @@ export type JewelryMasterQuery = QueryData<ReturnType<typeof createJewelryMaster
 export async function getJewelryMasterPageFromClient(
     page: number,
     filters: FilterOption[],
-    pageLength: number = 100
-): Promise<JewelryMasterQuery | undefined> {
-    const start = (page - 1) * pageLength;
-    const end = start + pageLength - 1;
+    searchString?: string,
+    sortColumn?: string,
+    sortDirection?: 'asc' | 'desc',
+    pageLength: number = PAGE_NUMBER
+) {
+    let start = (page - 1) * pageLength;
+    let end = start + pageLength - 1;
 
-    const jewelryMasterQuery = createJewelryMasterQuery()
+    // Create query
+    const jewelryMasterQuery = createJewelryMasterQuery();
 
-    jewelryMasterQuery.range(start, end)
+    // Apply pagination
+    jewelryMasterQuery.range(start, end);
 
     // Apply filters
     filters.forEach(filter => {
@@ -99,44 +105,57 @@ export async function getJewelryMasterPageFromClient(
         }
     });
 
-    const {data, error} = await jewelryMasterQuery
+    // Apply search by `prod_name` or `sku_number` if `searchString` is provided
+    if (searchString) {
+        jewelryMasterQuery.or(`prod_name.ilike.%${searchString}%,sku_number.ilike.%${searchString}%`);
+    }
 
+    // Apply sorting if sortColumn and sortDirection are provided
+    if (sortColumn && sortDirection) {
+        if (sortColumn) {
+            jewelryMasterQuery.order(sortColumn, { ascending: sortDirection === 'asc' });
+        }
+    }
+
+    // Execute query
+    const { data, error, count } = await jewelryMasterQuery;
+    console.log('data in dao: ', data)
     if (error) {
         throw error;
     }
-    return data as JewelryMasterQuery;
+    return { data: data as JewelryMasterQuery, count: count };
 }
 
-export async function getJewelryDataAsCSV(){
-    const { data, error } = await client
+export async function getJewelryDataAsCSV() {
+    const {data, error} = await client
         .from('ar_jewelry_master')
         .select()
         .csv()
-    if(error){
+    if (error) {
         throw error
     }
     return data
 }
 
 export async function getJewelryDataBySKU(sku: string): Promise<Tables<'ar_jewelry_master'> | null> {
-    const { data, error } = await client
+    const {data, error} = await client
         .from('ar_jewelry_master')
         .select()
         .eq('sku_number', sku)
         .limit(1)
-    if(error){
+    if (error) {
         throw error
     }
     return data ? data[0] : null
 }
 
-export async function editJewelryMasterRow(sku: string, row: TablesUpdate<'ar_jewelry_master'> ): Promise<void> {
+export async function editJewelryMasterRow(sku: string, row: TablesUpdate<'ar_jewelry_master'>): Promise<void> {
     const {error} = await client
         .from('ar_jewelry_master')
         .update(row)
         .eq('sku_number', sku)
 
-    if(error){
+    if (error) {
         console.error("Error updating item: ", error)
     }
 }
