@@ -22,7 +22,7 @@ export class Presenter<ViewType extends View> {
     }
 
     debounce = (func: (...args: any[]) => void, wait: number) => {
-        let timeout: number;
+        let timeout:  NodeJS.Timeout;
 
         return (...args: any[]) => {
             const later = () => {

@@ -55,7 +55,7 @@ const Table = ({
     const presenter = useMemo(() => new TablePresenter(listener), [listener]);
 
     useDebounceSearch(search, state.search, dispatch);
-    useScrollHandler(containerRef, presenter, data);
+    useScrollHandler(containerRef, presenter, state);
 
     useEffect(() => {
             presenter.getMoreData(state.search, true, true);
@@ -111,24 +111,24 @@ const Table = ({
                     </div>
                     <div className="flex justify-end items-center">
                         <Button
-                            icon={addIcon as SVGElement}
+                            icon={addIcon}
                             style="bg-argold hover:font-bold hover:bg-darkgold hover:border-darkgold rounded-lg h-12 mx-1.5 flex items-center"
                             onClick={() => navigate('/addJewelry')}
                         />
                         <Button
-                            icon={filterIcon as SVGElement}
+                            icon={filterIcon}
                             text="Filter"
                             onClick={() => dispatch({ type: ACTIONS.TOGGLE_FILTER_MODAL })}
                             style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
-                            icon={tableIcon as SVGElement}
+                            icon={tableIcon}
                             text="Change View"
                             onClick={() => dispatch({ type: ACTIONS.TOGGLE_COLUMN_MODAL })}
                             style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"
                         />
                         <Button
-                            icon={downloadIcon as SVGElement}
+                            icon={downloadIcon}
                             text="Download"
                             onClick={() => presenter.download(filename)}
                             style="text-argray bg-white hover:text-argray hover:bg-superlightgr hover:border-superlightgr border border-argray rounded-lg text-sm px-3 w-auto h-12 mx-1.5 flex items-center"

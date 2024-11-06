@@ -40,7 +40,7 @@ import {ACTIONS, initialState, itemMasterReducer, ItemMasterView} from "../../pr
 import {JewelryPresenter} from "../../presenter/JewelryPresenter.ts";
 
 const Jewelry: React.FC = () => {
-    const [state, dispatch] = useReducer(itemMasterReducer, initialState, (initialState: typeof initialState) => initialState);
+    const [state, dispatch] = useReducer(itemMasterReducer, initialState);
 
     const listener: ItemMasterView = {
         state: state,

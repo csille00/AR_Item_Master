@@ -1,6 +1,8 @@
 import React, {useEffect} from "react";
+import {TablePresenter} from "../../presenter/TablePresenter.ts";
+import {ItemMasterState} from "../../presenter/ItemMasterPresenter.ts";
 
-export const useScrollHandler = (containerRef: React.RefObject<HTMLDivElement>, presenter: TablePresenter, state: TableState) => {
+export const useScrollHandler = (containerRef: React.RefObject<HTMLDivElement>, presenter: TablePresenter, state: ItemMasterState) => {
     useEffect(() => {
         const container = containerRef.current;
         const handleScroll = presenter.handleScroll(containerRef);

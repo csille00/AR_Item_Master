@@ -20,9 +20,10 @@ import {DefaultStoneViews} from "../../Definitions/DefaultStoneViews.ts";
 import {ACTIONS, initialState, itemMasterReducer, ItemMasterView} from "../../presenter/ItemMasterPresenter.ts";
 import {StonePresenter} from "../../presenter/StonePresenter.ts";
 import {getStoneOriginFromClient} from "../../model/queries/StoneOriginDAO.ts";
+import {DefaultViews} from "../../Definitions/DefaultViews.ts";
 
 const Stone: React.FC = () => {
-    const [state, dispatch] = useReducer(itemMasterReducer, initialState, (initialState: typeof initialState) => initialState);
+    const [state, dispatch] = useReducer(itemMasterReducer, initialState);
 
     const listener: ItemMasterView = {
         state: state,

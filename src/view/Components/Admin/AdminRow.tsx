@@ -21,11 +21,11 @@ export const AdminRow: React.FC<AdminRowProps> = ({item, columns, onEdit, onDele
             ))}
             <td className="p-4 flex justify-end gap-2">
                 <Button
-                    icon={editIcon as SVGElement}
+                    icon={editIcon}
                     onClick={() => onEdit(item)}
                 />
                 <Button
-                    icon={deleteIcon as SVGElement}
+                    icon={deleteIcon}
                     onClick={() => onDelete(item)}
                 />
             </td>

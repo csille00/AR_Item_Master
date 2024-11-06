@@ -4,7 +4,7 @@ import {DefaultViews} from "./DefaultViews.ts";
 
 export class DefaultJewelryViews implements DefaultViews {
 
-    private defaultView = [
+    public defaultView = [
         {description: ArJewelryMasterColumns.SKU},
         {description: ArJewelryMasterColumns.PRODUCT_NAME},
         {description: ArJewelryMasterColumns.AR_STYLE},
@@ -14,7 +14,7 @@ export class DefaultJewelryViews implements DefaultViews {
         {description: ArJewelryMasterColumns.STATUS}
     ]
 
-    private baseRows: Option[] = [
+    public baseRows: Option[] = [
         {description: ArJewelryMasterColumns.SKU},
         {description: ArJewelryMasterColumns.PRODUCT_NAME},
         {description: ArJewelryMasterColumns.STYLE_NUMBER},
@@ -74,7 +74,7 @@ export class DefaultJewelryViews implements DefaultViews {
         {description: ArJewelryMasterColumns.CHARM_TYPE}
     ]
 
-    private rowOptions = {
+    public rowOptions = {
         'Default': this.defaultView,
         'Wedding Ring': this.weddingBandRows,
         'Earring': this.earringRows,

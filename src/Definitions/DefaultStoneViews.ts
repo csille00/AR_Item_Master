@@ -4,7 +4,7 @@ import {DefaultViews} from "./DefaultViews.ts";
 
 export class DefaultStoneViews implements DefaultViews{
 
-    private defaultView = [
+    public defaultView = [
         {description: ArStoneMasterColumns.SKU},
         {description: ArStoneMasterColumns.PRODUCT_NAME},
         {description: ArStoneMasterColumns.MSRP},
@@ -13,7 +13,7 @@ export class DefaultStoneViews implements DefaultViews{
         {description: ArStoneMasterColumns.DATE},
     ]
 
-    private baseRows: Option[] = [
+    public baseRows: Option[] = [
         {description: ArStoneMasterColumns.SKU},
         {description: ArStoneMasterColumns.PRODUCT_NAME},
         {description: ArStoneMasterColumns.STYLE_NUMBER},
@@ -36,7 +36,7 @@ export class DefaultStoneViews implements DefaultViews{
         {description: ArStoneMasterColumns.DATE}
     ]
 
-    private rowOptions = {
+    public rowOptions = {
         'Default': this.defaultView,
         'Engagement Loose Stones': this.baseRows,
         'Other Loose Stones': this.baseRows

@@ -6,7 +6,7 @@ export interface ItemMasterRowProps<T, U> {
     map: U
 }
 
-function getNestedValue<U>(item: any, column: U, map) {
+function getNestedValue<U>(item: any, column: string, map) {
     const mappedColumn = (map as any)[column as keyof U];
     const value = item[mappedColumn ?? ''];
 
@@ -27,7 +27,7 @@ export function ItemMasterRow<T, U>(props: ItemMasterRowProps<T, U>): React.Reac
     return (
         <>
             {props.columns.map((column, index) => {
-                const value = getNestedValue<U>(props.item, column as U, props.map);
+                const value = getNestedValue<U>(props.item, column, props.map);
                 return (
                     <td key={index} className="p-4">
                         {String(value)}

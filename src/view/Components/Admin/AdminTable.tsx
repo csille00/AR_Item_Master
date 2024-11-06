@@ -19,7 +19,7 @@ export const AdminTable = ({title, data, setAddOptionModalOpen, style, children}
                 <div className="flex items-center justify-between p-4">
                     <h1 className="text-argray text-left my-8 text-4xl justify-start">{title}</h1>
                     <Button
-                        icon={addIcon as SVGElement}
+                        icon={addIcon}
                         style="bg-argold hover:font-bold hover:bg-darkgold hover:border-darkgold rounded-lg h-12 mx-1.5 flex items-center"
                         onClick={() => setAddOptionModalOpen(true)}
                     />

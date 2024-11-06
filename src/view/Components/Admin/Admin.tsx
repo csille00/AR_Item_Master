@@ -133,7 +133,7 @@ const Admin = () => {
                     await updateMaterialType(updatedOption as TablesUpdate<'material_type'>);
                     break;
                 case AdminTables.ST_CUT:
-                    await updateStCut(updatedOption as TablesUpdate<'ctw_cut'>);
+                    await updateStCut(updatedOption as TablesUpdate<'st_cut'>);
                     break;
                 case AdminTables.ST_TYPE:
                     await updateStType(updatedOption as TablesUpdate<'st_type'>);
@@ -152,20 +152,18 @@ const Admin = () => {
 
     const handleAddOption = async (option: Option) => {
         try {
-            console.log("option to add: ", option)
-
             switch (selectedTable) {
                 case AdminTables.CTW_RANGE:
-                    await addCTWRange(option as Tables<'ctw_range'>);
+                    await addCTWRange(option as unknown as Tables<'ctw_range'>);
                     break;
                 case AdminTables.MATERIAL_TYPE:
                     await addMaterialType(option as Tables<'material_type'>);
                     break;
                 case AdminTables.ST_CUT:
-                    await addStCut(option as Tables<'ctw_cut'>);
+                    await addStCut(option as unknown as Tables<'st_cut'>);
                     break;
                 case AdminTables.ST_TYPE:
-                    await addStType(option as Tables<'st_type'>);
+                    await addStType(option as unknown as Tables<'st_type'>);
                     break;
                 default:
                     await addOption(selectedTable.toLowerCase().replace(/ /g, "_"), option as Option)

@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ButtonProps {
-    icon?: SVGElement | null;
+    icon?: string | null;
     text?: string | null;
     style?: string | null;
     onClick: (event?: React.FormEvent | undefined) => void;

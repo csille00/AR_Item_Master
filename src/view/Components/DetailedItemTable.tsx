@@ -58,11 +58,12 @@ const ItemTable: React.FC<ItemTableProps> = ({
             const data = await fetchItem(itemSku);
             if (data) {
                 setItem(data);
-                setFormData(prevFormData => ({
+                setFormData((prevFormData) => ({
                     ...prevFormData,
-                    ...Object.fromEntries(Object.entries(data))
+                    ...Object.fromEntries(
+                        Object.entries(data).map(([key, value]) => [key, value != null ? String(value) : ""])
+                    ),
                 }));
-                console.log("ITEM: ", data);
             }
         };
         getItem();
